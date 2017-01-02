@@ -1,2 +1,2 @@
-# jelly-dude
-2d game based on soft body physics
+# Jelly Dude
+2d game based on soft body physics.
