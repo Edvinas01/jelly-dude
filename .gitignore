@@ -20,5 +20,6 @@ hs_err_pid*
 
 # General
 !libs/
+!libs/*
 build/
 logs/
