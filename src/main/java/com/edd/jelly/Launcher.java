@@ -18,7 +18,7 @@ public class Launcher extends ApplicationAdapter {
         configuration.fullscreen = false;
         configuration.resizable = false;
 
-        new LwjglApplication(new Launcher(), configuration);
+        new LwjglApplication(new LiquidFunTest(), configuration);
     }
 
     @Override

@@ -19,5 +19,6 @@ hs_err_pid*
 .idea/
 
 # General
+!libs/
 build/
 logs/

@@ -50,19 +50,22 @@ dist.dependsOn classes
 
 dependencies {
 
-    // LigGDX dependencies.
+    // Nicer fonts.
     compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
-    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    // Core LigGDX dependencies.
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
+    // JBox2d + Liquid fun dependencies.
+    compile files('libs/liquidfun/gdx-liquidfun-natives.jar')
+    compile files('libs/liquidfun/gdx-liquidfun.jar')
+
     // Testing.
-    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4-rc-3'
-    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.7'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.7'
 }
 
 task wrapper(type: Wrapper) {
