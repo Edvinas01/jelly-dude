@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import com.edd.jelly.core.Game
 
 class Launcher : ApplicationAdapter() {
 
@@ -24,7 +25,7 @@ class Launcher : ApplicationAdapter() {
             configuration.fullscreen = false
             configuration.resizable = false
 
-            LwjglApplication(LiquidFunTest(), configuration)
+            LwjglApplication(Game(), configuration)
         }
     }
 }

@@ -3,6 +3,7 @@ buildscript {
         kotlinVersion = '1.0.6'
         ashleyVersion = '1.7.0'
         groovyVersion = '2.4.7'
+        guiceVersion = '4.1.0'
         spockVersion = '1.1-groovy-2.4-rc-3'
         gdxVersion = '1.9.5'
     }
@@ -72,6 +73,9 @@ dependencies {
 
     // Ashley.
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+
+    // Dependency injection.
+    compile "com.google.inject:guice:$guiceVersion"
 
     // JBox2d + Liquid fun dependencies.
     compile files('libs/liquidfun/gdx-liquidfun-natives.jar')
