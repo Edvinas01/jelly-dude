@@ -9,6 +9,3 @@ open class ComponentResolver<T : Component>(clazz: Class<T>) {
 
     operator fun get(entity: Entity): T = mapper.get(entity)
 }
-
-val Entity.transform: Transform
-    get() = Transform[this]
