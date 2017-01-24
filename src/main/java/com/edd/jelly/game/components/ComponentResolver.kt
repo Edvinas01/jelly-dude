@@ -1,4 +1,4 @@
-package com.edd.jelly.game.component
+package com.edd.jelly.game.components
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper

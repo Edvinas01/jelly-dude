@@ -8,13 +8,15 @@ object Units {
     /**
      * How many pixels make up a meter.
      */
-    val PPM: Float = 50f
+    val PPM: Float = 100f
 
     /**
      * How many meters make up a pixel.
      */
     val MPP: Float = 1 / PPM
 }
+
+private val RADIANS_TO_DEGREES = (180f / Math.PI).toFloat()
 
 /**
  * Get number value as meters.
@@ -28,3 +30,9 @@ val Number.meters: Float
  */
 val Number.pixels: Float
     get() = toFloat() * Units.PPM
+
+/**
+ * Get number value converted to degrees.
+ */
+val Number.degrees: Float
+    get() = toFloat() * RADIANS_TO_DEGREES

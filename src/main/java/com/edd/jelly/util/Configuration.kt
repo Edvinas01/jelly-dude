@@ -11,4 +11,6 @@ object Configuration {
 
     val FULLSCREEN = false
     val RESIZABLE = false
+
+    val GRAVITY = -9.81f
 }
