@@ -1,10 +1,12 @@
 package com.edd.jelly.exception
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 // Just testing spock here.
 class JellyExceptionSpec extends Specification {
 
+    @Ignore
     def "should format the message"() {
         given:
         def message = 'bad'
