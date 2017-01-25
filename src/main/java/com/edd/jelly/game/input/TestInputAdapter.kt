@@ -14,9 +14,11 @@ import com.edd.jelly.game.components.Transform
 import com.edd.jelly.game.components.transform
 import com.google.inject.Inject
 
-class TestInputAdapter @Inject constructor(private val camera: Camera,
-                                           private val engine: Engine,
-                                           private val world: World) : InputAdapter() {
+class TestInputAdapter @Inject constructor(
+        private val camera: Camera,
+        private val engine: Engine,
+        private val world: World
+) : InputAdapter() {
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         val pos = camera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))

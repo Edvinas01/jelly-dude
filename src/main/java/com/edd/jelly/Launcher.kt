@@ -7,7 +7,7 @@ import com.edd.jelly.core.Game
 import com.edd.jelly.util.Configuration
 
 class Launcher : ApplicationAdapter() {
-
+// todo https://www.youtube.com/watch?v=3lC9UaKF6MA&index=8&list=PLbH4r1N8PmBLHriCYXFNBdbwa33yTd4YY
     companion object {
 
         @JvmStatic

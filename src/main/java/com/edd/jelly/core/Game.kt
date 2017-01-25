@@ -3,7 +3,7 @@ package com.edd.jelly.core
 import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputMultiplexer
 import com.edd.jelly.game.input.TestInputAdapter
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -23,7 +23,9 @@ class Game : ApplicationAdapter() {
             engine.addSystem(s)
         }
 
-        Gdx.input.inputProcessor = injector.getInstance(TestInputAdapter::class.java)
+        Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java).apply {
+            addProcessor(injector.getInstance(TestInputAdapter::class.java))
+        }
     }
 
     override fun render() {
