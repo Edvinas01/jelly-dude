@@ -1,6 +1,6 @@
 package com.edd.jelly.exception
 
-class JellyException : RuntimeException {
+class GameException : RuntimeException {
 
     constructor(message: String, e: Exception) : super(message, e)
 

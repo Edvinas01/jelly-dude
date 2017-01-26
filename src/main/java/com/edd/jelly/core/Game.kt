@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
-import com.edd.jelly.game.input.TestInputAdapter
+import com.edd.jelly.input.TestInputAdapter
 import com.google.inject.Guice
 import com.google.inject.Injector
 

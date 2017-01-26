@@ -12,7 +12,7 @@ class JellyExceptionSpec extends Specification {
         def message = 'bad'
 
         when:
-        def exception = new JellyException('Bad {0}', message)
+        def exception = new GameException('Bad {0}', message)
 
         then:
         exception.message == "Bad $message" as String
@@ -20,7 +20,7 @@ class JellyExceptionSpec extends Specification {
 
     def "should trow exception"() {
         when:
-        new JellyException('Bad {}', badArg)
+        new GameException('Bad {}', badArg)
 
         then:
         thrown(IllegalArgumentException)

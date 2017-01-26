@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
-import com.edd.jelly.game.systems.*
+import com.edd.jelly.systems.*
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.meters
 import com.google.inject.Binder
