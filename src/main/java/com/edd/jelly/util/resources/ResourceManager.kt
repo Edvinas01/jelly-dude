@@ -1,8 +1,8 @@
 package com.edd.jelly.util.resources
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.edd.jelly.exception.GameException
 import com.google.inject.Inject
 
 class ResourceManager @Inject constructor() {
@@ -10,50 +10,63 @@ class ResourceManager @Inject constructor() {
     companion object {
         private val ATLAS_DIRECTORY = "textures"
         private val ATLAS_FILE_TYPE = "atlas"
+        private val MAIN_ATLAS_NAME = "main"
 
-        private val DEV_ATLAS_NAME = "dev"
+        private val FONT_DIRECTORY = "fonts"
+        private val FONT_SIZE = 16
+        private val MAIN_FONT_NAME = "kong_text"
     }
 
     private val atlases = mutableMapOf<String, TextureAtlas>()
+    private val fonts = mutableMapOf<String, BitmapFont>()
 
     /**
-     * Texture atlas which is used for development purposes.
+     * Main texture atlas.
      */
-    lateinit var devAtlas: TextureAtlas
+    lateinit var mainAtlas: TextureAtlas
 
     init {
-        devAtlas = loadAtlas(DEV_ATLAS_NAME)
+        mainAtlas = getAtlas(MAIN_ATLAS_NAME)
     }
 
     /**
-     * Load texture atlas by specifying its [path].
+     * Get texture atlas by specifying its [name]. If texture atlas is not loaded into memory, its first then loaded
+     * and afterwards returned.
      *
-     * @param path texture atlas path.
+     * @param name texture atlas name.
      * @return loaded texture atlas.
      */
-    fun loadAtlas(path: String): TextureAtlas {
-        return atlases.getOrPut(path, defaultValue = {
-            val fullPath = if (path.endsWith(ATLAS_FILE_TYPE)) {
-                path
+    fun getAtlas(name: String): TextureAtlas {
+        return atlases.getOrPut(name, defaultValue = {
+            val fullPath = if (name.endsWith(ATLAS_FILE_TYPE)) {
+                name
             } else {
-                "$path.$ATLAS_FILE_TYPE"
+                "$name.$ATLAS_FILE_TYPE"
             }
             TextureAtlas("$ATLAS_DIRECTORY/$fullPath")
         })
     }
 
     /**
-     * Get texture atlas by name.
+     * Get main game font.
      *
-     * @param name texture atlas name.
-     * @return texture atlas.
+     * @return font.
      */
-    operator fun get(name: String): TextureAtlas {
-        return atlases.getOrElse(name, defaultValue = {
-            throw GameException("Texture atlas with path: $name is not loaded")
-        })
+    fun getFont(): BitmapFont {
+        return getFont(MAIN_FONT_NAME)
+    }
+
+    /**
+     * Get font by name.
+     *
+     * @param name font name.
+     * @return font.
+     */
+    fun getFont(name: String): BitmapFont {
+        // todo load by name
+        return BitmapFont()
     }
 }
 
-operator fun TextureAtlas.get(name: String): TextureRegion =
+operator fun TextureAtlas.get(name: String): TextureRegion? =
         findRegion(name)
