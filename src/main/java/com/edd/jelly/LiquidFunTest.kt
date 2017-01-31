@@ -7,11 +7,7 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.Texture.TextureFilter
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
@@ -26,8 +22,6 @@ class LiquidFunTest : ApplicationAdapter(), InputProcessor {
 
     private var camera: OrthographicCamera? = null
     private var batch: SpriteBatch? = null
-    private var texture: Texture? = null
-    private var sprite: Sprite? = null
 
     private var mWorld: World? = null
     private var mParticleSystem: ParticleSystem? = null
@@ -47,14 +41,6 @@ class LiquidFunTest : ApplicationAdapter(), InputProcessor {
         Gdx.input.inputProcessor = this
 
         batch = SpriteBatch()
-        texture = Texture(Gdx.files.internal("badlogic.jpg"))
-        texture!!.setFilter(TextureFilter.Linear, TextureFilter.Linear)
-        val region = TextureRegion(texture, 0, 0, 512, 275)
-
-        sprite = Sprite(region)
-        sprite!!.setSize(width, height)
-        sprite!!.setOrigin(sprite!!.width / 2, sprite!!.height / 2)
-        sprite!!.setPosition(0f, 0f)
 
         createBox2DWorld(width, height)
         createParticleStuff(width, height)
@@ -169,7 +155,6 @@ class LiquidFunTest : ApplicationAdapter(), InputProcessor {
 
         batch!!.projectionMatrix = camera!!.combined
         batch!!.begin()
-        sprite!!.draw(batch!!)
         batch!!.end()
 
         //Get the combined matrix and scale it down to
@@ -184,7 +169,6 @@ class LiquidFunTest : ApplicationAdapter(), InputProcessor {
 
     override fun dispose() {
         batch!!.dispose()
-        texture!!.dispose()
         mParticleGroupDef1!!.shape.dispose()
         mWorld!!.dispose()
         mDebugRenderer!!.dispose()

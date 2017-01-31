@@ -7,15 +7,15 @@ import com.edd.jelly.components.*
 import com.edd.jelly.util.degrees
 import com.google.inject.Inject
 
-class PhysicsSynchronizationSystem @Inject constructor() : IteratingSystem(Family.all(
-        Transform::class.java,
+class ParticleSynchronizationSystem @Inject constructor() : IteratingSystem(Family.all(
+        Particles::class.java,
         Physics::class.java).get()) {
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity.transform
-        val body = entity.physics.body
+        val group = entity.particles.particleGroup
 
-        transform.position.set(body.position.x, body.position.y)
-        transform.rotation = body.angle.degrees
+        transform.position.set(group.position.x, group.position.y)
+        transform.rotation = group.angle.degrees
     }
 }
