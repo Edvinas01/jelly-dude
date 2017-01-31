@@ -173,7 +173,6 @@ class TestSystem @Inject constructor(
                         Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
                 ))
 
-//                world.createParticle() // todo for some other time
                 world.createParticleGroup(ParticleGroupDef().apply {
                     val particleTypes = listOf(
                             ParticleType.b2_waterParticle,

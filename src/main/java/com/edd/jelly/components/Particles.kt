@@ -2,7 +2,7 @@ package com.edd.jelly.components
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Entity
-import finnstr.libgdx.liquidfun.ParticleGroup
+import org.jbox2d.particle.ParticleGroup
 
 data class Particles(val particleGroup: ParticleGroup) : Component {
 
