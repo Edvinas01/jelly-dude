@@ -203,12 +203,12 @@ class TestSystem @Inject constructor(
 
         val transform = Transform(
                 pos,
-                Vector2(1f + MathUtils.random(3f),
-                        1f + MathUtils.random(1f)))
+                Vector2(0.3f + MathUtils.random(0.7f),
+                        0.1f + MathUtils.random(0.5f)))
 
         world.createJoint(ConstantVolumeJointDef().apply {
             val bodyCount = MathUtils.random(5, 20)
-            val circleRadius = 0.25f
+            val circleRadius = 0.10f
 
             for (i in 0..bodyCount - 1) {
                 addBody(world.createBody(BodyDef().apply {
