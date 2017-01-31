@@ -28,7 +28,6 @@ import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
-import org.jbox2d.dynamics.joints.JointDef
 import org.jbox2d.particle.ParticleColor
 import org.jbox2d.particle.ParticleGroupDef
 import org.jbox2d.particle.ParticleType
@@ -46,7 +45,8 @@ class TestSystem @Inject constructor(
     private enum class Mode {
         BOX,
         CIRCLE,
-        PARTICLE_BOX
+        PARTICLE_BOX,
+        JELLY,
     }
 
     private var mode = Mode.BOX
@@ -61,10 +61,6 @@ class TestSystem @Inject constructor(
         super.addedToEngine(engine)
 
         createPlatforms()
-        spawnJelly()
-        spawnJelly()
-
-
     }
 
     private inner class TestInputAdapter : InputAdapter() {
@@ -77,6 +73,7 @@ class TestSystem @Inject constructor(
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX
+                Input.Keys.NUM_4 -> mode = Mode.JELLY
 
                 else -> {
                     return false
@@ -100,6 +97,7 @@ class TestSystem @Inject constructor(
                 Mode.BOX -> spawnBox(pos)
                 Mode.CIRCLE -> spawnCircle(pos)
                 Mode.PARTICLE_BOX -> spawnParticleBox(pos)
+                Mode.JELLY -> spawnCoolJelly(pos)
             }
 
             return true
@@ -201,45 +199,45 @@ class TestSystem @Inject constructor(
         }
     }
 
-    fun spawnJelly() {
-        val volumeJoint = ConstantVolumeJointDef()
+    fun spawnCoolJelly(pos: Vector2) {
+        // todo persist joints in ECS
 
-        val posX = 10.0f
-        val posY = 10.0f
+        val transform = Transform(
+                pos,
+                Vector2(1f + MathUtils.random(3f),
+                        1f + MathUtils.random(1f)))
 
-        val width = 5.0f
-        val height = 5.0f
+        world.createJoint(ConstantVolumeJointDef().apply {
+            val bodyCount = MathUtils.random(5, 20)
+            val circleRadius = 0.25f
 
-        val bodyCount = 3
-        val bodyRadius = 0.5f
-        for (i in 0..bodyCount - 1) {
-            val angle = org.jbox2d.common.MathUtils.map(i.toFloat(), 0f, bodyCount.toFloat(), 0f, 2 * 3.1415f)
-            val bodyDef = BodyDef()
-            // bd.isBullet = true;
-            bodyDef.fixedRotation = true
+            for (i in 0..bodyCount - 1) {
+                addBody(world.createBody(BodyDef().apply {
+                    val angle = org.jbox2d.common.MathUtils.map(
+                            i.toFloat(),
+                            0f,
+                            bodyCount.toFloat(),
+                            0f,
+                            2 * MathUtils.PI)
 
-            val x = posX + width * Math.sin(angle.toDouble()).toFloat()
-            val y = posY + height * Math.cos(angle.toDouble()).toFloat()
-            bodyDef.position.set(Vec2(x, y))
-            bodyDef.type = BodyType.DYNAMIC
-            val body = world.createBody(bodyDef)
-            body.userData = "J"
-
-            val fixtureDef = FixtureDef()
-            val circle = CircleShape()
-            circle.m_radius = bodyRadius
-            fixtureDef.shape = circle
-            fixtureDef.density = 1.0f
-            body.createFixture(fixtureDef)
-            volumeJoint.addBody(body)
-        }
-
-        volumeJoint.frequencyHz = 10.0f
-        volumeJoint.dampingRatio = 1.0f
-        volumeJoint.collideConnected = false
-        val joint = world.createJoint(volumeJoint)
-
-        println()
+                    fixedRotation = true
+                    type = BodyType.DYNAMIC
+                    position.set(Vec2(
+                            pos.x + transform.width * Math.sin(angle.toDouble()).toFloat(),
+                            pos.y + transform.height * Math.cos(angle.toDouble()).toFloat()))
+                }).apply {
+                    createFixture(FixtureDef().apply {
+                        shape = CircleShape().apply {
+                            radius = circleRadius
+                        }
+                        density = 1f
+                    })
+                })
+            }
+            frequencyHz = 10.0f
+            dampingRatio = 1.0f
+            collideConnected = false
+        })
     }
 
     private fun createPlatforms() {

@@ -271,7 +271,7 @@ public class DebugRenderer implements Disposable {
         Vec2 p2 = new Vec2();
         joint.getAnchorB(p2);
 
-        if (joint.getType() == JointType.DISTANCE) {
+        if (joint.getType() == JointType.DISTANCE || joint.getType() == JointType.CONSTANT_VOLUME) {
             drawSegment(p1, p2, JOINT_COLOR);
         } else if (joint.getType() == JointType.PULLEY) {
             PulleyJoint pulley = (PulleyJoint) joint;
