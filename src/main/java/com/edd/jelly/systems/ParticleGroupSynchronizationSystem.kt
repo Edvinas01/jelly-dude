@@ -7,7 +7,7 @@ import com.edd.jelly.components.*
 import com.edd.jelly.util.degrees
 import com.google.inject.Inject
 
-class ParticleSynchronizationSystem @Inject constructor() : IteratingSystem(Family.all(
+class ParticleGroupSynchronizationSystem @Inject constructor() : IteratingSystem(Family.all(
         Particles::class.java,
         Physics::class.java).get()) {
 

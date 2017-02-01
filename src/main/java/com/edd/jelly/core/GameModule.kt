@@ -36,7 +36,7 @@ class GameModule(private val game: Game) : Module {
                 PhysicsSynchronizationSystem::class.java,
                 RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java,
-                ParticleSynchronizationSystem::class.java
+                ParticleGroupSynchronizationSystem::class.java
         ))
     }
 

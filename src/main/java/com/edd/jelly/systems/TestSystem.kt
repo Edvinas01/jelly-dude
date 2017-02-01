@@ -27,6 +27,7 @@ import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
+import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
 import org.jbox2d.particle.ParticleColor
 import org.jbox2d.particle.ParticleGroupDef
@@ -50,10 +51,23 @@ class TestSystem @Inject constructor(
     }
 
     private var mode = Mode.BOX
+    private var size = 1f
+    private var destroyed = false
+
+    private lateinit var jelly: ConstantVolumeJoint
     private val font: BitmapFont
+
+    companion object Move {
+        var up = false
+        var down = false
+
+        var left = false
+        var right = false
+    }
 
     init {
         inputMultiplexer.addProcessor(TestInputAdapter())
+        inputMultiplexer.addProcessor(MoveInputAdapter())
         font = resources.getFont()
     }
 
@@ -61,14 +75,98 @@ class TestSystem @Inject constructor(
         super.addedToEngine(engine)
 
         createPlatforms()
+        jelly = spawnCoolJelly(Vector2(0f, 5f), 0.25f, 0.5f, 40)
+    }
+
+    var lastPos = Vector2()
+
+    override fun update(deltaTime: Float) {
+        if (destroyed) {
+            return
+        }
+
+        val force = 0.05f
+        val maxVelocity = 7f
+
+        val avgPos = Vector2()
+
+        for (body in jelly.bodies) {
+            avgPos.x += body.position.x
+            avgPos.y += body.position.y
+
+            if (Math.abs(body.linearVelocity.x) > maxVelocity || Math.abs(body.linearVelocity.y) > maxVelocity) {
+                continue
+            }
+
+            if (up) {
+                body.applyForceToCenter(Vec2(0f, force * 4))
+            }
+            if (down) {
+                body.applyForceToCenter(Vec2(0f, -force))
+            }
+            if (left) {
+                body.applyForceToCenter(Vec2(-force, 0f))
+            }
+            if (right) {
+                body.applyForceToCenter(Vec2(force, 0f))
+            }
+        }
+        avgPos.x = avgPos.x / jelly.bodies.size
+        avgPos.y = avgPos.y / jelly.bodies.size
+
+        if (lastPos.dst(avgPos) > 0.25f) {
+            val factor = 0.995f
+
+            size *= factor
+            jelly.inflate(factor)
+            lastPos = avgPos
+        }
+
+        if (size < 0.4f || size > 4f) {
+            destroyed = true
+            world.destroyJoint(jelly)
+        }
+    }
+
+    private inner class MoveInputAdapter : InputAdapter() {
+        override fun keyDown(keycode: Int): Boolean {
+            when (keycode) {
+                Input.Keys.W -> up = true
+                Input.Keys.S -> down = true
+                Input.Keys.A -> left = true
+                Input.Keys.D -> right = true
+                else -> {
+                    return false
+                }
+            }
+            return true
+        }
+
+        override fun keyUp(keycode: Int): Boolean {
+            when (keycode) {
+                Input.Keys.W -> up = false
+                Input.Keys.S -> down = false
+                Input.Keys.A -> left = false
+                Input.Keys.D -> right = false
+                else -> {
+                    return false
+                }
+            }
+            return true
+        }
     }
 
     private inner class TestInputAdapter : InputAdapter() {
         override fun keyUp(keycode: Int): Boolean {
 
+
             // Handle mode changing.
             when (keycode) {
                 Input.Keys.ESCAPE -> Gdx.app.exit()
+                Input.Keys.SPACE -> {
+                    jelly.inflate(2f)
+                    size *= 2f
+                }
 
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
@@ -100,6 +198,7 @@ class TestSystem @Inject constructor(
                 Mode.JELLY -> spawnCoolJelly(pos)
             }
 
+            println("Clicked at: $pos")
             return true
         }
 
@@ -198,17 +297,18 @@ class TestSystem @Inject constructor(
         }
     }
 
-    fun spawnCoolJelly(pos: Vector2) {
-        // todo persist joints in ECS
+    fun spawnCoolJelly(pos: Vector2,
+                       width: Float = MathUtils.random(0.7f),
+                       height: Float = MathUtils.random(0.5f),
+                       bodyCount: Int = MathUtils.random(5, 20)): ConstantVolumeJoint {
 
         val transform = Transform(
                 pos,
-                Vector2(0.3f + MathUtils.random(0.7f),
-                        0.1f + MathUtils.random(0.5f)))
+                Vector2(0.3f + width,
+                        0.1f + height))
 
-        world.createJoint(ConstantVolumeJointDef().apply {
-            val bodyCount = MathUtils.random(5, 20)
-            val circleRadius = 0.10f
+        return world.createJoint(ConstantVolumeJointDef().apply {
+            val circleRadius = 0.02f
 
             for (i in 0..bodyCount - 1) {
                 addBody(world.createBody(BodyDef().apply {
@@ -233,10 +333,10 @@ class TestSystem @Inject constructor(
                     })
                 })
             }
-            frequencyHz = 10.0f
-            dampingRatio = 1.0f
+            frequencyHz = 20f
+            dampingRatio = 1f
             collideConnected = false
-        })
+        }) as ConstantVolumeJoint
     }
 
     private fun createPlatforms() {
