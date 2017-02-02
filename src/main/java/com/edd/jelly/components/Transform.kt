@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2
 
 data class Transform(val position: Vector2 = Vector2(0f, 0f),
                      val size: Vector2 = Vector2(0f, 0f),
-                     val scale: Vector2 = Vector2(1f, 1f),
                      var rotation: Float = 0f) : Component {
 
     companion object : ComponentResolver<Transform>(Transform::class.java)
@@ -33,18 +32,6 @@ data class Transform(val position: Vector2 = Vector2(0f, 0f),
         get() = size.y
         set(value) {
             size.y = value
-        }
-
-    var scaleX: Float
-        get() = scale.x
-        set(value) {
-            scale.x = value
-        }
-
-    var scaleY: Float
-        get() = scale.y
-        set(value) {
-            scale.y = value
         }
 }
 

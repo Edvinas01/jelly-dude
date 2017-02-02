@@ -1,4 +1,4 @@
-package com.edd.jelly.systems
+package com.edd.jelly.behaviour
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
@@ -53,8 +53,8 @@ class RenderingSystem @Inject constructor(private val camera: Camera,
                 halfHeight,
                 width,
                 height,
-                transform.scaleX,
-                transform.scaleY,
+                1f, // Scale probably wont be needed, just use size.
+                1f,
                 transform.rotation)
     }
 }

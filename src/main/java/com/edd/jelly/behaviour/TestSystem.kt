@@ -1,4 +1,4 @@
-package com.edd.jelly.systems
+package com.edd.jelly.behaviour
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
@@ -51,23 +51,10 @@ class TestSystem @Inject constructor(
     }
 
     private var mode = Mode.BOX
-    private var size = 1f
-    private var destroyed = false
-
-    private lateinit var jelly: ConstantVolumeJoint
     private val font: BitmapFont
-
-    companion object Move {
-        var up = false
-        var down = false
-
-        var left = false
-        var right = false
-    }
 
     init {
         inputMultiplexer.addProcessor(TestInputAdapter())
-        inputMultiplexer.addProcessor(MoveInputAdapter())
         font = resources.getFont()
     }
 
@@ -75,85 +62,6 @@ class TestSystem @Inject constructor(
         super.addedToEngine(engine)
 
         createPlatforms()
-        jelly = spawnCoolJelly(Vector2(0f, 5f), 0.25f, 0.5f, 40)
-    }
-
-    var lastPos = Vector2()
-
-    override fun update(deltaTime: Float) {
-        if (destroyed) {
-            return
-        }
-
-        val force = 0.05f
-        val maxVelocity = 7f
-
-        val avgPos = Vector2()
-
-        for (body in jelly.bodies) {
-            avgPos.x += body.position.x
-            avgPos.y += body.position.y
-
-            if (Math.abs(body.linearVelocity.x) > maxVelocity || Math.abs(body.linearVelocity.y) > maxVelocity) {
-                continue
-            }
-
-            if (up) {
-                body.applyForceToCenter(Vec2(0f, force * 4))
-            }
-            if (down) {
-                body.applyForceToCenter(Vec2(0f, -force))
-            }
-            if (left) {
-                body.applyForceToCenter(Vec2(-force, 0f))
-            }
-            if (right) {
-                body.applyForceToCenter(Vec2(force, 0f))
-            }
-        }
-        avgPos.x = avgPos.x / jelly.bodies.size
-        avgPos.y = avgPos.y / jelly.bodies.size
-
-        if (lastPos.dst(avgPos) > 0.25f) {
-            val factor = 0.995f
-
-            size *= factor
-            jelly.inflate(factor)
-            lastPos = avgPos
-        }
-
-        if (size < 0.4f || size > 4f) {
-            destroyed = true
-            world.destroyJoint(jelly)
-        }
-    }
-
-    private inner class MoveInputAdapter : InputAdapter() {
-        override fun keyDown(keycode: Int): Boolean {
-            when (keycode) {
-                Input.Keys.W -> up = true
-                Input.Keys.S -> down = true
-                Input.Keys.A -> left = true
-                Input.Keys.D -> right = true
-                else -> {
-                    return false
-                }
-            }
-            return true
-        }
-
-        override fun keyUp(keycode: Int): Boolean {
-            when (keycode) {
-                Input.Keys.W -> up = false
-                Input.Keys.S -> down = false
-                Input.Keys.A -> left = false
-                Input.Keys.D -> right = false
-                else -> {
-                    return false
-                }
-            }
-            return true
-        }
     }
 
     private inner class TestInputAdapter : InputAdapter() {
@@ -163,11 +71,6 @@ class TestSystem @Inject constructor(
             // Handle mode changing.
             when (keycode) {
                 Input.Keys.ESCAPE -> Gdx.app.exit()
-                Input.Keys.SPACE -> {
-                    jelly.inflate(2f)
-                    size *= 2f
-                }
-
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX

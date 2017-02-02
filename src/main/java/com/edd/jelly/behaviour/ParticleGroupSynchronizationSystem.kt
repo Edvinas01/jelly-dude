@@ -1,4 +1,4 @@
-package com.edd.jelly.systems
+package com.edd.jelly.behaviour
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family

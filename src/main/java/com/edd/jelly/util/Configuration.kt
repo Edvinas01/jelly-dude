@@ -13,4 +13,5 @@ object Configuration {
     val RESIZABLE = false
 
     val GRAVITY = -9.81f
+    val PARTICLE_RADIUS = 0.1f
 }

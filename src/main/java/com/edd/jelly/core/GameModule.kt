@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.edd.jelly.systems.*
+import com.edd.jelly.behaviour.*
+import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.DebugRenderer
 import com.edd.jelly.util.meters
@@ -30,13 +31,24 @@ class GameModule(private val game: Game) : Module {
     @Provides @Singleton
     fun systems(): Systems {
         return Systems(listOf(
+
+                // Testing.
                 TestSystem::class.java,
                 CameraControllerSystem::class.java,
+
+                // Physics simulation.
                 PhysicsSystem::class.java,
+
+                // Synchronization systems.
                 PhysicsSynchronizationSystem::class.java,
+                ParticleGroupSynchronizationSystem::class.java,
+
+                // Other.
+                PlayerSystem::class.java,
+
+                // Rendering.
                 RenderingSystem::class.java,
-                PhysicsDebugSystem::class.java,
-                ParticleGroupSynchronizationSystem::class.java
+                PhysicsDebugSystem::class.java
         ))
     }
 
@@ -50,7 +62,7 @@ class GameModule(private val game: Game) : Module {
 
     @Provides @Singleton
     fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {
-        particleRadius = 0.1f
+        particleRadius = Configuration.PARTICLE_RADIUS
     }
 
     @Provides @Singleton

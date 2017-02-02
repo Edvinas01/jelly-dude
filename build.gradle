@@ -78,8 +78,8 @@ dependencies {
     compile "com.google.inject:guice:$guiceVersion"
 
 //    Still not sure which type of box2d to use... So leaving these here just in case.
-    compile files('libs/liquidfun/gdx-liquidfun-natives.jar')
-    compile files('libs/liquidfun/gdx-liquidfun.jar')
+//    compile files('libs/liquidfun/gdx-liquidfun-natives.jar')
+//    compile files('libs/liquidfun/gdx-liquidfun.jar')
 
     // JBox2d + Liquid fun dependencies.
     compile files('libs/jbox2d/jbox2d-library-2.3.1-SNAPSHOT.jar')
