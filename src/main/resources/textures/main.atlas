@@ -1,11 +1,18 @@
 
-dev.png
+main.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 the_borker
   rotate: false
   xy: 1, 35
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+the_round_borker
+  rotate: false
+  xy: 131, 35
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -19,7 +26,7 @@ dev_grid
   index: -1
 dev_grid_tiny
   rotate: false
-  xy: 131, 147
+  xy: 261, 147
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

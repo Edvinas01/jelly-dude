@@ -1,4 +1,4 @@
-package com.edd.jelly.game.systems
+package com.edd.jelly.systems
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
@@ -7,10 +7,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.edd.jelly.game.components.Renderable
-import com.edd.jelly.game.components.Transform
-import com.edd.jelly.game.components.renderable
-import com.edd.jelly.game.components.transform
+import com.edd.jelly.components.Renderable
+import com.edd.jelly.components.Transform
+import com.edd.jelly.components.renderable
+import com.edd.jelly.components.transform
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 

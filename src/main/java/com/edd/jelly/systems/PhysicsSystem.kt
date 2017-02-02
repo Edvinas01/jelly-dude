@@ -1,8 +1,8 @@
-package com.edd.jelly.game.systems
+package com.edd.jelly.systems
 
 import com.badlogic.ashley.core.EntitySystem
-import com.badlogic.gdx.physics.box2d.World
 import com.google.inject.Inject
+import org.jbox2d.dynamics.World
 
 class PhysicsSystem @Inject constructor(private val world: World) : EntitySystem() {
 
@@ -20,7 +20,7 @@ class PhysicsSystem @Inject constructor(private val world: World) : EntitySystem
 
         accumulator += frameTime
         while (accumulator >= TIME_STEP) {
-            world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, POSITION_ITERATIONS)
+            world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
             accumulator -= TIME_STEP
         }
     }
