@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour
+package com.edd.jelly.behaviour.rendering
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
@@ -14,11 +14,13 @@ import com.edd.jelly.components.transform
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 
-class RenderingSystem @Inject constructor(private val camera: Camera,
-                                          private val batch: Batch) : IteratingSystem(Family.all(
-
+class RenderingSystem @Inject constructor(
+        private val camera: Camera,
+        private val batch: Batch
+) : IteratingSystem(Family.all(
         Transform::class.java,
-        Renderable::class.java).get()) {
+        Renderable::class.java
+).get()) {
 
     override fun update(deltaTime: Float) {
         batch.projectionMatrix = camera.combined

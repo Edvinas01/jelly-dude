@@ -5,10 +5,16 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.g2d.PolygonRegion
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.components.*
 import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.meters
+import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
 import com.google.inject.Inject
@@ -21,10 +27,14 @@ import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
 class PlayerSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
+        private val polygonBatch: PolygonSpriteBatch,
+        private val camera: Camera,
         private val world: World
 ) : IteratingSystem(Family.all(
         Transform::class.java,
@@ -46,16 +56,40 @@ class PlayerSystem @Inject constructor(
         val PLAYER_MAX_VELOCITY = 7f
     }
 
+    val triangulator = EarClippingTriangulator()
+
+    lateinit var playerPolygonRegion: PolygonRegion
     lateinit var playerTexture: TextureRegion
 
     override fun addedToEngine(engine: Engine?) {
         super.addedToEngine(engine)
 
-        playerTexture = resourceManager.mainAtlas["jelly_face"]!!
+        playerTexture = resourceManager.mainAtlas["dev_grid"]!!
 
         // Spawn player and register its input adapter.
-        val spawned = spawnPlayer(0f, 2f).player
+        val player = spawnPlayer(0f, 2f)
+        val transform = player.transform
+        val spawned = player.player
+
         inputMultiplexer.addProcessor(PlayerInputAdapter(spawned))
+
+        val vertices = FloatArray(spawned.joint.bodies.size * 2)
+        spawned.joint.bodies.forEachIndexed { i, body ->
+            val vec = Vec2(transform.position.x, transform.position.y)
+            vertices[i * 2]     = -body.getLocalPoint(vec).x.pixels * playerTexture.regionWidth.meters  + playerTexture.regionWidth  / 2
+            vertices[i * 2 + 1] = -body.getLocalPoint(vec).y.pixels * playerTexture.regionHeight.meters + playerTexture.regionHeight / 2
+        }
+
+        val triangles = triangulator.computeTriangles(vertices)
+        playerPolygonRegion = PolygonRegion(playerTexture, vertices, triangles.toArray())
+    }
+
+    override fun update(deltaTime: Float) {
+        polygonBatch.projectionMatrix = camera.combined
+
+        polygonBatch.begin()
+        super.update(deltaTime)
+        polygonBatch.end()
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
@@ -92,6 +126,22 @@ class PlayerSystem @Inject constructor(
             // Calculate average position of all bodies, center of the blob.
             transform.position.x = averagePosition.x / bodies.size
             transform.position.y = averagePosition.y / bodies.size
+        }
+
+        polygonBatch.draw(playerPolygonRegion,
+                transform.x,
+                transform.y,
+                playerTexture.regionWidth.meters,
+                playerTexture.regionHeight.meters)
+
+        player.joint.bodies.forEachIndexed { i, body ->
+            val vec = Vec2(transform.position.x, transform.position.y)
+
+            playerPolygonRegion.vertices[i * 2] = -body.getLocalPoint(vec).x.pixels
+            playerPolygonRegion.vertices[i * 2 + 1] = -body.getLocalPoint(vec).y.pixels
+        }
+        triangulator.computeTriangles(playerPolygonRegion.vertices).toArray().forEachIndexed { i, triangle ->
+            playerPolygonRegion.triangles[i] = triangle
         }
     }
 

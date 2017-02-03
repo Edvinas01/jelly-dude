@@ -7,9 +7,11 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.*
 import com.edd.jelly.behaviour.player.PlayerSystem
+import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.DebugRenderer
 import com.edd.jelly.util.meters
@@ -43,11 +45,11 @@ class GameModule(private val game: Game) : Module {
                 PhysicsSynchronizationSystem::class.java,
                 ParticleGroupSynchronizationSystem::class.java,
 
+                RenderingSystem::class.java,
                 // Other.
                 PlayerSystem::class.java,
 
                 // Rendering.
-                RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java
         ))
     }
@@ -59,6 +61,9 @@ class GameModule(private val game: Game) : Module {
 
     @Provides @Singleton
     fun batch(): Batch = SpriteBatch()
+
+    @Provides @Singleton
+    fun polygonBatch(): PolygonSpriteBatch = PolygonSpriteBatch()
 
     @Provides @Singleton
     fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {
