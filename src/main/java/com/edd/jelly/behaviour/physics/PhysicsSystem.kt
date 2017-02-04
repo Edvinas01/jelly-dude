@@ -1,4 +1,4 @@
-package com.edd.jelly.systems
+package com.edd.jelly.behaviour.physics
 
 import com.badlogic.ashley.core.EntitySystem
 import com.google.inject.Inject
