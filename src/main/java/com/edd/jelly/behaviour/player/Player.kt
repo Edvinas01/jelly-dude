@@ -1,10 +1,11 @@
-package com.edd.jelly.components
+package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Entity
+import com.edd.jelly.behaviour.components.ComponentResolver
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 
-data class PlayerComponent(
+data class Player(
         val joint: ConstantVolumeJoint
 ) : Component {
 
@@ -13,8 +14,8 @@ data class PlayerComponent(
     var movingLeft: Boolean = false
     var movingRight: Boolean = false
 
-    companion object : ComponentResolver<PlayerComponent>(PlayerComponent::class.java)
+    companion object : ComponentResolver<Player>(Player::class.java)
 }
 
-val Entity.player: PlayerComponent
-    get() = PlayerComponent[this]
+val Entity.player: Player
+    get() = Player[this]

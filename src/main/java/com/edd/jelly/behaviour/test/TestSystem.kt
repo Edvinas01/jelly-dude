@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour
+package com.edd.jelly.behaviour.test
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
@@ -9,13 +9,16 @@ import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.PolygonRegion
+import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.edd.jelly.components.Physics
-import com.edd.jelly.components.Renderable
-import com.edd.jelly.components.Transform
-import com.edd.jelly.components.transform
+import com.edd.jelly.behaviour.physics.Physics
+import com.edd.jelly.behaviour.rendering.Renderable
+import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
 import com.google.inject.Inject
@@ -35,6 +38,7 @@ import org.jbox2d.particle.ParticleType
 
 class TestSystem @Inject constructor(
         inputMultiplexer: InputMultiplexer,
+        private val earClippingTriangulator: EarClippingTriangulator,
         private val resources: ResourceManager,
         private val camera: Camera,
         private val world: World
@@ -245,17 +249,23 @@ class TestSystem @Inject constructor(
     private fun createPlatforms() {
         val atlas = resources.mainAtlas
 
+        // Test polygon rendering.
         engine.addEntity(Entity().apply {
-            add(Renderable(atlas.findRegion("dev_grid")))
-            add(Transform(
-                    Vector2(5f, 5f),
-                    Vector2(2.5f, 2.5f)
-            ))
+            val region = atlas.findRegion("dev_grid")
+            val vertices = floatArrayOf(
+                    0f, 0f,
+                    0f, 16f,
+                    16f, 16f,
+                    16f, 0f
+            )
+
+            val transform = Transform(
+                    Vector2(-1f, 6f),
+                    Vector2(1f, 1f))
 
             val body = world.createBody(BodyDef().apply {
                 type = BodyType.DYNAMIC
             })
-
             body.createFixture(PolygonShape().apply {
                 setAsBox(transform.width / 2, transform.height / 2)
             }, 1f)
@@ -263,8 +273,36 @@ class TestSystem @Inject constructor(
                 Vec2(v.x, v.y)
             }, 0f)
 
+            add(transform)
             add(Physics(body))
+            add(PolygonRenderable(PolygonRegion(
+                    region,
+                    vertices,
+                    earClippingTriangulator.computeTriangles(vertices).toArray())))
         })
+
+        for (i in 1..2) {
+            engine.addEntity(Entity().apply {
+                add(Renderable(atlas.findRegion("dev_grid")))
+                add(Transform(
+                        Vector2(5f, 5f + i),
+                        Vector2(i.toFloat(), i.toFloat())
+                ))
+
+                val body = world.createBody(BodyDef().apply {
+                    type = BodyType.DYNAMIC
+                })
+
+                body.createFixture(PolygonShape().apply {
+                    setAsBox(transform.width / 2, transform.height / 2)
+                }, 1f)
+                body.setTransform(transform.position.let { v ->
+                    Vec2(v.x, v.y)
+                }, 0f)
+
+                add(Physics(body))
+            })
+        }
 
         fun staticPlatform(x: Float, y: Float, width: Float, height: Float) {
             engine.addEntity(Entity().apply {

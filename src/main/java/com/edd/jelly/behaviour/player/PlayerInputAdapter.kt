@@ -2,9 +2,9 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
-import com.edd.jelly.components.PlayerComponent
+import com.edd.jelly.behaviour.player.Player
 
-class PlayerInputAdapter(private val player: PlayerComponent) : InputAdapter() {
+class PlayerInputAdapter(private val player: Player) : InputAdapter() {
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {

@@ -9,9 +9,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.EarClippingTriangulator
 import com.edd.jelly.behaviour.*
+import com.edd.jelly.behaviour.physics.ParticleGroupSynchronizationSystem
+import com.edd.jelly.behaviour.physics.PhysicsDebugSystem
+import com.edd.jelly.behaviour.physics.PhysicsSynchronizationSystem
+import com.edd.jelly.behaviour.physics.PhysicsSystem
+import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
+import com.edd.jelly.behaviour.test.CameraControllerSystem
+import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.DebugRenderer
 import com.edd.jelly.util.meters
@@ -45,13 +53,21 @@ class GameModule(private val game: Game) : Module {
                 PhysicsSynchronizationSystem::class.java,
                 ParticleGroupSynchronizationSystem::class.java,
 
-                RenderingSystem::class.java,
-                // Other.
+                // Player.
                 PlayerSystem::class.java,
+                PlayerSynchronizationSystem::class.java,
 
                 // Rendering.
+                RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java
         ))
+    }
+
+    @Provides @Singleton
+    fun earClippingTriangulator(): EarClippingTriangulator {
+
+        // This object keeps a state, not sure if it can be a singleton.
+        return EarClippingTriangulator()
     }
 
     @Provides @Singleton
@@ -60,10 +76,10 @@ class GameModule(private val game: Game) : Module {
     }
 
     @Provides @Singleton
-    fun batch(): Batch = SpriteBatch()
+    fun polygonBatch(): PolygonSpriteBatch = PolygonSpriteBatch()
 
     @Provides @Singleton
-    fun polygonBatch(): PolygonSpriteBatch = PolygonSpriteBatch()
+    fun batch(): SpriteBatch = SpriteBatch()
 
     @Provides @Singleton
     fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {

@@ -5,15 +5,12 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.components.*
+import com.edd.jelly.behaviour.components.*
+import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.exception.GameException
-import com.edd.jelly.util.meters
 import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
@@ -21,32 +18,28 @@ import com.google.inject.Inject
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.common.MathUtils
 import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.BodyDef
-import org.jbox2d.dynamics.BodyType
-import org.jbox2d.dynamics.FixtureDef
-import org.jbox2d.dynamics.World
+import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 class PlayerSystem @Inject constructor(
+        private val earClippingTriangulator: EarClippingTriangulator,
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
-        private val polygonBatch: PolygonSpriteBatch,
-        private val camera: Camera,
         private val world: World
 ) : IteratingSystem(Family.all(
         Transform::class.java,
-        PlayerComponent::class.java
+        Player::class.java
 ).get()) {
 
     companion object {
+        val PLAYER_TEXTURE_NAME = "the_borker"
+
         val PLAYER_VERTEX_COUNT = 40
         val PLAYER_VERTEX_SIZE = 0.02f
 
-        val PLAYER_WIDTH = 0.55f
-        val PLAYER_HEIGHT = 0.6f
+        val PLAYER_WIDTH = 1.1f
+        val PLAYER_HEIGHT = 1.2f
         val PLAYER_MOVE_FORCE = 0.05f
 
         val PLAYER_DAMPING = 2f
@@ -56,54 +49,20 @@ class PlayerSystem @Inject constructor(
         val PLAYER_MAX_VELOCITY = 7f
     }
 
-    val triangulator = EarClippingTriangulator()
-
-    lateinit var playerPolygonRegion: PolygonRegion
-    lateinit var playerTexture: TextureRegion
-
     override fun addedToEngine(engine: Engine?) {
         super.addedToEngine(engine)
 
-        playerTexture = resourceManager.mainAtlas["dev_grid"]!!
-
         // Spawn player and register its input adapter.
-        val player = spawnPlayer(0f, 2f)
-        val transform = player.transform
-        val spawned = player.player
-
-        inputMultiplexer.addProcessor(PlayerInputAdapter(spawned))
-
-        val vertices = FloatArray(spawned.joint.bodies.size * 2)
-        spawned.joint.bodies.forEachIndexed { i, body ->
-            val vec = Vec2(transform.position.x, transform.position.y)
-            vertices[i * 2]     = -body.getLocalPoint(vec).x.pixels * playerTexture.regionWidth.meters  + playerTexture.regionWidth  / 2
-            vertices[i * 2 + 1] = -body.getLocalPoint(vec).y.pixels * playerTexture.regionHeight.meters + playerTexture.regionHeight / 2
-        }
-
-        val triangles = triangulator.computeTriangles(vertices)
-        playerPolygonRegion = PolygonRegion(playerTexture, vertices, triangles.toArray())
-    }
-
-    override fun update(deltaTime: Float) {
-        polygonBatch.projectionMatrix = camera.combined
-
-        polygonBatch.begin()
-        super.update(deltaTime)
-        polygonBatch.end()
+        inputMultiplexer.addProcessor(PlayerInputAdapter(spawnPlayer(0f, 2f).player))
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val transform = entity.transform
         val player = entity.player
 
         with(player) {
-            val averagePosition = Vector2()
             val bodies = player.joint.bodies
 
             for (body in bodies) {
-                averagePosition.x += body.position.x
-                averagePosition.y += body.position.y
-
                 val velocity = body.linearVelocity
 
                 // Up and down movement.
@@ -122,35 +81,50 @@ class PlayerSystem @Inject constructor(
                     body.applyForceToCenter(Vec2(PLAYER_MOVE_FORCE, 0f))
                 }
             }
-
-            // Calculate average position of all bodies, center of the blob.
-            transform.position.x = averagePosition.x / bodies.size
-            transform.position.y = averagePosition.y / bodies.size
         }
+    }
 
-        polygonBatch.draw(playerPolygonRegion,
-                transform.x,
-                transform.y,
-                playerTexture.regionWidth.meters,
-                playerTexture.regionHeight.meters)
+    /**
+     * Create polygon region from provided transform position, size and body vertices.
+     */
+    private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
+        val playerTexture = resourceManager.mainAtlas[PLAYER_TEXTURE_NAME]!!
 
-        player.joint.bodies.forEachIndexed { i, body ->
-            val vec = Vec2(transform.position.x, transform.position.y)
+        val xRatio = playerTexture.regionWidth / transform.width.pixels
+        val yRatio = playerTexture.regionHeight / transform.height.pixels
 
-            playerPolygonRegion.vertices[i * 2] = -body.getLocalPoint(vec).x.pixels
-            playerPolygonRegion.vertices[i * 2 + 1] = -body.getLocalPoint(vec).y.pixels
+        val halfWidth = playerTexture.regionWidth / 2
+        val halfHeight = playerTexture.regionHeight / 2
+
+        val worldPoint = Vec2(transform.position.x, transform.position.y)
+        val vertices = FloatArray(bodies.size * 2)
+
+        bodies.forEachIndexed { i, body ->
+
+            // x coordinates.
+            vertices[i * 2] =
+                    -body.getLocalPoint(worldPoint).x.pixels * xRatio + halfWidth
+
+            // y coordinates.
+            vertices[i * 2 + 1] =
+                    -body.getLocalPoint(worldPoint).y.pixels * yRatio + halfHeight
         }
-        triangulator.computeTriangles(playerPolygonRegion.vertices).toArray().forEachIndexed { i, triangle ->
-            playerPolygonRegion.triangles[i] = triangle
-        }
+        return PolygonRegion(
+                playerTexture,
+                vertices,
+                earClippingTriangulator.computeTriangles(vertices).toArray())
     }
 
     /**
      * Spawn player at a given location.
      */
-    private fun spawnPlayer(x: Float, y: Float): Entity {
+    private fun spawnPlayer(x: Float,
+                            y: Float,
+                            width: Float = PLAYER_WIDTH,
+                            height: Float = PLAYER_HEIGHT): Entity {
+
         val players = engine.getEntitiesFor(Family
-                .all(PlayerComponent::class.java)
+                .all(Player::class.java)
                 .get())
 
         // For now only one player is allowed.
@@ -159,14 +133,14 @@ class PlayerSystem @Inject constructor(
         }
 
         val entity = Entity().apply {
-            val transform = Transform(
-                    Vector2(x, y),
-                    Vector2(PLAYER_WIDTH, PLAYER_HEIGHT))
-
             val joint = world.createJoint(ConstantVolumeJointDef().apply {
                 collideConnected = false
                 dampingRatio = PLAYER_DAMPING
                 frequencyHz = PLAYER_HZ
+
+                // We're going round in a circle, radius will be double, so have to divide by two.
+                val halfWidth = width / 2
+                val halfHeight = height / 2
 
                 for (vertex in 0..PLAYER_VERTEX_COUNT - 1) {
 
@@ -181,8 +155,8 @@ class PlayerSystem @Inject constructor(
 
                         fixedRotation = true
                         position = Vec2(
-                                x + transform.width * MathUtils.sin(angle),
-                                y + transform.height * MathUtils.cos(angle))
+                                x + halfWidth * MathUtils.sin(angle),
+                                y + halfHeight * MathUtils.cos(angle))
 
                         type = BodyType.DYNAMIC
 
@@ -197,9 +171,13 @@ class PlayerSystem @Inject constructor(
                 }
             }) as ConstantVolumeJoint
 
+            val transform = Transform(
+                    Vector2(x, y),
+                    Vector2(width, height))
+
             // Register player entity components.
-            add(Renderable(playerTexture))
-            add(PlayerComponent(joint))
+            add(PolygonRenderable(createPlayerTexture(transform, joint.bodies)))
+            add(Player(joint))
             add(transform)
         }
         engine.addEntity(entity)

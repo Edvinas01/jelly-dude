@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour
+package com.edd.jelly.behaviour.test
 
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Input

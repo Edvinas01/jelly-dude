@@ -1,4 +1,4 @@
-package com.edd.jelly.components
+package com.edd.jelly.behaviour.components
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
