@@ -23,7 +23,7 @@ class ResourceManager @Inject constructor() {
     /**
      * Main texture atlas.
      */
-    lateinit var mainAtlas: TextureAtlas
+    val mainAtlas: TextureAtlas
 
     init {
         mainAtlas = getAtlas(MAIN_ATLAS_NAME)

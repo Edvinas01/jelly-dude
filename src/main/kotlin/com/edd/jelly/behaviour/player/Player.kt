@@ -1,8 +1,8 @@
 package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.Entity
 import com.edd.jelly.behaviour.components.ComponentResolver
+import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 
 data class Player(
@@ -14,8 +14,17 @@ data class Player(
     var movingLeft: Boolean = false
     var movingRight: Boolean = false
 
+    /**
+     * How long has the player been off the ground.
+     */
+    var airTime = 0f
+
+    var canJump = true
+
+    /**
+     * Set of player contacts, identified by reference id.
+     */
+    val contacts = mutableSetOf<Contact>()
+
     companion object : ComponentResolver<Player>(Player::class.java)
 }
-
-val Entity.player: Player
-    get() = Player[this]

@@ -1,10 +1,15 @@
 package com.edd.jelly.behaviour.physics
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
+import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
-class PhysicsSystem @Inject constructor(private val world: World) : EntitySystem() {
+class PhysicsSystem @Inject constructor(
+        private val messagingContactListener: MessagingContactListener,
+        private val world: World
+) : EntitySystem() {
 
     companion object {
         private val VELOCITY_ITERATIONS = 6
@@ -14,6 +19,12 @@ class PhysicsSystem @Inject constructor(private val world: World) : EntitySystem
     }
 
     private var accumulator = 0f
+
+    override fun addedToEngine(engine: Engine) {
+        super.addedToEngine(engine)
+
+        world.setContactListener(messagingContactListener)
+    }
 
     override fun update(deltaTime: Float) {
         val frameTime = Math.min(deltaTime, MIN_FRAME_TIME)

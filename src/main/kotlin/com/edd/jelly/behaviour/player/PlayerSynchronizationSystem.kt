@@ -21,7 +21,7 @@ class PlayerSynchronizationSystem @Inject constructor(
 ).get()) {
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val bodies = entity.player.joint.bodies
+        val bodies = Player.mapper[entity].joint.bodies
 
         // Adjust player transform, gotta sync it first since further calculations require it to be in position. Thus
         // two iterations of bodies are required. Can't think of a better way right now.

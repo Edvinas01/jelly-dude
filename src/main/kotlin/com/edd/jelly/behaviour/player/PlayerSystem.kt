@@ -9,7 +9,11 @@ import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.*
+import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
+import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
+import com.edd.jelly.core.events.Listener
+import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
@@ -19,6 +23,7 @@ import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.common.MathUtils
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
+import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
 
@@ -26,6 +31,7 @@ class PlayerSystem @Inject constructor(
         private val earClippingTriangulator: EarClippingTriangulator,
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
+        private val messaging: Messaging,
         private val world: World
 ) : IteratingSystem(Family.all(
         Transform::class.java,
@@ -47,26 +53,41 @@ class PlayerSystem @Inject constructor(
         val PLAYER_HZ = 20f
 
         val PLAYER_MAX_VELOCITY = 7f
+
+        /**
+         * Player air time in seconds.
+         */
+        val PLAYER_MAX_AIR_TIME = 0.2f
     }
 
-    override fun addedToEngine(engine: Engine?) {
+    override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
 
         // Spawn player and register its input adapter.
-        inputMultiplexer.addProcessor(PlayerInputAdapter(spawnPlayer(0f, 2f).player))
+        inputMultiplexer.addProcessor(PlayerInputAdapter(Player.mapper[spawnPlayer(0f, 2f)]))
+
+        // Initialize player event listeners.
+        initListeners()
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val player = entity.player
+        with(Player.mapper[entity]) {
 
-        with(player) {
-            val bodies = player.joint.bodies
+            // If player has no contacts at the moment, it means he is in the air.
+            if (contacts.isEmpty()) {
+                airTime += deltaTime // TODO check if there is a better way to calc time.
+            }
 
-            for (body in bodies) {
+            // Player can jump if hes been in air for not too long.
+            canJump = airTime < PLAYER_MAX_AIR_TIME
+
+            for (body in joint.bodies) {
+
+                // Current velocity of this body.
                 val velocity = body.linearVelocity
 
                 // Up and down movement.
-                if (movingUp && velocity.y < PLAYER_MAX_VELOCITY) {
+                if (canJump && movingUp && velocity.y < PLAYER_MAX_VELOCITY) {
                     body.applyForceToCenter(Vec2(0f, PLAYER_MOVE_FORCE * 4))
                 }
                 if (movingDown && velocity.y > -PLAYER_MAX_VELOCITY) {
@@ -175,12 +196,59 @@ class PlayerSystem @Inject constructor(
                     Vector2(x, y),
                     Vector2(width, height))
 
+            val player = Player(joint)
+            joint.bodies.forEach { body ->
+                body.userData = player
+            }
+
             // Register player entity components.
             add(PolygonRenderable(createPlayerTexture(transform, joint.bodies)))
-            add(Player(joint))
+            add(player)
             add(transform)
         }
         engine.addEntity(entity)
         return entity
+    }
+
+    /**
+     * Initialize physics listeners for player system.
+     */
+    private fun initListeners() {
+        fun resolvePlayer(contact: Contact): Pair<Player, Body>? {
+            val dataA = contact.fixtureA.body.userData
+            val dataB = contact.fixtureB.body.userData
+
+            // Player is touching himself, ignore.
+            if (dataA is Player && dataB is Player) {
+                return null
+            }
+
+            if (dataA is Player) {
+                return Pair(dataA, contact.fixtureB.body)
+            }
+            if (dataB is Player) {
+                return Pair(dataB, contact.fixtureA.body)
+            }
+            return null
+        }
+
+        messaging.listen(object : Listener<EndContactEvent> {
+            override fun listen(event: EndContactEvent) {
+                resolvePlayer(event.contact)?.let {
+                    it.first.contacts.remove(event.contact)
+                }
+            }
+        })
+
+        messaging.listen(object : Listener<BeginContactEvent> {
+            override fun listen(event: BeginContactEvent) {
+                resolvePlayer(event.contact)?.let {
+                    with(it.first) {
+                        contacts.add(event.contact)
+                        airTime = 0f
+                    }
+                }
+            }
+        })
     }
 }
