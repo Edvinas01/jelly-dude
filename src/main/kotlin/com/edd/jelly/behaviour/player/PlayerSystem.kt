@@ -20,6 +20,7 @@ import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
 import com.google.inject.Inject
+import org.jbox2d.collision.WorldManifold
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.common.MathUtils
 import org.jbox2d.common.Vec2
@@ -253,12 +254,23 @@ class PlayerSystem @Inject constructor(
         // Listen for when player starts touching an object.
         messaging.listen(object : Listener<BeginContactEvent> {
             override fun listen(event: BeginContactEvent) {
-                resolvePlayer(event.contact)?.let {
-                    with(it.first) {
-                        contacts.add(event.contact)
 
-                        if (contacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
-                            airTime = 0f
+                // Did a player trigger this contact?
+                resolvePlayer(event.contact)?.let {
+                    with(event.contact) {
+                        val manifold = WorldManifold()
+                        getWorldManifold(manifold)
+
+                        // Player hit the upper part of the body.
+                        if (manifold.normal.y > 0) {
+                            with(it.first) {
+                                contacts.add(event.contact)
+
+                                // Enough contacts registered to reset player air time.
+                                if (contacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
+                                    airTime = 0f
+                                }
+                            }
                         }
                     }
                 }
