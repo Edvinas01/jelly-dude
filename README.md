@@ -2,7 +2,7 @@
   <img src="logo.png"/>
 </p>
 
-# Jelly Dude
+# Jelly Mother
 2d game based on soft body physics.
 
 ## Running
