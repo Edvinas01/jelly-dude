@@ -15,6 +15,7 @@ import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.degrees
 import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
@@ -43,21 +44,27 @@ class PlayerSystem @Inject constructor(
 
         val PLAYER_VERTEX_COUNT = 40
         val PLAYER_VERTEX_SIZE = 0.02f
-
         val PLAYER_WIDTH = 1.1f
         val PLAYER_HEIGHT = 1.2f
-        val PLAYER_MOVE_FORCE = 0.05f
 
-        val PLAYER_DAMPING = 2f
-        val PLAYER_DENSITY = 1f
-        val PLAYER_HZ = 20f
+        val MOVE_FORCE = 0.05f
 
-        val PLAYER_MAX_VELOCITY = 7f
+        val DAMPING = 2f
+        val DENSITY = 1f
+        val HZ = 20f
+
+        val MAX_VELOCITY = 7f
 
         /**
          * Player air time in seconds.
          */
-        val PLAYER_MAX_AIR_TIME = 0.2f
+        val MAX_AIR_TIME = 0.2f
+
+        /**
+         * Minimum player physics contact ratio for when it counts that a player is touching the ground. The higher the
+         * number, the less contacts are needed.
+         */
+        val MIN_CONTACT_RATIO = 5
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -79,7 +86,7 @@ class PlayerSystem @Inject constructor(
             }
 
             // Player can jump if hes been in air for not too long.
-            canJump = airTime < PLAYER_MAX_AIR_TIME
+            canJump = airTime < MAX_AIR_TIME
 
             for (body in joint.bodies) {
 
@@ -87,19 +94,19 @@ class PlayerSystem @Inject constructor(
                 val velocity = body.linearVelocity
 
                 // Up and down movement.
-                if (canJump && movingUp && velocity.y < PLAYER_MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(0f, PLAYER_MOVE_FORCE * 4))
+                if (canJump && movingUp && velocity.y < MAX_VELOCITY) {
+                    body.applyForceToCenter(Vec2(0f, MOVE_FORCE * 4))
                 }
-                if (movingDown && velocity.y > -PLAYER_MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(0f, -PLAYER_MOVE_FORCE))
+                if (movingDown && velocity.y > -MAX_VELOCITY) {
+                    body.applyForceToCenter(Vec2(0f, -MOVE_FORCE))
                 }
 
                 // Left and right movement.
-                if (movingLeft && velocity.x > -PLAYER_MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(-PLAYER_MOVE_FORCE, 0f))
+                if (movingLeft && velocity.x > -MAX_VELOCITY) {
+                    body.applyForceToCenter(Vec2(-MOVE_FORCE, 0f))
                 }
-                if (movingRight && velocity.x < PLAYER_MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(PLAYER_MOVE_FORCE, 0f))
+                if (movingRight && velocity.x < MAX_VELOCITY) {
+                    body.applyForceToCenter(Vec2(MOVE_FORCE, 0f))
                 }
             }
         }
@@ -156,8 +163,8 @@ class PlayerSystem @Inject constructor(
         val entity = Entity().apply {
             val joint = world.createJoint(ConstantVolumeJointDef().apply {
                 collideConnected = false
-                dampingRatio = PLAYER_DAMPING
-                frequencyHz = PLAYER_HZ
+                dampingRatio = DAMPING
+                frequencyHz = HZ
 
                 // We're going round in a circle, radius will be double, so have to divide by two.
                 val halfWidth = width / 2
@@ -183,7 +190,7 @@ class PlayerSystem @Inject constructor(
 
                     }).apply {
                         createFixture(FixtureDef().apply {
-                            density = PLAYER_DENSITY
+                            density = DENSITY
                             shape = CircleShape().apply {
                                 radius = PLAYER_VERTEX_SIZE
                             }
@@ -214,6 +221,8 @@ class PlayerSystem @Inject constructor(
      * Initialize physics listeners for player system.
      */
     private fun initListeners() {
+
+        // Resolve player component from a contact.
         fun resolvePlayer(contact: Contact): Pair<Player, Body>? {
             val dataA = contact.fixtureA.body.userData
             val dataB = contact.fixtureB.body.userData
@@ -232,6 +241,7 @@ class PlayerSystem @Inject constructor(
             return null
         }
 
+        // Listen for when player stops touching an object.
         messaging.listen(object : Listener<EndContactEvent> {
             override fun listen(event: EndContactEvent) {
                 resolvePlayer(event.contact)?.let {
@@ -240,12 +250,16 @@ class PlayerSystem @Inject constructor(
             }
         })
 
+        // Listen for when player starts touching an object.
         messaging.listen(object : Listener<BeginContactEvent> {
             override fun listen(event: BeginContactEvent) {
                 resolvePlayer(event.contact)?.let {
                     with(it.first) {
                         contacts.add(event.contact)
-                        airTime = 0f
+
+                        if (contacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
+                            airTime = 0f
+                        }
                     }
                 }
             }
