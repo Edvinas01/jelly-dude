@@ -2,7 +2,7 @@
   <img src="logo.png"/>
 </p>
 
-# Jelly Mother
+# Jelly Dude
 2d game based on soft body physics.
 
 ## Running
@@ -18,4 +18,4 @@ And on a Windows machine
 gradlew.bat run
 ```
 
-This will build the game and launch it.
+This will download all required dependecies, build the game and launch it.
