@@ -28,6 +28,8 @@ import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
+import org.jbox2d.dynamics.joints.WeldJoint
+import org.jbox2d.dynamics.joints.WeldJointDef
 
 class PlayerSystem @Inject constructor(
         private val earClippingTriangulator: EarClippingTriangulator,
@@ -48,13 +50,12 @@ class PlayerSystem @Inject constructor(
         val PLAYER_WIDTH = 1.1f
         val PLAYER_HEIGHT = 1.2f
 
-        val MOVE_FORCE = 0.05f
-
         val DAMPING = 2f
         val DENSITY = 1f
         val HZ = 20f
-
         val MAX_VELOCITY = 7f
+
+        val MOVE_FORCE = 0.05f * DENSITY
 
         /**
          * Player air time in seconds.
@@ -67,8 +68,8 @@ class PlayerSystem @Inject constructor(
          */
         val MIN_CONTACT_RATIO = 5
 
-        val DEFLATION_JOINT_MULTIPLIER = 8f
         val DEFLATION_SPEED_MULTIPLIER = 1 / 2f
+        val DEFLATION_JOINT_LENGTH = 0.04f
         val DEFLATION_AMOUNT = 0.7f
         val DEFLATION_SPEED = 10
     }
@@ -86,13 +87,13 @@ class PlayerSystem @Inject constructor(
     override fun processEntity(entity: Entity, deltaTime: Float) {
         with(Player.mapper[entity]) {
 
-            // If player has no contacts at the moment, it means he is in the air.
-            if (contacts.isEmpty()) {
-                airTime += deltaTime // TODO check if there is a better way to calc time.
+            // If player has no contacts or joints at the moment, it means he is in the air.
+            if (groundContacts.isEmpty() && stickyJoints.isEmpty()) {
+                airTime += deltaTime
             }
 
-            // Player can jump if hes been in air for not too long.
-            canJump = airTime < MAX_AIR_TIME
+            // Player can jump if hes been in air for not too long or has some sticky joints.
+            canJump = airTime < MAX_AIR_TIME || stickyJoints.size > MIN_CONTACT_RATIO
 
             // Calculated move force for this player.
             val moveForce = speedMultiplier * MOVE_FORCE
@@ -119,7 +120,45 @@ class PlayerSystem @Inject constructor(
                 }
             }
 
+            handleStickiness(this)
             handleSize(this, deltaTime)
+        }
+    }
+
+    /**
+     * Handle player stickiness to objects.
+     */
+    private fun handleStickiness(player: Player) {
+        with(player) {
+            if (sticky) {
+                for (contact in contacts) {
+                    if (stickyJoints.containsKey(contact)
+
+                            // Joint's don't seem to work with static bodies.
+                            || BodyType.STATIC == contact.fixtureA.body.type
+                            || BodyType.STATIC == contact.fixtureB.body.type) {
+
+                        continue
+                    }
+
+                    // Create a joint to where a player is contacting another body.
+                    stickyJoints.put(contact, world.createJoint(WeldJointDef().apply {
+                        val manifold = WorldManifold()
+                        contact.getWorldManifold(manifold)
+
+                        initialize(contact.fixtureA.body, contact.fixtureB.body, manifold.points.first())
+
+                        collideConnected = true
+                    }) as WeldJoint)
+                }
+            } else {
+
+                // Player is not sticky, cleanup old joints.
+                stickyJoints.forEach {
+                    world.destroyJoint(it.value)
+                }
+                stickyJoints.clear()
+            }
         }
     }
 
@@ -132,11 +171,11 @@ class PlayerSystem @Inject constructor(
             // Key to deflate or inflate was pressed or released.
             if (deflationState == Player.Deflation.DEFLATE || deflationState == Player.Deflation.INFLATE) {
                 val direction = if (deflationState == Player.Deflation.DEFLATE) {
-                    deflationJointMultiplier = 1 / DEFLATION_JOINT_MULTIPLIER
+                    deflationJointLength = -DEFLATION_JOINT_LENGTH
                     speedMultiplier = DEFLATION_SPEED_MULTIPLIER
                     1f
                 } else {
-                    deflationJointMultiplier = DEFLATION_JOINT_MULTIPLIER
+                    deflationJointLength = DEFLATION_JOINT_LENGTH
                     speedMultiplier = 1f
                     -1f
                 }
@@ -163,7 +202,7 @@ class PlayerSystem @Inject constructor(
 
                     // Strengthen or weaken joints according to deflation factor.
                     for (joint in joint.joints) {
-                        joint.length *= deflationJointMultiplier
+                        joint.length += deflationJointLength
                     }
                     deflationState = Player.Deflation.IDLE
                 }
@@ -281,30 +320,16 @@ class PlayerSystem @Inject constructor(
      */
     private fun initListeners() {
 
-        // Resolve player component from a contact.
-        fun resolvePlayer(contact: Contact): Pair<Player, Body>? {
-            val dataA = contact.fixtureA.body.userData
-            val dataB = contact.fixtureB.body.userData
-
-            // Player is touching himself, ignore.
-            if (dataA is Player && dataB is Player) {
-                return null
-            }
-
-            if (dataA is Player) {
-                return Pair(dataA, contact.fixtureB.body)
-            }
-            if (dataB is Player) {
-                return Pair(dataB, contact.fixtureA.body)
-            }
-            return null
-        }
-
         // Listen for when player stops touching an object.
         messaging.listen(object : Listener<EndContactEvent> {
             override fun listen(event: EndContactEvent) {
-                resolvePlayer(event.contact)?.let {
-                    it.first.contacts.remove(event.contact)
+                resolveContact(event.contact)?.let {
+                    with(it.first) {
+
+                        // Cleanup the contacts.
+                        groundContacts.remove(event.contact)
+                        contacts.remove(event.contact)
+                    }
                 }
             }
         })
@@ -314,18 +339,22 @@ class PlayerSystem @Inject constructor(
             override fun listen(event: BeginContactEvent) {
 
                 // Did a player trigger this contact?
-                resolvePlayer(event.contact)?.let {
+                resolveContact(event.contact)?.let {
                     with(event.contact) {
+
+                        // Always populate the list of all contacts.
+                        it.first.contacts.add(this)
+
                         val manifold = WorldManifold()
                         getWorldManifold(manifold)
 
                         // Player hit the upper part of the body.
                         if (manifold.normal.y > 0) {
                             with(it.first) {
-                                contacts.add(event.contact)
+                                groundContacts.add(event.contact)
 
                                 // Enough contacts registered to reset player air time.
-                                if (contacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
+                                if (groundContacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
                                     airTime = 0f
                                 }
                             }
@@ -334,5 +363,26 @@ class PlayerSystem @Inject constructor(
                 }
             }
         })
+    }
+
+    /**
+     * Resolve player and body which player is touching from a contact.
+     */
+    private fun resolveContact(contact: Contact): Pair<Player, Body>? {
+        val dataA = contact.fixtureA.body.userData
+        val dataB = contact.fixtureB.body.userData
+
+        // Player is touching himself, ignore.
+        if (dataA is Player && dataB is Player) {
+            return null
+        }
+
+        if (dataA is Player) {
+            return Pair(dataA, contact.fixtureB.body)
+        }
+        if (dataB is Player) {
+            return Pair(dataB, contact.fixtureA.body)
+        }
+        return null
     }
 }

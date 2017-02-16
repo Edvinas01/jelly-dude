@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component
 import com.edd.jelly.behaviour.components.ComponentResolver
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
+import org.jbox2d.dynamics.joints.WeldJoint
 
 data class Player(
         val joint: ConstantVolumeJoint
@@ -23,7 +24,7 @@ data class Player(
     var movingDown = false
     var movingLeft = false
     var movingRight = false
-    var stick = false
+    var sticky = false
 
     /**
      * How long has the player been off the ground.
@@ -31,8 +32,15 @@ data class Player(
     var airTime = 0f
     var canJump = true
 
+    val stickyJoints = mutableMapOf<Contact, WeldJoint>()
+
     /**
-     * Set of player contacts, identified by reference id.
+     * Set of player contacts ground contacts, identified by reference id.
+     */
+    val groundContacts = mutableSetOf<Contact>()
+
+    /**
+     * Set of all player contacts.
      */
     val contacts = mutableSetOf<Contact>()
 
@@ -45,7 +53,7 @@ data class Player(
      * Current deflation state.
      */
     var deflationState = Deflation.IDLE
-    var deflationJointMultiplier = 1f
+    var deflationJointLength = 0f
 
     var speedMultiplier = 1f
 
