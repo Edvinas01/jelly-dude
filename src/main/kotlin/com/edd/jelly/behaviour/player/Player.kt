@@ -64,4 +64,11 @@ data class Player(
     var speedMultiplier = 1f
 
     companion object : ComponentResolver<Player>(Player::class.java)
+
+    /**
+     * Check player has enough ground contacts based on provided contact ratio.
+     */
+    fun testContactRatio(ratio: Int): Boolean {
+        return groundContacts.size >= joint.bodies.size / ratio
+    }
 }

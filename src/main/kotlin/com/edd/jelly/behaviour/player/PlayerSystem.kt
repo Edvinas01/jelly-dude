@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.edd.jelly.behaviour.components.*
+import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
@@ -47,20 +48,27 @@ class PlayerSystem @Inject constructor(
 ).get()) {
 
     companion object {
-        val PLAYER_TEXTURE_NAME = "the_borker"
 
+        /**
+         * Speed of the camera which follows the player.
+         */
         val CAMERA_SPEED = 2f
+
+        // Player body constants.
+        val PLAYER_TEXTURE_NAME = "the_borker"
         val PLAYER_VERTEX_COUNT = 40
         val PLAYER_VERTEX_SIZE = 0.02f
         val PLAYER_WIDTH = 1.1f
         val PLAYER_HEIGHT = 1.2f
-
         val DAMPING = 2f
         val DENSITY = 1f
         val HZ = 20f
-        val MAX_VELOCITY = 7f
 
+        /**
+         * The force which is applied to the player when its moving.
+         */
         val MOVE_FORCE = 0.05f * DENSITY
+        val MAX_VELOCITY = 7f
 
         /**
          * Player air time in seconds.
@@ -73,13 +81,16 @@ class PlayerSystem @Inject constructor(
          */
         val MIN_CONTACT_RATIO = 5
 
-        val HEALTH_TICK_DISTANCE = 5
+        /**
+         * How much does the player have to travel in order for a health tick to occur,
+         */
+        val HEALTH_TICK_DISTANCE = 30
 
         // Deflation stuff.
         val DEFLATION_SPEED_MULTIPLIER = 1 / 2f
         val DEFLATION_JOINT_LENGTH = 0.04f
         val DEFLATION_AMOUNT = 0.7f
-        val DEFLATION_SPEED = 10
+        val DEFLATION_SPEED = 5
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -91,7 +102,20 @@ class PlayerSystem @Inject constructor(
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        with(Player.mapper[entity]) {
+        val player = Player.mapper[entity]
+
+        processMovement(player, deltaTime)
+        processHealth(player, entity)
+        processStickiness(player)
+        processDeflation(player, deltaTime)
+        processCamera(entity.transform, deltaTime)
+    }
+
+    /**
+     * Process player movement and jumping.
+     */
+    private fun processMovement(player: Player, deltaTime: Float) {
+        with(player) {
 
             // If player has no contacts or joints at the moment, it means he is in the air.
             if (groundContacts.isEmpty() && stickyJoints.isEmpty()) {
@@ -99,7 +123,7 @@ class PlayerSystem @Inject constructor(
             }
 
             // Player can jump if hes been in air for not too long or has some sticky joints.
-            canJump = airTime < MAX_AIR_TIME || stickyJoints.size > MIN_CONTACT_RATIO
+            canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO)
 
             // Calculated move force for this player.
             val moveForce = speedMultiplier * MOVE_FORCE
@@ -125,18 +149,13 @@ class PlayerSystem @Inject constructor(
                     body.applyForceToCenter(Vec2(moveForce, 0f))
                 }
             }
-
-            handleHealth(this, entity)
-            handleStickiness(this)
-            handleSize(this, deltaTime)
-            handleCamera(entity.transform, deltaTime)
         }
     }
 
     /**
-     * Handle player health drain.
+     * Process player health drain.
      */
-    private fun handleHealth(player: Player, entity: Entity) {
+    private fun processHealth(player: Player, entity: Entity) {
         with(player) {
             if (contacts.isEmpty()) {
                 return
@@ -155,9 +174,9 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
-     * Handle player stickiness to objects.
+     * Process player stickiness to objects.
      */
-    private fun handleStickiness(player: Player) {
+    private fun processStickiness(player: Player) {
         with(player) {
             if (sticky) {
                 for (contact in contacts) {
@@ -192,9 +211,9 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
-     * Handle shrinking and growing of a player.
+     * Process shrinking and growing of a player.
      */
-    private fun handleSize(player: Player, deltaTime: Float) {
+    private fun processDeflation(player: Player, deltaTime: Float) {
         with(player) {
 
             // Key to deflate or inflate was pressed or released.
@@ -230,6 +249,7 @@ class PlayerSystem @Inject constructor(
                 } else {
 
                     // Strengthen or weaken joints according to deflation factor.
+                    // TODO figure out why this is breaking
                     for (joint in joint.joints) {
                         joint.length += deflationJointLength
                     }
@@ -240,9 +260,9 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
-     * Handle camera movements for the player.
+     * Process camera movements for the player.
      */
-    private fun handleCamera(transform: Transform, deltaTime: Float) {
+    private fun processCamera(transform: Transform, deltaTime: Float) {
         camera.position.lerp(Vector3(
                 transform.position.x,
                 transform.position.y,
@@ -436,7 +456,7 @@ class PlayerSystem @Inject constructor(
                                 groundContacts.add(event.contact)
 
                                 // Enough contacts registered to reset player air time.
-                                if (groundContacts.size >= joint.bodies.size / MIN_CONTACT_RATIO) {
+                                if (testContactRatio(MIN_CONTACT_RATIO)) {
                                     airTime = 0f
                                 }
                             }
