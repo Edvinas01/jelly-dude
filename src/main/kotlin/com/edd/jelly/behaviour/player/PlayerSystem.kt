@@ -15,10 +15,10 @@ import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
-import com.edd.jelly.util.degrees
 import com.edd.jelly.util.pixels
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
+import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold
 import org.jbox2d.collision.shapes.CircleShape
@@ -66,6 +66,11 @@ class PlayerSystem @Inject constructor(
          * number, the less contacts are needed.
          */
         val MIN_CONTACT_RATIO = 5
+
+        val DEFLATION_JOINT_MULTIPLIER = 8f
+        val DEFLATION_SPEED_MULTIPLIER = 1 / 2f
+        val DEFLATION_AMOUNT = 0.7f
+        val DEFLATION_SPEED = 10
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -89,6 +94,9 @@ class PlayerSystem @Inject constructor(
             // Player can jump if hes been in air for not too long.
             canJump = airTime < MAX_AIR_TIME
 
+            // Calculated move force for this player.
+            val moveForce = speedMultiplier * MOVE_FORCE
+
             for (body in joint.bodies) {
 
                 // Current velocity of this body.
@@ -96,18 +104,68 @@ class PlayerSystem @Inject constructor(
 
                 // Up and down movement.
                 if (canJump && movingUp && velocity.y < MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(0f, MOVE_FORCE * 4))
+                    body.applyForceToCenter(Vec2(0f, moveForce * 4))
                 }
                 if (movingDown && velocity.y > -MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(0f, -MOVE_FORCE))
+                    body.applyForceToCenter(Vec2(0f, -moveForce))
                 }
 
                 // Left and right movement.
                 if (movingLeft && velocity.x > -MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(-MOVE_FORCE, 0f))
+                    body.applyForceToCenter(Vec2(-moveForce, 0f))
                 }
                 if (movingRight && velocity.x < MAX_VELOCITY) {
-                    body.applyForceToCenter(Vec2(MOVE_FORCE, 0f))
+                    body.applyForceToCenter(Vec2(moveForce, 0f))
+                }
+            }
+
+            handleSize(this, deltaTime)
+        }
+    }
+
+    /**
+     * Handle shrinking and growing of a player.
+     */
+    private fun handleSize(player: Player, deltaTime: Float) {
+        with(player) {
+
+            // Key to deflate or inflate was pressed or released.
+            if (deflationState == Player.Deflation.DEFLATE || deflationState == Player.Deflation.INFLATE) {
+                val direction = if (deflationState == Player.Deflation.DEFLATE) {
+                    deflationJointMultiplier = 1 / DEFLATION_JOINT_MULTIPLIER
+                    speedMultiplier = DEFLATION_SPEED_MULTIPLIER
+                    1f
+                } else {
+                    deflationJointMultiplier = DEFLATION_JOINT_MULTIPLIER
+                    speedMultiplier = 1f
+                    -1f
+                }
+
+                // How much should deflate.
+                deflation = direction * DEFLATION_AMOUNT - direction * deflation.take(DEFLATION_AMOUNT)
+
+                // How much should the joints be strengthened on deflation.
+                deflationState = Player.Deflation.WORKING
+            }
+
+            if (deflationState == Player.Deflation.WORKING) {
+                val sign = Math.signum(deflation)
+                if (Math.abs(deflation) > 0) {
+
+                    // How much should we deflate this tick.
+                    val dt = deflation.take(-sign
+                            * DEFLATION_SPEED
+                            * Math.round(deltaTime * 100) / 100)
+
+                    joint.targetVolume -= dt
+                    deflation += dt
+                } else {
+
+                    // Strengthen or weaken joints according to deflation factor.
+                    for (joint in joint.joints) {
+                        joint.length *= deflationJointMultiplier
+                    }
+                    deflationState = Player.Deflation.IDLE
                 }
             }
         }

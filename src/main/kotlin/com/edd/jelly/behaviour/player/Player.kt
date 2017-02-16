@@ -9,22 +9,45 @@ data class Player(
         val joint: ConstantVolumeJoint
 ) : Component {
 
-    var movingUp: Boolean = false
-    var movingDown: Boolean = false
-    var movingLeft: Boolean = false
-    var movingRight: Boolean = false
+    /**
+     * Deflation states.
+     */
+    enum class Deflation {
+        IDLE,
+        WORKING,
+        DEFLATE,
+        INFLATE
+    }
+
+    var movingUp = false
+    var movingDown = false
+    var movingLeft = false
+    var movingRight = false
+    var stick = false
 
     /**
      * How long has the player been off the ground.
      */
     var airTime = 0f
-
     var canJump = true
 
     /**
      * Set of player contacts, identified by reference id.
      */
     val contacts = mutableSetOf<Contact>()
+
+    /**
+     * How much should the player deflate.
+     */
+    var deflation = 0f
+
+    /**
+     * Current deflation state.
+     */
+    var deflationState = Deflation.IDLE
+    var deflationJointMultiplier = 1f
+
+    var speedMultiplier = 1f
 
     companion object : ComponentResolver<Player>(Player::class.java)
 }
