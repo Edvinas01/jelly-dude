@@ -19,6 +19,7 @@ class CameraControllerSystem @Inject constructor(
         private val camera: Camera
 ) : EntitySystem() {
 
+    private var enabled = false
     private var right = false
     private var left = false
     private var up = false
@@ -57,6 +58,7 @@ class CameraControllerSystem @Inject constructor(
 
             override fun keyUp(keycode: Int): Boolean {
                 when (keycode) {
+                    Input.Keys.GRAVE -> enabled = !enabled
                     Input.Keys.RIGHT -> right = false
                     Input.Keys.LEFT -> left = false
                     Input.Keys.UP -> up = false
@@ -71,6 +73,10 @@ class CameraControllerSystem @Inject constructor(
     }
 
     override fun update(deltaTime: Float) {
+        if (!enabled) {
+            return
+        }
+
         val slowDown = deltaTime * SLOW_DOWN_SPEED
 
         moveVector.lerp(Vector2.Zero, slowDown)

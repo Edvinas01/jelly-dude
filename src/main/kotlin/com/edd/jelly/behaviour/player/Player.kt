@@ -1,6 +1,7 @@
 package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.Component
+import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.ComponentResolver
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
@@ -20,6 +21,7 @@ data class Player(
         INFLATE
     }
 
+    val velocity = Vector2()
     var movingUp = false
     var movingDown = false
     var movingLeft = false
@@ -30,6 +32,10 @@ data class Player(
      * How long has the player been off the ground.
      */
     var airTime = 0f
+
+    var movedWithoutTick = 0f
+    var health = 100
+
     var canJump = true
 
     val stickyJoints = mutableMapOf<Contact, WeldJoint>()

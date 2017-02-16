@@ -44,12 +44,12 @@ class GameModule(private val game: Game) : Module {
     fun systems(): Systems {
         return Systems(listOf(
 
+                // Physics simulation.
+                PhysicsSystem::class.java,
+
                 // Testing.
                 TestSystem::class.java,
                 CameraControllerSystem::class.java,
-
-                // Physics simulation.
-                PhysicsSystem::class.java,
 
                 // Synchronization systems.
                 PhysicsSynchronizationSystem::class.java,

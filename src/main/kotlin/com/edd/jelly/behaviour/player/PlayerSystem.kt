@@ -2,12 +2,15 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.EntityListener
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.*
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
@@ -36,6 +39,7 @@ class PlayerSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
+        private val camera: Camera,
         private val world: World
 ) : IteratingSystem(Family.all(
         Transform::class.java,
@@ -45,6 +49,7 @@ class PlayerSystem @Inject constructor(
     companion object {
         val PLAYER_TEXTURE_NAME = "the_borker"
 
+        val CAMERA_SPEED = 2f
         val PLAYER_VERTEX_COUNT = 40
         val PLAYER_VERTEX_SIZE = 0.02f
         val PLAYER_WIDTH = 1.1f
@@ -68,6 +73,9 @@ class PlayerSystem @Inject constructor(
          */
         val MIN_CONTACT_RATIO = 5
 
+        val HEALTH_TICK_DISTANCE = 5
+
+        // Deflation stuff.
         val DEFLATION_SPEED_MULTIPLIER = 1 / 2f
         val DEFLATION_JOINT_LENGTH = 0.04f
         val DEFLATION_AMOUNT = 0.7f
@@ -77,11 +85,9 @@ class PlayerSystem @Inject constructor(
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
 
-        // Spawn player and register its input adapter.
-        inputMultiplexer.addProcessor(PlayerInputAdapter(Player.mapper[spawnPlayer(0f, 2f)]))
-
         // Initialize player event listeners.
         initListeners()
+        spawnPlayer()
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
@@ -120,8 +126,31 @@ class PlayerSystem @Inject constructor(
                 }
             }
 
+            handleHealth(this, entity)
             handleStickiness(this)
             handleSize(this, deltaTime)
+            handleCamera(entity.transform, deltaTime)
+        }
+    }
+
+    /**
+     * Handle player health drain.
+     */
+    private fun handleHealth(player: Player, entity: Entity) {
+        with(player) {
+            if (contacts.isEmpty()) {
+                return
+            }
+
+            if (movedWithoutTick > HEALTH_TICK_DISTANCE) {
+                movedWithoutTick = 0f
+                health--
+            }
+            movedWithoutTick += Math.abs(velocity.x) + Math.abs(velocity.y)
+
+            if (health <= 0) {
+                engine.removeEntity(entity)
+            }
         }
     }
 
@@ -211,6 +240,18 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
+     * Handle camera movements for the player.
+     */
+    private fun handleCamera(transform: Transform, deltaTime: Float) {
+        camera.position.lerp(Vector3(
+                transform.position.x,
+                transform.position.y,
+                0f
+        ), deltaTime * CAMERA_SPEED)
+        camera.update()
+    }
+
+    /**
      * Create polygon region from provided transform position, size and body vertices.
      */
     private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
@@ -239,6 +280,13 @@ class PlayerSystem @Inject constructor(
                 playerTexture,
                 vertices,
                 earClippingTriangulator.computeTriangles(vertices).toArray())
+    }
+
+    // TODO only for testing.
+    private fun spawnPlayer() {
+
+        // Spawn player and register its input adapter.
+        inputMultiplexer.addProcessor(PlayerInputAdapter(Player.mapper[spawnPlayer(0f, 2f)]))
     }
 
     /**
@@ -316,9 +364,43 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
-     * Initialize physics listeners for player system.
+     * Initialize physics and Ashley listeners for player system.
      */
     private fun initListeners() {
+
+        // Listen for player destruction.
+        engine.addEntityListener(Family.one(Player::class.java).get(), object : EntityListener {
+            override fun entityRemoved(entity: Entity) {
+
+                with(Player.mapper[entity]) {
+                    groundContacts.clear()
+                    contacts.clear()
+
+                    for ((key, value) in stickyJoints) {
+                        world.destroyJoint(value)
+                    }
+                    stickyJoints.clear()
+
+                    world.destroyJoint(joint)
+                    for (body in joint.bodies) {
+                        world.destroyBody(body)
+                    }
+
+                    // Respawn the player. TODO only for testing
+                    inputMultiplexer.processors.find {
+                        it is PlayerInputAdapter && it.player == this
+                    }?.let {
+                        inputMultiplexer.removeProcessor(it)
+                    }
+                }
+
+                // TODO only for testing.
+                spawnPlayer()
+            }
+
+            override fun entityAdded(entity: Entity) {
+            }
+        })
 
         // Listen for when player stops touching an object.
         messaging.listen(object : Listener<EndContactEvent> {
