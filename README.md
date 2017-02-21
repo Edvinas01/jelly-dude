@@ -6,7 +6,8 @@
 2d game based on soft body physics.
 
 ## Running
-To build and run the game, you only need to have JDK 8 installed on your machine. After cloning this repository, navigate to root project directory.
+To build and run the game, you only need to have JDK 8 installed on your machine. After you got that ready, clone this
+repository and navigate to the root project directory.
 
 If you're on Linux run the following command
 ```
@@ -18,4 +19,4 @@ And on a Windows machine
 gradlew.bat run
 ```
 
-This will download all required dependecies, build the game and launch it.
+This will download all required dependencies, build the game and launch it.
