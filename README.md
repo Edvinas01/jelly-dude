@@ -20,3 +20,7 @@ gradlew.bat run
 ```
 
 This will download all required dependencies, build the game and launch it.
+
+## Development
+If you're interested in how the game development progressed, you can [this](https://www.youtube.com/playlist?list=PL5No3sH5hcxuFBLlb_7-5g6G21-uueiQf) Youtube playlist which showcases how the game looks in various 
+development steps.
