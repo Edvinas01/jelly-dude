@@ -50,6 +50,7 @@ class PlayerSystem @Inject constructor(
         val PLAYER_VERTEX_SIZE = 0.02f
         val PLAYER_WIDTH = 1.1f
         val PLAYER_HEIGHT = 1.2f
+        val SIZE_LOSS = 0.995f
         val DAMPING = 2f
         val DENSITY = 1f
         val HZ = 20f
@@ -160,6 +161,7 @@ class PlayerSystem @Inject constructor(
 
             if (movedWithoutTick > HEALTH_TICK_DISTANCE) {
                 movedWithoutTick = 0f
+                joint.inflate(SIZE_LOSS)
                 health--
             }
             movedWithoutTick += Math.abs(velocity.x) + Math.abs(velocity.y)
