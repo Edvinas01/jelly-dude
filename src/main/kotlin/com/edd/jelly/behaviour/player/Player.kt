@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.ComponentResolver
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
-import org.jbox2d.dynamics.joints.WeldJoint
+import org.jbox2d.dynamics.joints.RevoluteJoint
 
 data class Player(
         val joint: ConstantVolumeJoint
@@ -38,7 +38,7 @@ data class Player(
 
     var canJump = true
 
-    val stickyJoints = mutableMapOf<Contact, WeldJoint>()
+    val stickyJoints = mutableMapOf<Contact, RevoluteJoint>()
 
     /**
      * Set of player contacts ground contacts, identified by reference id.
@@ -49,6 +49,11 @@ data class Player(
      * Set of all player contacts.
      */
     val contacts = mutableSetOf<Contact>()
+
+    /**
+     * Was deflation initiated.
+     */
+    var deflateInitiated = false
 
     /**
      * How much should the player deflate.
@@ -66,9 +71,11 @@ data class Player(
     companion object : ComponentResolver<Player>(Player::class.java)
 
     /**
-     * Check player has enough ground contacts based on provided contact ratio.
+     * Check if player has enough ground contacts and sticky joints based on provided contact ratio.
      */
     fun testContactRatio(ratio: Int): Boolean {
-        return groundContacts.size >= joint.bodies.size / ratio
+        val limit = joint.bodies.size / ratio
+        return groundContacts.size >= limit
+                || stickyJoints.size >= limit
     }
 }

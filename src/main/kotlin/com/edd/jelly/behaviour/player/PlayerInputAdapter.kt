@@ -1,23 +1,34 @@
 package com.edd.jelly.behaviour.player
 
-import com.badlogic.gdx.Input
+import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputAdapter
+import com.edd.jelly.core.events.Messaging
 
-class PlayerInputAdapter(var player: Player) : InputAdapter() {
-
-    private var deflateInitiated = false
+class PlayerInputAdapter(
+        val messaging: Messaging,
+        val player: Entity
+) : InputAdapter() {
 
     override fun keyDown(keycode: Int): Boolean {
-        with (player) {
+        with(Player.mapper[player]) {
             when (keycode) {
-                Input.Keys.W -> movingUp = true
-                Input.Keys.S -> movingDown = true
-                Input.Keys.A -> movingLeft = true
-                Input.Keys.D -> movingRight = true
-                Input.Keys.SPACE -> sticky = true
-                Input.Keys.E -> {
+                Keys.W -> movingUp = true
+                Keys.S -> movingDown = true
+                Keys.A -> movingLeft = true
+                Keys.D -> movingRight = true
+                Keys.SPACE -> sticky = true
+                Keys.E -> {
                     deflateInitiated = true
                     deflationState = Player.Deflation.DEFLATE
+                }
+                Keys.R -> {
+
+                    // Send input events that fire off immediately.
+                    messaging.send(PlayerInputEvent(
+                            player,
+                            Keys.R == keycode
+                    ))
                 }
                 else -> {
                     return false
@@ -28,14 +39,14 @@ class PlayerInputAdapter(var player: Player) : InputAdapter() {
     }
 
     override fun keyUp(keycode: Int): Boolean {
-        with(player) {
+        with(Player.mapper[player]) {
             when (keycode) {
-                Input.Keys.W -> movingUp = false
-                Input.Keys.S -> movingDown = false
-                Input.Keys.A -> movingLeft = false
-                Input.Keys.D -> movingRight = false
-                Input.Keys.SPACE -> sticky = false
-                Input.Keys.E -> {
+                Keys.W -> movingUp = false
+                Keys.S -> movingDown = false
+                Keys.A -> movingLeft = false
+                Keys.D -> movingRight = false
+                Keys.SPACE -> sticky = false
+                Keys.E -> {
                     if (deflateInitiated) {
                         deflateInitiated = false
                         deflationState = Player.Deflation.INFLATE

@@ -1,10 +1,6 @@
 package com.edd.jelly.behaviour.player
 
-import com.badlogic.ashley.core.Engine
-import com.badlogic.ashley.core.Entity
-import com.badlogic.ashley.core.EntityListener
-import com.badlogic.ashley.core.Family
-import com.badlogic.ashley.systems.IteratingSystem
+import com.badlogic.ashley.core.*
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
@@ -30,10 +26,7 @@ import org.jbox2d.common.MathUtils
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.contacts.Contact
-import org.jbox2d.dynamics.joints.ConstantVolumeJoint
-import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
-import org.jbox2d.dynamics.joints.WeldJoint
-import org.jbox2d.dynamics.joints.WeldJointDef
+import org.jbox2d.dynamics.joints.*
 
 class PlayerSystem @Inject constructor(
         private val earClippingTriangulator: EarClippingTriangulator,
@@ -42,10 +35,7 @@ class PlayerSystem @Inject constructor(
         private val messaging: Messaging,
         private val camera: Camera,
         private val world: World
-) : IteratingSystem(Family.all(
-        Transform::class.java,
-        Player::class.java
-).get()) {
+) : EntitySystem() {
 
     companion object {
 
@@ -101,14 +91,21 @@ class PlayerSystem @Inject constructor(
         spawnPlayer()
     }
 
-    override fun processEntity(entity: Entity, deltaTime: Float) {
-        val player = Player.mapper[entity]
+    override fun update(deltaTime: Float) {
+        engine.getEntitiesFor(Family.all(
+                Transform::class.java,
+                Player::class.java).get()
+        ).first().let { entity ->
 
-        processMovement(player, deltaTime)
-        processHealth(player, entity)
-        processStickiness(player)
-        processDeflation(player, deltaTime)
-        processCamera(entity.transform, deltaTime)
+            // At the moment only one player is allowed.
+            val player = Player.mapper[entity]
+
+            processMovement(player, deltaTime)
+            processHealth(player, entity)
+            processStickiness(player)
+            processDeflation(player, deltaTime)
+            processCamera(entity.transform, deltaTime)
+        }
     }
 
     /**
@@ -190,14 +187,14 @@ class PlayerSystem @Inject constructor(
                     }
 
                     // Create a joint to where a player is contacting another body.
-                    stickyJoints.put(contact, world.createJoint(WeldJointDef().apply {
+                    stickyJoints.put(contact, world.createJoint(RevoluteJointDef().apply {
                         val manifold = WorldManifold()
                         contact.getWorldManifold(manifold)
 
                         initialize(contact.fixtureA.body, contact.fixtureB.body, manifold.points.first())
 
                         collideConnected = true
-                    }) as WeldJoint)
+                    }) as RevoluteJoint)
                 }
             } else {
 
@@ -247,12 +244,6 @@ class PlayerSystem @Inject constructor(
                     joint.targetVolume -= dt
                     deflation += dt
                 } else {
-
-                    // Strengthen or weaken joints according to deflation factor.
-                    // TODO figure out why this is breaking
-                    for (joint in joint.joints) {
-                        joint.length += deflationJointLength
-                    }
                     deflationState = Player.Deflation.IDLE
                 }
             }
@@ -306,7 +297,7 @@ class PlayerSystem @Inject constructor(
     private fun spawnPlayer() {
 
         // Spawn player and register its input adapter.
-        inputMultiplexer.addProcessor(PlayerInputAdapter(Player.mapper[spawnPlayer(0f, 2f)]))
+        inputMultiplexer.addProcessor(PlayerInputAdapter(messaging, spawnPlayer(0f, 2f)))
     }
 
     /**
@@ -384,6 +375,33 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
+     * Destroy player entity.
+     */
+    private fun destroyPlayer(player: Entity) {
+        with(Player.mapper[player]) {
+            groundContacts.clear()
+            contacts.clear()
+
+            for ((key, value) in stickyJoints) {
+                world.destroyJoint(value)
+            }
+            stickyJoints.clear()
+
+            world.destroyJoint(joint)
+            for (body in joint.bodies) {
+                world.destroyBody(body)
+            }
+
+            // Respawn the player.
+            inputMultiplexer.processors.find {
+                it is PlayerInputAdapter && it.player == player
+            }?.let {
+                inputMultiplexer.removeProcessor(it)
+            }
+        }
+    }
+
+    /**
      * Initialize physics and Ashley listeners for player system.
      */
     private fun initListeners() {
@@ -391,29 +409,7 @@ class PlayerSystem @Inject constructor(
         // Listen for player destruction.
         engine.addEntityListener(Family.one(Player::class.java).get(), object : EntityListener {
             override fun entityRemoved(entity: Entity) {
-
-                with(Player.mapper[entity]) {
-                    groundContacts.clear()
-                    contacts.clear()
-
-                    for ((key, value) in stickyJoints) {
-                        world.destroyJoint(value)
-                    }
-                    stickyJoints.clear()
-
-                    world.destroyJoint(joint)
-                    for (body in joint.bodies) {
-                        world.destroyBody(body)
-                    }
-
-                    // Respawn the player. TODO only for testing
-                    inputMultiplexer.processors.find {
-                        it is PlayerInputAdapter && it.player == this
-                    }?.let {
-                        inputMultiplexer.removeProcessor(it)
-                    }
-                }
-
+                destroyPlayer(entity)
                 // TODO only for testing.
                 spawnPlayer()
             }
@@ -462,6 +458,15 @@ class PlayerSystem @Inject constructor(
                             }
                         }
                     }
+                }
+            }
+        })
+
+        // Listen for player inputs.
+        messaging.listen(object : Listener<PlayerInputEvent> {
+            override fun listen(event: PlayerInputEvent) {
+                if (event.reset) {
+                    engine.removeEntity(event.player)
                 }
             }
         })
