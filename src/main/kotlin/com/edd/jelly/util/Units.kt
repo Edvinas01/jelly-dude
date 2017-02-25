@@ -16,7 +16,8 @@ object Units {
     val MPP: Float = 1 / PPM
 }
 
-private val RADIANS_TO_DEGREES = (180f / Math.PI).toFloat()
+private val ONE_RADIAN = (180 / Math.PI).toFloat()
+private val ONE_DEGREE = (1 / ONE_RADIAN).toFloat()
 
 /**
  * Get number value as meters.
@@ -32,7 +33,13 @@ val Number.pixels: Float
     get() = toFloat() * Units.PPM
 
 /**
- * Get number value converted to degrees.
+ * Get number value converted to degrees, assuming its in radians.
  */
 val Number.degrees: Float
-    get() = toFloat() * RADIANS_TO_DEGREES
+    get() = toFloat() * ONE_RADIAN
+
+/**
+ * Get number value converted to radians, assuming its in degrees.
+ */
+val Number.radians: Float
+    get() = toFloat() * ONE_DEGREE

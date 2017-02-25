@@ -21,7 +21,8 @@ class PlayerSynchronizationSystem @Inject constructor(
 ).get()) {
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val bodies = entity.player.joint.bodies
+        val player = Player.mapper[entity]
+        val bodies = player.joint.bodies
 
         // Adjust player transform, gotta sync it first since further calculations require it to be in position. Thus
         // two iterations of bodies are required. Can't think of a better way right now.
@@ -29,12 +30,20 @@ class PlayerSynchronizationSystem @Inject constructor(
         bodies.forEach { body ->
             midPoint.x += body.position.x
             midPoint.y += body.position.y
+
+            player.velocity.x += body.linearVelocity.x
+            player.velocity.y += body.linearVelocity.y
         }
 
         val transform = entity.transform
 
+        // Count average player position.
         transform.x = midPoint.x / bodies.size
         transform.y = midPoint.y / bodies.size
+
+        // Count average player velocity.
+        player.velocity.x = player.velocity.x / bodies.size
+        player.velocity.y = player.velocity.y / bodies.size
 
         // Center point of the player.
         val vec = Vec2(

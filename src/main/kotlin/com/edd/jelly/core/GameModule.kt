@@ -15,11 +15,13 @@ import com.edd.jelly.behaviour.physics.ParticleGroupSynchronizationSystem
 import com.edd.jelly.behaviour.physics.PhysicsDebugSystem
 import com.edd.jelly.behaviour.physics.PhysicsSynchronizationSystem
 import com.edd.jelly.behaviour.physics.PhysicsSystem
+import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
+import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.DebugRenderer
 import com.edd.jelly.util.meters
@@ -42,12 +44,12 @@ class GameModule(private val game: Game) : Module {
     fun systems(): Systems {
         return Systems(listOf(
 
+                // Physics simulation.
+                PhysicsSystem::class.java,
+
                 // Testing.
                 TestSystem::class.java,
                 CameraControllerSystem::class.java,
-
-                // Physics simulation.
-                PhysicsSystem::class.java,
 
                 // Synchronization systems.
                 PhysicsSynchronizationSystem::class.java,
@@ -109,6 +111,13 @@ class GameModule(private val game: Game) : Module {
 
     @Provides @Singleton
     fun engine(): Engine = game.engine
+
+    @Provides @Singleton
+    fun messaging() = Messaging()
+
+    @Provides @Singleton
+    fun messagingContactListener(messaging: Messaging) =
+            MessagingContactListener(messaging)
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

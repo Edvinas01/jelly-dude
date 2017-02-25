@@ -7,7 +7,7 @@ import spock.lang.Specification
 class JellyExceptionSpec extends Specification {
 
     @Ignore
-    def "should format the message"() {
+    def "Should format the message"() {
         given:
         def message = 'bad'
 
@@ -18,7 +18,7 @@ class JellyExceptionSpec extends Specification {
         exception.message == "Bad $message" as String
     }
 
-    def "should trow exception"() {
+    def "Should trow exception"() {
         when:
         new GameException('Bad {}', badArg)
 

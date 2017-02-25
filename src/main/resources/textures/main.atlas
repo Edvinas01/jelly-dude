@@ -3,16 +3,23 @@ main.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-the_borker
+slime
   rotate: false
   xy: 1, 85
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-the_round_borker
+the_borker
   rotate: false
   xy: 131, 85
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+the_round_borker
+  rotate: false
+  xy: 261, 85
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -26,7 +33,7 @@ jelly_face
   index: -1
 dev_grid
   rotate: false
-  xy: 261, 181
+  xy: 391, 181
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

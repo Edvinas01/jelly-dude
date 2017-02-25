@@ -14,11 +14,11 @@ import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.edd.jelly.behaviour.physics.Physics
-import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
+import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.util.resources.ResourceManager
 import com.edd.jelly.util.resources.get
 import com.google.inject.Inject
@@ -328,6 +328,7 @@ class TestSystem @Inject constructor(
         }
 
         staticPlatform(0f, 0f, 50f, 1f)
+        staticPlatform(-2f, 1.5f, 3f, 1f)
         staticPlatform(25f, 5f, 1f, 10f)
         staticPlatform(-25f, 5f, 1f, 10f)
     }
