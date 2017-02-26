@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
@@ -16,7 +15,7 @@ import com.google.inject.Inject
  */
 class CameraControllerSystem @Inject constructor(
         multiplexer: InputMultiplexer,
-        private val camera: Camera
+        private val camera: OrthographicCamera
 ) : EntitySystem() {
 
     private var enabled = false

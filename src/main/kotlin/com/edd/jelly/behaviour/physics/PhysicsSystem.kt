@@ -1,8 +1,8 @@
 package com.edd.jelly.behaviour.physics
 
-import com.badlogic.ashley.core.Engine
-import com.badlogic.ashley.core.EntitySystem
+import com.badlogic.ashley.core.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
+import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
@@ -24,6 +24,20 @@ class PhysicsSystem @Inject constructor(
         super.addedToEngine(engine)
 
         world.setContactListener(messagingContactListener)
+
+        // Listen for destroyed physics objects.
+        engine.addEntityListener(Family.all(Physics::class.java).get(), object : EntityListenerAdapter() {
+            override fun entityRemoved(entity: Entity) {
+                world.destroyBody(entity.physics.body)
+            }
+        })
+
+        // Listen for destroyed particle objects.
+        engine.addEntityListener(Family.all(Particles::class.java).get(), object : EntityListenerAdapter() {
+            override fun entityRemoved(entity: Entity) {
+                world.destroyParticlesInGroup(Particles.mapper[entity].particleGroup)
+            }
+        })
     }
 
     override fun update(deltaTime: Float) {

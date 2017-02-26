@@ -2,7 +2,7 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.*
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
@@ -33,7 +33,7 @@ class PlayerSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
-        private val camera: Camera,
+        private val camera: OrthographicCamera,
         private val world: World
 ) : EntitySystem() {
 
@@ -299,7 +299,7 @@ class PlayerSystem @Inject constructor(
     private fun spawnPlayer() {
 
         // Spawn player and register its input adapter.
-        inputMultiplexer.addProcessor(PlayerInputAdapter(messaging, spawnPlayer(0f, 2f)))
+        inputMultiplexer.addProcessor(PlayerInputAdapter(messaging, spawnPlayer(2f, 2f)))
     }
 
     /**

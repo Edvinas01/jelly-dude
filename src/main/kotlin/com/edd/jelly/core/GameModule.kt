@@ -6,11 +6,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.EarClippingTriangulator
-import com.edd.jelly.behaviour.*
+import com.edd.jelly.behaviour.level.LevelSystem
 import com.edd.jelly.behaviour.physics.ParticleGroupSynchronizationSystem
 import com.edd.jelly.behaviour.physics.PhysicsDebugSystem
 import com.edd.jelly.behaviour.physics.PhysicsSynchronizationSystem
@@ -24,7 +25,9 @@ import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.DebugRenderer
+import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
+import com.edd.jelly.util.resources.ResourceManager
 import com.google.inject.Binder
 import com.google.inject.Module
 import com.google.inject.Provides
@@ -43,6 +46,7 @@ class GameModule(private val game: Game) : Module {
     @Provides @Singleton
     fun systems(): Systems {
         return Systems(listOf(
+                LevelSystem::class.java,
 
                 // Physics simulation.
                 PhysicsSystem::class.java,
@@ -99,7 +103,7 @@ class GameModule(private val game: Game) : Module {
     }
 
     @Provides @Singleton
-    fun camera(): Camera {
+    fun camera(): OrthographicCamera {
         val width = Gdx.graphics.width.meters
         val height = Gdx.graphics.height.meters
 
@@ -118,6 +122,17 @@ class GameModule(private val game: Game) : Module {
     @Provides @Singleton
     fun messagingContactListener(messaging: Messaging) =
             MessagingContactListener(messaging)
+
+    @Provides @Singleton
+    fun tmxMapLoader() = TmxMapLoader()
+
+    @Provides @Singleton
+    fun resourceManager(tmxMapLoader: TmxMapLoader) =
+            ResourceManager(tmxMapLoader)
+
+    @Provides @Singleton
+    fun orthogonalTiledMapRenderer(spriteBatch: SpriteBatch) =
+            OrthogonalTiledMapRenderer(null, Units.MPP, spriteBatch)
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

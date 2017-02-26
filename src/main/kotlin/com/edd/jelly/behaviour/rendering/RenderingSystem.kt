@@ -6,26 +6,34 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.level.RenderableLevel
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
+        private val tiledMapRenderer: OrthogonalTiledMapRenderer,
         private val polygonBatch: PolygonSpriteBatch,
         private val spriteBatch: SpriteBatch,
-        private val camera: Camera
+        private val camera: OrthographicCamera
 ) : EntitySystem() {
 
+    private lateinit var levelRenderableEntities: ImmutableArray<Entity>
     private lateinit var simpleRenderableEntities: ImmutableArray<Entity>
     private lateinit var polygonRenderableEntities: ImmutableArray<Entity>
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+
+        levelRenderableEntities = engine.getEntitiesFor(Family.all(
+                RenderableLevel::class.java
+        ).get())
 
         simpleRenderableEntities = engine.getEntitiesFor(Family.all(
                 Renderable::class.java,
@@ -51,6 +59,12 @@ class RenderingSystem @Inject constructor(
         polygonBatch.begin()
         renderPolygons()
         polygonBatch.end()
+
+        levelRenderableEntities.forEach {
+            tiledMapRenderer.map = RenderableLevel.mapper[it].tiledMap
+            tiledMapRenderer.setView(camera)
+            tiledMapRenderer.render()
+        }
     }
 
     fun renderEntities() {

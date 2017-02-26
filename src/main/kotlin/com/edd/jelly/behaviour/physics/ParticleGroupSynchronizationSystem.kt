@@ -13,7 +13,7 @@ class ParticleGroupSynchronizationSystem @Inject constructor() : IteratingSystem
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val transform = entity.transform
-        val group = entity.particles.particleGroup
+        val group = Particles.mapper[entity].particleGroup
 
         transform.position.set(group.position.x, group.position.y)
         transform.rotation = group.angle.degrees
