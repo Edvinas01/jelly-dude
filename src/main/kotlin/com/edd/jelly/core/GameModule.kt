@@ -4,12 +4,10 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.edd.jelly.behaviour.level.LevelSystem
 import com.edd.jelly.behaviour.physics.ParticleGroupSynchronizationSystem
@@ -19,6 +17,7 @@ import com.edd.jelly.behaviour.physics.PhysicsSystem
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
+import com.edd.jelly.behaviour.rendering.LayeredTiledMapRenderer
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
@@ -131,8 +130,8 @@ class GameModule(private val game: Game) : Module {
             ResourceManager(tmxMapLoader)
 
     @Provides @Singleton
-    fun orthogonalTiledMapRenderer(spriteBatch: SpriteBatch) =
-            OrthogonalTiledMapRenderer(null, Units.MPP, spriteBatch)
+    fun layeredTiledMapRenderer(spriteBatch: SpriteBatch) =
+            LayeredTiledMapRenderer(spriteBatch, Units.MPP)
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

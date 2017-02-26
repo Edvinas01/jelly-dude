@@ -1,11 +1,9 @@
-package com.edd.jelly.behaviour.level.tiled
+package com.edd.jelly.behaviour.level
 
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapObjects
-import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.edd.jelly.behaviour.level.LevelSystem
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
 import org.jbox2d.collision.shapes.PolygonShape
@@ -68,6 +66,9 @@ class MapBodyBuilder private constructor(private val world: World) {
         }
     }
 
+    /**
+     * Create polygon shape from rectangle.
+     */
     private fun create(rectangleObject: RectangleMapObject): PolygonShape {
         val rectangle = rectangleObject.rectangle
         val polygon = PolygonShape()
@@ -84,30 +85,4 @@ class MapBodyBuilder private constructor(private val world: World) {
 
         return polygon
     }
-
-    private fun create(polygonObject: PolygonMapObject): PolygonShape {
-        val polygon = PolygonShape()
-        val vertices = polygonObject.polygon.transformedVertices
-
-        val worldVertices = arrayOfNulls<Vec2>(vertices.size / 2)
-        for (i in 0..worldVertices.size - 1) {
-            worldVertices[i] = Vec2(vertices[i * 2].meters, vertices[i * 2 + 1].meters)
-        }
-
-        polygon.set(worldVertices, worldVertices.size)
-        return polygon
-    }
-//
-//    private fun create(polylineObject: PolylineMapObject): ChainShape {
-//        val vertices = polylineObject.polyline.transformedVertices
-//
-//        val worldVertices = arrayOfNulls<Vec2>(vertices.size / 2)
-//        for (i in 0..vertices.size / 2 - 1) {
-//            worldVertices[i] = Vec2(vertices[i * 2].meters, vertices[i * 2 + 1].meters)
-//        }
-//
-//        return ChainShape().apply {
-//            createChain(worldVertices, worldVertices.size)
-//        }
-//    }
 }

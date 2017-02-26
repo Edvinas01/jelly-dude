@@ -8,9 +8,9 @@ import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.level.RenderableLevel
@@ -18,7 +18,7 @@ import com.edd.jelly.util.meters
 import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
-        private val tiledMapRenderer: OrthogonalTiledMapRenderer,
+        private val tiledMapRenderer: LayeredTiledMapRenderer,
         private val polygonBatch: PolygonSpriteBatch,
         private val spriteBatch: SpriteBatch,
         private val camera: OrthographicCamera
@@ -50,21 +50,48 @@ class RenderingSystem @Inject constructor(
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
+
+        // Render background and base map layers.
+        tiledMapRenderer.setView(camera)
+        levelRenderableEntities.forEach {
+            with(RenderableLevel.mapper[it]) {
+                background?.let {
+                    renderBackground(it)
+                }
+                tiledMapRenderer.render(backgroundLayers)
+                tiledMapRenderer.render(baseLayers)
+            }
+        }
+
+        // Render simple entities.
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         renderEntities()
         spriteBatch.end()
 
+        // Render polygons.
         polygonBatch.projectionMatrix = camera.combined
         polygonBatch.begin()
         renderPolygons()
         polygonBatch.end()
 
+        // Render foreground layers.
         levelRenderableEntities.forEach {
-            tiledMapRenderer.map = RenderableLevel.mapper[it].tiledMap
-            tiledMapRenderer.setView(camera)
-            tiledMapRenderer.render()
+            tiledMapRenderer.render(RenderableLevel.mapper[it].foregroundLayers)
         }
+    }
+
+    fun renderBackground(texture: Texture) {
+        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.begin()
+        spriteBatch.draw(
+                texture,
+                camera.position.x - camera.viewportWidth / 2,
+                camera.position.y - camera.viewportHeight / 2,
+                camera.viewportWidth,
+                camera.viewportHeight
+        )
+        spriteBatch.end()
     }
 
     fun renderEntities() {

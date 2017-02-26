@@ -72,6 +72,9 @@
 </data>
  </layer>
  <objectgroup name="collision">
+  <properties>
+   <property name="background" value="test"/>
+  </properties>
   <object id="4" x="0" y="1760" width="96" height="288"/>
   <object id="5" x="96" y="1952" width="4000" height="96"/>
   <object id="6" x="4000" y="1760" width="96" height="192"/>

@@ -7,7 +7,9 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
-import com.edd.jelly.behaviour.level.tiled.MapBodyBuilder
+import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.edd.jelly.behaviour.level.MapBodyBuilder
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
@@ -25,6 +27,9 @@ class LevelSystem @Inject constructor(
 
     companion object {
         val COLLISION_LAYER = "collision"
+        val BACKGROUND_NAME = "background"
+        val FOREGROUND_NAME = "foreground"
+        val BACKGROUND_TEXTURE_PROPERTY = "background_texture"
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -52,8 +57,40 @@ class LevelSystem @Inject constructor(
             engine.addEntity(Entity().add(Physics(it)))
         }
         engine.addEntity(Entity().apply {
-            add(RenderableLevel(map))
+            add(createRenderableLevel(map))
         })
+    }
+
+    /**
+     * Create level renderable details.
+     */
+    private fun createRenderableLevel(map: TiledMap): RenderableLevel {
+        val baseLayers = mutableListOf<MapLayer>()
+        val backgroundLayers = mutableListOf<MapLayer>()
+        val foregroundLayers = mutableListOf<MapLayer>()
+
+        // Segment layers.
+        map.layers.forEach {
+            with(it.name) {
+                if (startsWith(BACKGROUND_NAME, true)) {
+                    backgroundLayers.add(it)
+                } else if (startsWith(FOREGROUND_NAME, true)) {
+                    foregroundLayers.add(it)
+                } else {
+                    baseLayers.add(it)
+                }
+            }
+        }
+
+        return RenderableLevel(
+                map,
+                baseLayers.toList(),
+                backgroundLayers.toList(),
+                foregroundLayers.toList(),
+                map.properties[BACKGROUND_TEXTURE_PROPERTY]?.let {
+                    resources.getTexture(it as String)
+                }
+        )
     }
 
     /**

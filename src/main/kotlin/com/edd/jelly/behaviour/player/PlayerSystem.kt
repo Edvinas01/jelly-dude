@@ -45,7 +45,7 @@ class PlayerSystem @Inject constructor(
         val CAMERA_SPEED = 2f
 
         // Player body constants.
-        val PLAYER_TEXTURE_NAME = "the_borker"
+        val PLAYER_TEXTURE_NAME = "slime"
         val PLAYER_VERTEX_COUNT = 40
         val PLAYER_VERTEX_SIZE = 0.02f
         val PLAYER_WIDTH = 1.1f
