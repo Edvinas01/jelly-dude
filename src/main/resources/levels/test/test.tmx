@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="25">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="49">
  <properties>
   <property name="background_texture" value="test_background"/>
  </properties>
@@ -28,6 +28,15 @@
   <object id="19" x="672" y="1664" width="64" height="192"/>
   <object id="20" x="736" y="1664" width="32" height="64"/>
   <object id="21" x="768" y="1760" width="224" height="96"/>
+  <object id="32" x="96" y="1888" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object id="46" x="352" y="1760">
+   <polygon points="0,0 0,-128 32,-96 64,-128 64,0"/>
+  </object>
+  <object id="48" x="96" y="1760">
+   <polyline points="0,0 64,0 32,-32 64,-64 32,-96 64,-128 0,-128 0,-32 -32,-32 -32,0 0,0"/>
+  </object>
  </objectgroup>
  <layer name="background" width="128" height="64">
   <data encoding="base64" compression="gzip">
