@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.util.resources.ResourceManager
@@ -173,7 +174,7 @@ class TestSystem @Inject constructor(
                         Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
                 ))
 
-                world.createParticleGroup(ParticleGroupDef().apply {
+                val group = world.createParticleGroup(ParticleGroupDef().apply {
                     val particleTypes = listOf(
                             ParticleType.b2_waterParticle,
                             ParticleType.b2_springParticle,
@@ -194,6 +195,8 @@ class TestSystem @Inject constructor(
                     }
                     color = ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random()))
                 })
+
+                add(Particles(group))
             })
         }
     }

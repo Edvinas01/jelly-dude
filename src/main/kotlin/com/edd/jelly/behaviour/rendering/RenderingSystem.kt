@@ -8,7 +8,7 @@ import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.components.Transform
@@ -50,117 +50,124 @@ class RenderingSystem @Inject constructor(
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-
-        // Render background and base map layers.
-        tiledMapRenderer.setView(camera)
-        levelRenderableEntities.forEach {
-            with(RenderableLevel.mapper[it]) {
-                background?.let {
-                    renderBackground(it)
-                }
-                tiledMapRenderer.render(backgroundLayers)
-                tiledMapRenderer.render(baseLayers)
-            }
-        }
-
-        // Render simple entities.
-        spriteBatch.projectionMatrix = camera.combined
-        spriteBatch.begin()
+        renderBackground()
         renderEntities()
-        spriteBatch.end()
-
-        // Render polygons.
-        polygonBatch.projectionMatrix = camera.combined
-        polygonBatch.begin()
         renderPolygons()
-        polygonBatch.end()
+        renderForeground()
+    }
 
-        // Render foreground layers.
+    /**
+     * Render foreground layers.
+     */
+    fun renderForeground() {
         levelRenderableEntities.forEach {
             tiledMapRenderer.render(RenderableLevel.mapper[it].foregroundLayers)
         }
     }
 
-    fun renderBackground(texture: Texture) {
-        spriteBatch.projectionMatrix = camera.combined
-        spriteBatch.begin()
-        spriteBatch.draw(
-                texture,
-                camera.position.x - camera.viewportWidth / 2,
-                camera.position.y - camera.viewportHeight / 2,
-                camera.viewportWidth,
-                camera.viewportHeight
-        )
-        spriteBatch.end()
+    /**
+     * Render background and base map layers.
+     */
+    fun renderBackground() {
+        tiledMapRenderer.setView(camera)
+        levelRenderableEntities.forEach {
+            with(RenderableLevel.mapper[it]) {
+                background?.let { texture ->
+                    spriteBatch.draw {
+                        it.draw(
+                                texture,
+                                camera.position.x - camera.viewportWidth / 2,
+                                camera.position.y - camera.viewportHeight / 2,
+                                camera.viewportWidth,
+                                camera.viewportHeight
+                        )
+                    }
+                }
+                tiledMapRenderer.render(backgroundLayers)
+                tiledMapRenderer.render(baseLayers)
+            }
+        }
     }
 
+    /**
+     * Render simple entities.
+     */
     fun renderEntities() {
-        for (entity in simpleRenderableEntities) {
-            renderEntity(entity)
+        spriteBatch.draw {
+            for (entity in simpleRenderableEntities) {
+                val transform = entity.transform
+                val region = Renderable.mapper[entity].textureRegion
+
+                val width =
+                        if (transform.width > 0) transform.width
+                        else region.regionWidth.meters
+
+                val height =
+                        if (transform.height > 0) transform.height
+                        else region.regionHeight.meters
+
+                val halfWidth = width / 2
+                val halfHeight = height / 2
+
+                it.draw(
+                        region,
+                        transform.x - halfWidth,
+                        transform.y - halfHeight,
+                        halfWidth,
+                        halfHeight,
+                        width,
+                        height,
+                        1f,
+                        1f,
+                        transform.rotation)
+            }
         }
     }
 
-    fun renderEntity(entity: Entity) {
-        val transform = entity.transform
-        val region = Renderable.mapper[entity].textureRegion
-
-        val width =
-                if (transform.width > 0) transform.width
-                else region.regionWidth.meters
-
-        val height =
-                if (transform.height > 0) transform.height
-                else region.regionHeight.meters
-
-        val halfWidth = width / 2
-        val halfHeight = height / 2
-
-        spriteBatch.draw(
-                region,
-                transform.x - halfWidth,
-                transform.y - halfHeight,
-                halfWidth,
-                halfHeight,
-                width,
-                height,
-                1f,
-                1f,
-                transform.rotation)
-    }
-
+    /**
+     * Render polygon entities.
+     */
     fun renderPolygons() {
-        for (entity in polygonRenderableEntities) {
-            renderPolygon(entity)
+        polygonBatch.draw {
+            for (entity in polygonRenderableEntities) {
+                val polygonRenderable = PolygonRenderable.mapper[entity]
+                val polygonRegion = polygonRenderable.polygonRegion
+                val transform = entity.transform
+                val region = polygonRegion.region
+
+                val width =
+                        if (transform.width > 0) transform.width
+                        else region.regionWidth.meters
+
+                val height =
+                        if (transform.height > 0) transform.height
+                        else region.regionHeight.meters
+
+                val halfWidth = width / 2
+                val halfHeight = height / 2
+
+                it.draw(
+                        polygonRegion,
+                        transform.x - halfWidth,
+                        transform.y - halfHeight,
+                        halfWidth,
+                        halfHeight,
+                        transform.width,
+                        transform.height,
+                        1f,
+                        1f,
+                        transform.rotation)
+            }
         }
     }
 
-    fun renderPolygon(entity: Entity) {
-        val polygonRenderable = PolygonRenderable.mapper[entity]
-        val polygonRegion = polygonRenderable.polygonRegion
-        val transform = entity.transform
-        val region = polygonRegion.region
-
-        val width =
-                if (transform.width > 0) transform.width
-                else region.regionWidth.meters
-
-        val height =
-                if (transform.height > 0) transform.height
-                else region.regionHeight.meters
-
-        val halfWidth = width / 2
-        val halfHeight = height / 2
-
-        polygonBatch.draw(
-                polygonRegion,
-                transform.x - halfWidth,
-                transform.y - halfHeight,
-                halfWidth,
-                halfHeight,
-                transform.width,
-                transform.height,
-                1f,
-                1f,
-                transform.rotation)
+    /**
+     * Helper function to wrap block withing sprite batch begin and end statements.
+     */
+    private inline fun <T : Batch> T.draw(block: (T) -> Unit) {
+        this.projectionMatrix = camera.combined
+        begin()
+        block(this)
+        end()
     }
 }
