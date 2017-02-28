@@ -23,7 +23,8 @@ import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.Configuration
-import com.edd.jelly.util.DebugRenderer
+import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.behaviour.rendering.ParallaxCamera
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.edd.jelly.util.resources.ResourceManager
@@ -107,6 +108,17 @@ class GameModule(private val game: Game) : Module {
         val height = Gdx.graphics.height.meters
 
         return OrthographicCamera(width, height).apply {
+            position.set(width / 2f, height / 2f, 0f)
+            update()
+        }
+    }
+
+    @Provides @Singleton
+    fun parallaxCamera(): ParallaxCamera {
+        val width = Gdx.graphics.width
+        val height = Gdx.graphics.height
+
+        return ParallaxCamera(width.toFloat(), height.toFloat()).apply {
             position.set(width / 2f, height / 2f, 0f)
             update()
         }

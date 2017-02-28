@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.edd.jelly.behaviour.level.MapBodyBuilder

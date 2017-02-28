@@ -23,8 +23,6 @@
   <object id="12" x="544" y="1664" width="32" height="32"/>
   <object id="14" x="640" y="1760" width="32" height="32"/>
   <object id="15" x="608" y="1792" width="32" height="32"/>
-  <object id="16" x="576" y="1824" width="32" height="32"/>
-  <object id="17" x="544" y="1856" width="32" height="32"/>
   <object id="19" x="672" y="1664" width="64" height="192"/>
   <object id="20" x="736" y="1664" width="32" height="64"/>
   <object id="21" x="768" y="1760" width="224" height="96"/>
