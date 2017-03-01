@@ -8,9 +8,11 @@ import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.MathUtils
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.level.RenderableLevel
@@ -73,18 +75,37 @@ class RenderingSystem @Inject constructor(
         levelRenderableEntities.forEach {
             with(RenderableLevel.mapper[it]) {
                 background?.let { texture ->
-                    spriteBatch.draw {
-                        it.draw(
-                                texture,
-                                camera.position.x - camera.viewportWidth / 2,
-                                camera.position.y - camera.viewportHeight / 2,
-                                camera.viewportWidth,
-                                camera.viewportHeight
-                        )
-                    }
+                    renderBackgroundTexture(texture)
                 }
                 tiledMapRenderer.render(backgroundLayers)
                 tiledMapRenderer.render(baseLayers)
+            }
+        }
+    }
+
+    // TODO FIX THIS CRAP
+    fun renderBackgroundTexture(texture: Texture) {
+
+        val parallaxX = -0.3f // TODO
+
+        val x = camera.position.x - camera.viewportWidth / 2
+        val y = camera.position.y - camera.viewportHeight / 2
+
+        val offsetX = MathUtils.round(x * (1 - parallaxX) / camera.viewportWidth) * camera.viewportWidth
+
+        println("width: ${camera.viewportWidth} camX: $x, offsetX: $offsetX")
+
+        for (s in -1..1) {
+            val sOffset = s * camera.viewportWidth
+
+            spriteBatch.draw {
+                it.draw(
+                        texture,
+                        parallaxX * x + offsetX + sOffset,
+                        y,
+                        camera.viewportWidth,
+                        camera.viewportHeight
+                )
             }
         }
     }
