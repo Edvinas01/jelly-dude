@@ -4,13 +4,9 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.google.inject.Inject
 
-class ResourceManager @Inject constructor(
-        private val tmxMapLoader: TmxMapLoader
-) {
+class ResourceManager @Inject constructor() {
 
     companion object {
         private val TEXTURE_DIRECTORY = "textures"
@@ -22,9 +18,6 @@ class ResourceManager @Inject constructor(
         private val FONT_DIRECTORY = "fonts"
         private val FONT_SIZE = 16
         private val MAIN_FONT_NAME = "kong_text"
-
-        private val LEVEL_DIRECTORY = "levels"
-        private val LEVEL_FILE_TYPE = "tmx"
     }
 
     private val textures = mutableMapOf<String, Texture>()
@@ -76,16 +69,6 @@ class ResourceManager @Inject constructor(
     fun getFont(name: String): BitmapFont {
         // todo load by name
         return BitmapFont()
-    }
-
-    /**
-     * Get tiled map by name.
-     *
-     * @param name tiled map name.
-     * @return tiled map.
-     */
-    fun getTiledMap(name: String): TiledMap {
-        return tmxMapLoader.load("$LEVEL_DIRECTORY/$name/$name.$LEVEL_FILE_TYPE")
     }
 
     /**

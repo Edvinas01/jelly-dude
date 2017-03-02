@@ -7,30 +7,24 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.maps.MapLayer
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.edd.jelly.behaviour.level.MapBodyBuilder
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.core.tiled.JellyMap
+import com.edd.jelly.core.tiled.JellyMapLoader
 import com.edd.jelly.util.EntityListenerAdapter
-import com.edd.jelly.util.resources.ResourceManager
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
 class LevelSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
-        private val resources: ResourceManager,
+        private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
         private val world: World
 ) : EntitySystem() {
 
     companion object {
         val COLLISION_LAYER = "collision"
-        val BACKGROUND_NAME = "background"
-        val FOREGROUND_NAME = "foreground"
-        val BACKGROUND_TEXTURE_PROPERTY = "background_texture"
     }
 
     override fun addedToEngine(engine: Engine) {
@@ -49,49 +43,17 @@ class LevelSystem @Inject constructor(
      * Load level by name.
      */
     private fun loadLevel(name: String) {
-        val map = resources.getTiledMap(name)
+        val map = jellyMapLoader.loadMap(name)
         MapBodyBuilder
                 .usingWorld(world)
-                .tiledMapLayer(map, COLLISION_LAYER)
+                .tiledMapLayer(map.tiledMap, COLLISION_LAYER)
                 .buildBodies().forEach {
 
             engine.addEntity(Entity().add(Physics(it)))
         }
         engine.addEntity(Entity().apply {
-            add(createRenderableLevel(map))
+            add(map)
         })
-    }
-
-    /**
-     * Create level renderable details.
-     */
-    private fun createRenderableLevel(map: TiledMap): RenderableLevel {
-        val baseLayers = mutableListOf<MapLayer>()
-        val backgroundLayers = mutableListOf<MapLayer>()
-        val foregroundLayers = mutableListOf<MapLayer>()
-
-        // Segment layers.
-        map.layers.forEach {
-            with(it.name) {
-                if (startsWith(BACKGROUND_NAME, true)) {
-                    backgroundLayers.add(it)
-                } else if (startsWith(FOREGROUND_NAME, true)) {
-                    foregroundLayers.add(it)
-                } else {
-                    baseLayers.add(it)
-                }
-            }
-        }
-
-        return RenderableLevel(
-                map,
-                baseLayers.toList(),
-                backgroundLayers.toList(),
-                foregroundLayers.toList(),
-                map.properties[BACKGROUND_TEXTURE_PROPERTY]?.let {
-                    resources.getTexture(it as String)
-                }
-        )
     }
 
     /**
@@ -105,10 +67,10 @@ class LevelSystem @Inject constructor(
             }
         })
 
-        // Listen for map removals.
-        engine.addEntityListener(Family.all(RenderableLevel::class.java).get(), object : EntityListenerAdapter() {
+        // Listen for level removals.
+        engine.addEntityListener(Family.all(JellyMap::class.java).get(), object : EntityListenerAdapter() {
             override fun entityRemoved(entity: Entity) {
-                RenderableLevel.mapper[entity].tiledMap.dispose()
+                JellyMap.mapper[entity].tiledMap.dispose()
             }
         })
 

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
@@ -256,12 +255,12 @@ class PlayerSystem @Inject constructor(
      * Process camera movements for the player.
      */
     private fun processCamera(transform: Transform, deltaTime: Float) {
-        camera.position.lerp(Vector3(
-                transform.position.x,
-                transform.position.y,
-                0f
-        ), deltaTime * CAMERA_SPEED)
-        camera.update()
+//        camera.position.lerp(Vector3(
+//                transform.position.x,
+//                transform.position.y,
+//                0f
+//        ), deltaTime * CAMERA_SPEED)
+//        camera.update()
     }
 
     /**

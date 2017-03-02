@@ -17,26 +17,29 @@ import com.edd.jelly.behaviour.physics.PhysicsSystem
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
-import com.edd.jelly.behaviour.rendering.LayeredTiledMapRenderer
+import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.behaviour.physics.DebugRenderer
-import com.edd.jelly.behaviour.rendering.ParallaxCamera
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
-import com.edd.jelly.util.resources.ResourceManager
 import com.google.inject.Binder
 import com.google.inject.Module
 import com.google.inject.Provides
 import com.google.inject.Singleton
+import com.google.inject.name.Named
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
 
 class GameModule(private val game: Game) : Module {
+
+    companion object {
+        const val UI_CAMERA = "uiCamera"
+    }
 
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
@@ -113,14 +116,13 @@ class GameModule(private val game: Game) : Module {
         }
     }
 
-    @Provides @Singleton
-    fun parallaxCamera(): ParallaxCamera {
-        val width = Gdx.graphics.width
-        val height = Gdx.graphics.height
+    @Provides @Singleton @Named(UI_CAMERA)
+    fun uiCamera(): OrthographicCamera {
+        val width = Gdx.graphics.width.toFloat()
+        val height = Gdx.graphics.height.toFloat()
 
-        return ParallaxCamera(width.toFloat(), height.toFloat()).apply {
-            position.set(width / 2f, height / 2f, 0f)
-            update()
+        return OrthographicCamera(width, height).apply {
+            setToOrtho(false, width, height)
         }
     }
 
@@ -138,12 +140,8 @@ class GameModule(private val game: Game) : Module {
     fun tmxMapLoader() = TmxMapLoader()
 
     @Provides @Singleton
-    fun resourceManager(tmxMapLoader: TmxMapLoader) =
-            ResourceManager(tmxMapLoader)
-
-    @Provides @Singleton
-    fun layeredTiledMapRenderer(spriteBatch: SpriteBatch) =
-            LayeredTiledMapRenderer(spriteBatch, Units.MPP)
+    fun layeredTiledMapRenderer(camera: OrthographicCamera, batch: SpriteBatch) =
+            JellyMapRenderer(camera, batch, Units.MPP)
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

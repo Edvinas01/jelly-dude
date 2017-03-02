@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour.level
+package com.edd.jelly.core.tiled
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.gdx.graphics.Texture
@@ -6,13 +6,11 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.edd.jelly.behaviour.components.ComponentResolver
 
-data class RenderableLevel(
+class JellyMap internal constructor(
         val tiledMap: TiledMap,
-        val baseLayers: List<MapLayer>,
         val backgroundLayers: List<MapLayer>,
         val foregroundLayers: List<MapLayer>,
-        var background: Texture? = null
+        val background: Texture?
 ) : Component {
-
-    companion object : ComponentResolver<RenderableLevel>(RenderableLevel::class.java)
+    companion object : ComponentResolver<JellyMap>(JellyMap::class.java)
 }

@@ -8,34 +8,29 @@ import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.MathUtils
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
-import com.edd.jelly.behaviour.level.RenderableLevel
+import com.edd.jelly.core.tiled.JellyMap
+import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
-        private val tiledMapRenderer: LayeredTiledMapRenderer,
+        private val tiledMapRenderer: JellyMapRenderer,
         private val polygonBatch: PolygonSpriteBatch,
         private val spriteBatch: SpriteBatch,
         private val camera: OrthographicCamera
 ) : EntitySystem() {
 
-    private lateinit var levelRenderableEntities: ImmutableArray<Entity>
+    private lateinit var levels: ImmutableArray<Entity>
     private lateinit var simpleRenderableEntities: ImmutableArray<Entity>
     private lateinit var polygonRenderableEntities: ImmutableArray<Entity>
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
-
-        levelRenderableEntities = engine.getEntitiesFor(Family.all(
-                RenderableLevel::class.java
-        ).get())
 
         simpleRenderableEntities = engine.getEntitiesFor(Family.all(
                 Renderable::class.java,
@@ -45,6 +40,10 @@ class RenderingSystem @Inject constructor(
         polygonRenderableEntities = engine.getEntitiesFor(Family.all(
                 PolygonRenderable::class.java,
                 Transform::class.java
+        ).get())
+
+        levels = engine.getEntitiesFor(Family.all(
+                JellyMap::class.java
         ).get())
     }
 
@@ -59,54 +58,21 @@ class RenderingSystem @Inject constructor(
     }
 
     /**
-     * Render foreground layers.
-     */
-    fun renderForeground() {
-        levelRenderableEntities.forEach {
-            tiledMapRenderer.render(RenderableLevel.mapper[it].foregroundLayers)
-        }
-    }
-
-    /**
      * Render background and base map layers.
      */
     fun renderBackground() {
         tiledMapRenderer.setView(camera)
-        levelRenderableEntities.forEach {
-            with(RenderableLevel.mapper[it]) {
-                background?.let { texture ->
-                    renderBackgroundTexture(texture)
-                }
-                tiledMapRenderer.render(backgroundLayers)
-                tiledMapRenderer.render(baseLayers)
-            }
+        levels.forEach {
+            tiledMapRenderer.drawBackground(JellyMap.mapper[it])
         }
     }
 
-    // TODO FIX THIS CRAP
-    fun renderBackgroundTexture(texture: Texture) {
-
-        val parallaxX = -0.3f // TODO
-
-        val x = camera.position.x - camera.viewportWidth / 2
-        val y = camera.position.y - camera.viewportHeight / 2
-
-        val offsetX = MathUtils.round(x * (1 - parallaxX) / camera.viewportWidth) * camera.viewportWidth
-
-        println("width: ${camera.viewportWidth} camX: $x, offsetX: $offsetX")
-
-        for (s in -1..1) {
-            val sOffset = s * camera.viewportWidth
-
-            spriteBatch.draw {
-                it.draw(
-                        texture,
-                        parallaxX * x + offsetX + sOffset,
-                        y,
-                        camera.viewportWidth,
-                        camera.viewportHeight
-                )
-            }
+    /**
+     * Render foreground layers.
+     */
+    fun renderForeground() {
+        levels.forEach {
+            tiledMapRenderer.drawForeground(JellyMap.mapper[it])
         }
     }
 
