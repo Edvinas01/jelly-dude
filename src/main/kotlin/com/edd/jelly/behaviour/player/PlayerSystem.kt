@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
@@ -89,14 +90,13 @@ class PlayerSystem @Inject constructor(
 
         // Initialize player event listeners.
         initListeners()
-        spawnPlayer()
     }
 
     override fun update(deltaTime: Float) {
         engine.getEntitiesFor(Family.all(
                 Transform::class.java,
                 Player::class.java).get()
-        ).first().let { entity ->
+        ).forEach { entity ->
 
             // At the moment only one player is allowed.
             val player = Player.mapper[entity]
@@ -295,13 +295,6 @@ class PlayerSystem @Inject constructor(
                 earClippingTriangulator.computeTriangles(vertices).toArray())
     }
 
-    // TODO only for testing.
-    private fun spawnPlayer() {
-
-        // Spawn player and register its input adapter.
-        inputMultiplexer.addProcessor(PlayerInputAdapter(messaging, spawnPlayer(2f, 2f)))
-    }
-
     /**
      * Spawn player at a given location.
      */
@@ -362,7 +355,7 @@ class PlayerSystem @Inject constructor(
                     Vector2(x, y),
                     Vector2(width, height))
 
-            val player = Player(joint)
+            val player = Player(joint, Vector2(x, y))
             joint.bodies.forEach { body ->
                 body.userData = player
             }
@@ -371,15 +364,18 @@ class PlayerSystem @Inject constructor(
             add(PolygonRenderable(createPlayerTexture(transform, joint.bodies)))
             add(player)
             add(transform)
+
         }
+
         engine.addEntity(entity)
+        inputMultiplexer.forPlayer(entity)
         return entity
     }
 
     /**
      * Destroy player entity.
      */
-    private fun destroyPlayer(player: Entity) {
+    private fun destroyPlayer(player: Entity): Player {
         with(Player.mapper[player]) {
             groundContacts.clear()
             contacts.clear()
@@ -393,13 +389,9 @@ class PlayerSystem @Inject constructor(
             for (body in joint.bodies) {
                 world.destroyBody(body)
             }
+            inputMultiplexer.removeForPlayer()
 
-            // Respawn the player.
-            inputMultiplexer.processors.find {
-                it is PlayerInputAdapter && it.player == player
-            }?.let {
-                inputMultiplexer.removeProcessor(it)
-            }
+            return this
         }
     }
 
@@ -411,9 +403,13 @@ class PlayerSystem @Inject constructor(
         // Listen for player destruction.
         engine.addEntityListener(Family.one(Player::class.java).get(), object : EntityListener {
             override fun entityRemoved(entity: Entity) {
-                destroyPlayer(entity)
-                // TODO only for testing.
-                spawnPlayer()
+                val player =destroyPlayer(entity)
+
+                if (player.reset) {
+                    with(player.lastSpawn) {
+                        spawnPlayer(x, y)
+                    }
+                }
             }
 
             override fun entityAdded(entity: Entity) {
@@ -472,6 +468,13 @@ class PlayerSystem @Inject constructor(
                 }
             }
         })
+
+        // Listen for level loads.
+        messaging.listen(object : Listener<LevelLoadedEvent> {
+            override fun listen(event: LevelLoadedEvent) {
+                spawnPlayer(event.x, event.y)
+            }
+        })
     }
 
     /**
@@ -493,5 +496,18 @@ class PlayerSystem @Inject constructor(
             return Pair(dataB, contact.fixtureA.body)
         }
         return null
+    }
+
+    private fun InputMultiplexer.removeForPlayer() {
+        processors.filter {
+            it is PlayerInputAdapter
+        }.forEach {
+            removeProcessor(it)
+        }
+    }
+
+    private fun InputMultiplexer.forPlayer(player: Entity) {
+        removeForPlayer()
+        addProcessor(PlayerInputAdapter(messaging, player))
     }
 }

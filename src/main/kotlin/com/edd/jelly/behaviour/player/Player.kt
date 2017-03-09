@@ -8,7 +8,8 @@ import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.RevoluteJoint
 
 data class Player(
-        val joint: ConstantVolumeJoint
+        val joint: ConstantVolumeJoint,
+        val lastSpawn: Vector2
 ) : Component {
 
     /**
@@ -27,6 +28,7 @@ data class Player(
     var movingLeft = false
     var movingRight = false
     var sticky = false
+    var reset = false
 
     /**
      * How long has the player been off the ground.

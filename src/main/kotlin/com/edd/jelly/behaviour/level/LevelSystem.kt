@@ -13,6 +13,7 @@ import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
 import com.edd.jelly.util.EntityListenerAdapter
+import com.edd.jelly.util.meters
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
@@ -29,7 +30,7 @@ class LevelSystem @Inject constructor(
 
     override fun addedToEngine(engine: Engine) {
         initListeners()
-        messaging.send(LoadLevelEvent("test"))
+        messaging.send(LoadNewLevelEvent("test"))
     }
 
     /**
@@ -54,14 +55,18 @@ class LevelSystem @Inject constructor(
         engine.addEntity(Entity().apply {
             add(map)
         })
+
+        with(map.spawn) {
+            messaging.send(LevelLoadedEvent(x.meters, y.meters))
+        }
     }
 
     /**
      * Initialize listeners for this system.
      */
     private fun initListeners() {
-        messaging.listen(object : Listener<LoadLevelEvent> {
-            override fun listen(event: LoadLevelEvent) {
+        messaging.listen(object : Listener<LoadNewLevelEvent> {
+            override fun listen(event: LoadNewLevelEvent) {
                 unloadLevel()
                 loadLevel(event.levelName)
             }
@@ -78,11 +83,11 @@ class LevelSystem @Inject constructor(
         inputMultiplexer.addProcessor(object : InputAdapter() {
             override fun keyUp(keycode: Int): Boolean {
                 if (Input.Keys.NUMPAD_1 == keycode) {
-                    messaging.send(LoadLevelEvent("test"))
+                    messaging.send(LoadNewLevelEvent("test"))
                     return true
                 }
                 if (Input.Keys.NUMPAD_2 == keycode) {
-                    messaging.send(LoadLevelEvent("test2"))
+                    messaging.send(LoadNewLevelEvent("test2"))
                     return true
                 }
                 return false

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.edd.jelly.core.events.Messaging
 import com.google.inject.Guice
 import com.google.inject.Injector
 
@@ -22,6 +23,7 @@ class Game : ApplicationAdapter() {
             engine.addSystem(s)
         }
 
+        injector.getInstance(Messaging::class.java).ready()
         Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
     }
 

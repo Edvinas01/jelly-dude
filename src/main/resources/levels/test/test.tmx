@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="54">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="59">
  <properties>
   <property name="background_texture" value="test_background"/>
  </properties>
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>
- <layer name="parallax_foreground" width="128" height="64">
+ <layer name="background" width="128" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RsQkAQAwDsVTef+RfIHXCEwncG64KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmJbtA6xJ6X9VmnFD117/O/QHgL88gQD03QCAAAA=
+  </data>
+ </layer>
+ <layer name="parallax_clouds_3" width="128" height="64">
   <properties>
+   <property name="offsetX" type="float" value="100"/>
+   <property name="offsetY" type="float" value="100"/>
    <property name="parallax" type="bool" value="true"/>
-   <property name="speedX" type="float" value="0.2"/>
-   <property name="speedY" type="float" value="0.5"/>
-   <property name="texture" value="test_something"/>
+   <property name="speedX" type="float" value="0.10000000000000009"/>
+   <property name="speedY" type="float" value="0.8"/>
+   <property name="texture" value="test_clouds"/>
+   <property name="type" value="PARALLAX"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
   </data>
  </layer>
- <layer name="foreground" width="128" height="64">
+ <layer name="parallax_clouds_2" width="128" height="64">
+  <properties>
+   <property name="offsetX" type="float" value="300"/>
+   <property name="offsetY" type="float" value="0"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.3"/>
+   <property name="texture" value="test_clouds"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3VsQoAIAhAwRb//5fbhSJH8w4kKHB5Q2sBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQFY/DXPr/LzeOyxuzVPv7R3qKdOb7yh79+zl10h8A+ttesrZ7AIAAAA==
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
   </data>
  </layer>
- <objectgroup name="entities"/>
+ <layer name="parallax_clouds_1" width="128" height="64">
+  <properties>
+   <property name="speedX" type="float" value="0.5"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="test_clouds"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
+  </data>
+ </layer>
+ <layer name="tiles" width="128" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3XyQqDMBQF0NQuOg///7XVhTSEJ8VUBfUcuGAXVuGaPE0JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACALWiKsC/NwDH7oP/1OhS/b20ube4j/iPf9/W/bs82xzbvkefpfxu6/q8V5+l/ef2+W9NXpJsFef/9LCgTzYa8f89ArJy1Nbp+yu+tKfrv7y3vP7rW0PX0v4w5+s+fy1f6zv7u+BEkejfw/T+sXPf/7ANT9z/FnsRy5tr/md6vtVWz9vS/b1H/pxS/p8v2cg76F5H95QPdtHwwAIAAAA==
+  </data>
+ </layer>
+ <objectgroup name="entities">
+  <object id="58" name="start" x="704" y="1632">
+   <ellipse/>
+  </object>
+ </objectgroup>
  <objectgroup name="collision">
   <object id="4" x="0" y="1760" width="96" height="288"/>
   <object id="5" x="96" y="1952" width="4000" height="96"/>
@@ -54,48 +90,17 @@
    <polyline points="0,0 -128,0 -160,-32"/>
   </object>
  </objectgroup>
- <layer name="tiles" width="128" height="64">
+ <layer name="foreground" width="128" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3XyQqDMBQF0NQuOg///7XVhTSEJ8VUBfUcuGAXVuGaPE0JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACALWiKsC/NwDH7oP/1OhS/b20ube4j/iPf9/W/bs82xzbvkefpfxu6/q8V5+l/ef2+W9NXpJsFef/9LCgTzYa8f89ArJy1Nbp+yu+tKfrv7y3vP7rW0PX0v4w5+s+fy1f6zv7u+BEkejfw/T+sXPf/7ANT9z/FnsRy5tr/md6vtVWz9vS/b1H/pxS/p8v2cg76F5H95QPdtHwwAIAAAA==
+   H4sIAAAAAAAAC+3VsQoAIAhAwRb//5fbhSJH8w4kKHB5Q2sBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQFY/DXPr/LzeOyxuzVPv7R3qKdOb7yh79+zl10h8A+ttesrZ7AIAAAA==
   </data>
  </layer>
- <layer name="background" width="128" height="64">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3RsQkAQAwDsVTef+RfIHXCEwncG64KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmJbtA6xJ6X9VmnFD117/O/QHgL88gQD03QCAAAA=
-  </data>
- </layer>
- <layer name="parallax_clouds_3" width="128" height="64">
+ <layer name="parallax_foreground" width="128" height="64">
   <properties>
-   <property name="offsetX" type="float" value="100"/>
-   <property name="offsetY" type="float" value="100"/>
-   <property name="parallax" type="bool" value="true"/>
-   <property name="speedX" type="float" value="0.10000000000000009"/>
-   <property name="speedY" type="float" value="0.8"/>
-   <property name="texture" value="test_clouds"/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
-  </data>
- </layer>
- <layer name="parallax_clouds_2" width="128" height="64">
-  <properties>
-   <property name="offsetX" type="float" value="300"/>
-   <property name="offsetY" type="float" value="0"/>
-   <property name="parallax" type="bool" value="true"/>
-   <property name="speedX" type="float" value="0.3"/>
-   <property name="speedY" type="float" value="0.3"/>
-   <property name="texture" value="test_clouds"/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
-  </data>
- </layer>
- <layer name="parallax_clouds_1" width="128" height="64">
-  <properties>
-   <property name="parallax" type="bool" value="true"/>
-   <property name="speedX" type="float" value="0.5"/>
+   <property name="speedX" type="float" value="0.2"/>
    <property name="speedY" type="float" value="0.5"/>
-   <property name="texture" value="test_clouds"/>
+   <property name="texture" value="test_something"/>
+   <property name="type" value="PARALLAX"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==

@@ -130,7 +130,7 @@ class GameModule(private val game: Game) : Module {
     fun engine(): Engine = game.engine
 
     @Provides @Singleton
-    fun messaging() = Messaging()
+    fun messaging() = Messaging().pause()
 
     @Provides @Singleton
     fun messagingContactListener(messaging: Messaging) =

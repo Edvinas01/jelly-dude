@@ -23,6 +23,7 @@ class PlayerInputAdapter(
                     deflationState = Player.Deflation.DEFLATE
                 }
                 Keys.R -> {
+                    reset = true
 
                     // Send input events that fire off immediately.
                     messaging.send(PlayerInputEvent(
