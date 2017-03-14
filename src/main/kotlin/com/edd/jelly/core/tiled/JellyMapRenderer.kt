@@ -74,18 +74,32 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
      */
     private fun drawParallaxLayer(layer: ParallaxLayer) {
         with(layer) {
-            val x = layer.offsetX + camera.position.x - camera.viewportWidth / 2
-            val y = layer.offsetY +camera.position.y - camera.viewportHeight / 2
 
-            val offsetX = MathUtils.round(x * (1 - speedX) / camera.viewportWidth) * camera.viewportWidth
+            // Camera bottom.
+            val y = offset.y + camera.position.y - camera.viewportHeight / 2
+
+            // Parallax camera bottom.
+            var py = y * speed.y
+
+            if (clampBottom && py > y) {
+                py = y
+            }
+
+            val tx = y - size.y / 2 // Don't really know how to name this one.
+            if (clampTop && tx > py) {
+                py = tx
+            }
+
+            // Camera left.
+            val x = offset.x + camera.position.x - size.x / 2
 
             for (padding in -1..1) {
                 batch.draw(
                         texture,
-                        x * speedX + offsetX + padding * camera.viewportWidth,
-                        y * speedY,
-                        camera.viewportWidth,
-                        camera.viewportHeight
+                        x * speed.x + MathUtils.round(x * (1 - speed.x) / size.x) * size.x + padding * size.x,
+                        py,
+                        size.x,
+                        size.y
                 )
             }
         }

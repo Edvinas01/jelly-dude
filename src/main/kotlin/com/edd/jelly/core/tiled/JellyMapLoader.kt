@@ -1,5 +1,6 @@
 package com.edd.jelly.core.tiled
 
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -13,7 +14,8 @@ import com.google.inject.Inject
 
 class JellyMapLoader @Inject constructor(
         private val resourceManager: ResourceManager,
-        private val tmxMapLoader: TmxMapLoader
+        private val tmxMapLoader: TmxMapLoader,
+        private val camera: OrthographicCamera
 ) {
 
     private enum class LayerType {
@@ -48,8 +50,8 @@ class JellyMapLoader @Inject constructor(
         for (layer in map.layers) {
             background = background && ENTITY_LAYER != layer.name
 
-            // Care only about renderable layers.
-            if (layer !is TiledMapTileLayer) {
+            // Care only about renderable and visible layers.
+            if (layer !is TiledMapTileLayer || !layer.isVisible) {
                 continue
             }
 
@@ -63,13 +65,29 @@ class JellyMapLoader @Inject constructor(
                     LayerType.valueOf(it)
                 } ?: LayerType.DEFAULT) {
                     LayerType.PARALLAX -> {
+                        val texture = resourceManager.getTexture(layer.getString("texture") ?:
+                                throw GameException("Please specify parallax \"texture\" name"))
+
                         add(ParallaxLayer(
-                                layer.getFloat("offsetX").meters,
-                                layer.getFloat("offsetY").meters,
-                                layer.getFloat("speedX", 1f),
-                                layer.getFloat("speedY", 1f),
-                                resourceManager.getTexture(layer.getString("texture") ?:
-                                        throw GameException("Please specify parallax \"texture\" name"))
+                                Vector2(
+                                        layer.getFloat("offsetX").meters,
+                                        layer.getFloat("offsetY").meters
+                                ),
+                                Vector2(
+                                        layer.getFloat("speedX", 1f),
+                                        layer.getFloat("speedY", 1f)
+                                ),
+                                layer.getBoolean("clampTop", false),
+                                layer.getBoolean("clampBottom", false),
+                                texture,
+                                Vector2(
+                                        (if (layer.getBoolean("fitX"))
+                                            camera.viewportWidth
+                                        else texture.width.meters) * layer.getFloat("scaleX", 1f),
+                                        (if (layer.getBoolean("fitY"))
+                                            camera.viewportHeight
+                                        else texture.height.meters) * layer.getFloat("scaleY", 1f)
+                                )
                         ))
                     }
                     else -> {

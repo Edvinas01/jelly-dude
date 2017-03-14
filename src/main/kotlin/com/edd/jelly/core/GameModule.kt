@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.edd.jelly.behaviour.level.LevelSystem
@@ -24,6 +25,7 @@ import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.Configuration
 import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.debug.DebugSystem
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.Binder
@@ -68,7 +70,8 @@ class GameModule(private val game: Game) : Module {
 
                 // Rendering.
                 RenderingSystem::class.java,
-                PhysicsDebugSystem::class.java
+                PhysicsDebugSystem::class.java,
+                DebugSystem::class.java
         ))
     }
 
@@ -91,6 +94,9 @@ class GameModule(private val game: Game) : Module {
     fun batch(): SpriteBatch = SpriteBatch()
 
     @Provides @Singleton
+    fun shapeRenderer(): ShapeRenderer = ShapeRenderer()
+
+    @Provides @Singleton
     fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {
         particleRadius = Configuration.PARTICLE_RADIUS
     }
@@ -107,12 +113,8 @@ class GameModule(private val game: Game) : Module {
 
     @Provides @Singleton
     fun camera(): OrthographicCamera {
-        val width = Gdx.graphics.width.meters
-        val height = Gdx.graphics.height.meters
-
-        return OrthographicCamera(width, height).apply {
-            position.set(width / 2f, height / 2f, 0f)
-            update()
+        return OrthographicCamera().apply {
+            setToOrtho(false, Gdx.graphics.width.meters, Gdx.graphics.height.meters)
         }
     }
 

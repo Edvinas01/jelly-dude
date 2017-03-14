@@ -1,9 +1,11 @@
 package com.edd.jelly.util.resources
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.google.inject.Inject
 
 class ResourceManager @Inject constructor() {
@@ -68,7 +70,11 @@ class ResourceManager @Inject constructor() {
      */
     fun getFont(name: String): BitmapFont {
         // todo load by name
-        return BitmapFont()
+
+        val gen = FreeTypeFontGenerator(Gdx.files.internal("$FONT_DIRECTORY/$name.ttf"))
+        val param = FreeTypeFontGenerator.FreeTypeFontParameter()
+        param.size = 16
+        return gen.generateFont(param)
     }
 
     /**
