@@ -9,6 +9,3 @@ data class Particles(val particleGroup: ParticleGroup) : Component {
 
     companion object : ComponentResolver<Particles>(Particles::class.java)
 }
-
-val Entity.particles: Particles
-    get() = Particles[this]

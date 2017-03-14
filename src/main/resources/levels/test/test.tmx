@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="59">
+ <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="../../textures/test_tileset.png" width="128" height="128"/>
+ </tileset>
+ <layer name="parallax_background" width="128" height="64">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="fitY" type="bool" value="true"/>
+   <property name="scaleX" type="float" value="1"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedX" type="float" value="0.09999999999999998"/>
+   <property name="speedY" type="float" value="0.3"/>
+   <property name="texture" value="test_background"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
+  </data>
+ </layer>
+ <layer name="background" width="128" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RsQkAQAwDsVTef+RfIHXCEwncG64KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmJbtA6xJ6X9VmnFD117/O/QHgL88gQD03QCAAAA=
+  </data>
+ </layer>
+ <layer name="parallax_clouds_2" width="128" height="64">
+  <properties>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="offsetX" type="float" value="300"/>
+   <property name="offsetY" type="float" value="0"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.8"/>
+   <property name="texture" value="test_clouds"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
+  </data>
+ </layer>
+ <layer name="parallax_clouds_1" width="128" height="64">
+  <properties>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="speedX" type="float" value="0.5"/>
+   <property name="speedY" type="float" value="0.9"/>
+   <property name="texture" value="test_clouds"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
+  </data>
+ </layer>
+ <layer name="tiles" width="128" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3XyQqDMBQF0NQuOg///7XVhTSEJ8VUBfUcuGAXVuGaPE0JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACALWiKsC/NwDH7oP/1OhS/b20ube4j/iPf9/W/bs82xzbvkefpfxu6/q8V5+l/ef2+W9NXpJsFef/9LCgTzYa8f89ArJy1Nbp+yu+tKfrv7y3vP7rW0PX0v4w5+s+fy1f6zv7u+BEkejfw/T+sXPf/7ANT9z/FnsRy5tr/md6vtVWz9vS/b1H/pxS/p8v2cg76F5H95QPdtHwwAIAAAA==
+  </data>
+ </layer>
+ <objectgroup name="entities">
+  <object id="58" name="start" x="704" y="1632">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="collision">
+  <object id="4" x="0" y="1760" width="96" height="288"/>
+  <object id="5" x="96" y="1952" width="4000" height="96"/>
+  <object id="6" x="4000" y="1760" width="96" height="192"/>
+  <object id="7" x="3584" y="1888" width="32" height="32"/>
+  <object id="8" x="3520" y="1824" width="32" height="32"/>
+  <object id="9" x="3456" y="1760" width="32" height="32"/>
+  <object id="10" x="3392" y="1824" width="32" height="32"/>
+  <object id="11" x="3328" y="1888" width="32" height="32"/>
+  <object id="12" x="544" y="1664" width="32" height="32"/>
+  <object id="14" x="640" y="1760" width="32" height="32"/>
+  <object id="15" x="608" y="1792" width="32" height="32"/>
+  <object id="19" x="672" y="1664" width="64" height="192"/>
+  <object id="20" x="736" y="1664" width="32" height="64"/>
+  <object id="21" x="768" y="1760" width="224" height="96"/>
+  <object id="32" x="96" y="1888" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object id="46" x="352" y="1760">
+   <polygon points="0,0 0,-128 32,-96 64,-128 64,0"/>
+  </object>
+  <object id="48" x="96" y="1760">
+   <polyline points="0,0 64,0 32,-32 64,-64 32,-96 64,-128 0,-128 0,-32 -32,-32 -32,0 0,0"/>
+  </object>
+  <object id="49" x="1088" y="1568" width="128" height="128"/>
+  <object id="50" x="1120" y="1696" width="96" height="160"/>
+  <object id="51" x="1216" y="1760" width="32" height="64"/>
+  <object id="52" x="992" y="1632">
+   <polyline points="0,0 -128,0 -160,-32"/>
+  </object>
+ </objectgroup>
+ <layer name="parallax_foreground" width="128" height="64">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="speedX" type="float" value="0.2"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="test_something"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
+  </data>
+ </layer>
+</map>

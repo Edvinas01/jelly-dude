@@ -6,6 +6,8 @@ import java.lang.reflect.ParameterizedType
 class Messaging {
 
     private val listeners = mutableMapOf<Class<out Event>, MutableList<Listener<Event>>>()
+    private val waiting = mutableListOf<Event>()
+    private var ready = true
 
     /**
      * Register a new listener for a specific event type.
@@ -46,15 +48,33 @@ class Messaging {
      * Send an event of a specific type to all listeners who listen for this event.
      */
     fun <T : Event> send(event: T) {
+        if (!ready) {
+            waiting.add(event)
+            return
+        }
+
         listeners[event.javaClass]?.forEach {
             it.listen(event)
         }
     }
 
     /**
-     * Removes all listeners.
+     * Ready up messaging and clear waiting list.
      */
-    fun clearListeners() {
-        listeners.clear()
+    fun ready(): Messaging {
+        ready = true
+        waiting.forEach {
+            send(it)
+        }
+        waiting.clear()
+        return this
+    }
+
+    /**
+     * Pause messaging.
+     */
+    fun pause(): Messaging {
+        ready = false
+        return this
     }
 }

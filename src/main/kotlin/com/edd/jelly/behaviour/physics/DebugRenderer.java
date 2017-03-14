@@ -1,4 +1,4 @@
-package com.edd.jelly.util;
+package com.edd.jelly.behaviour.physics;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
