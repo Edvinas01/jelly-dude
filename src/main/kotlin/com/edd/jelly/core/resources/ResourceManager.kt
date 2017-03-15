@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.google.inject.Inject
+import com.google.inject.Singleton
 
+@Singleton
 class ResourceManager @Inject constructor() {
 
     companion object {
@@ -32,6 +34,7 @@ class ResourceManager @Inject constructor() {
     val mainAtlas: TextureAtlas
 
     init {
+        println("lod meh")
         mainAtlas = getAtlas(MAIN_ATLAS_NAME)
     }
 

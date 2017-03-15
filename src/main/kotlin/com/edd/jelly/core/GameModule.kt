@@ -33,9 +33,12 @@ import com.google.inject.Module
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.google.inject.name.Named
+import jdk.nashorn.api.scripting.NashornScriptEngine
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
+import javax.script.Compilable
+import javax.script.ScriptEngineManager
 
 class GameModule(private val game: Game) : Module {
 
@@ -144,6 +147,9 @@ class GameModule(private val game: Game) : Module {
     @Provides @Singleton
     fun layeredTiledMapRenderer(camera: OrthographicCamera, batch: SpriteBatch) =
             JellyMapRenderer(camera, batch, Units.MPP)
+
+    @Provides @Singleton
+    fun scriptEngine() = ScriptEngineManager().getEngineByName("nashorn") as NashornScriptEngine
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

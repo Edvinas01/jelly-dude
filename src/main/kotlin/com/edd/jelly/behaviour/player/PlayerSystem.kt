@@ -19,6 +19,7 @@ import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.pixels
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
+import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold
@@ -35,7 +36,8 @@ class PlayerSystem @Inject constructor(
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
         private val camera: OrthographicCamera,
-        private val world: World
+        private val world: World,
+        scriptManager: ScriptManager
 ) : EntitySystem() {
 
     companion object {
@@ -85,6 +87,8 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_SPEED = 5
     }
 
+    private val movementFunctions = scriptManager.getHooks(MovementFunction::class.java)
+
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
 
@@ -114,6 +118,9 @@ class PlayerSystem @Inject constructor(
      */
     private fun processMovement(player: Player, deltaTime: Float) {
         with(player) {
+            movementFunctions.forEach {
+                it.beforeProcessMove(this)
+            }
 
             // If player has no contacts or joints at the moment, it means he is in the air.
             if (groundContacts.isEmpty() && stickyJoints.isEmpty()) {
@@ -146,6 +153,10 @@ class PlayerSystem @Inject constructor(
                 if (movingRight && velocity.x < MAX_VELOCITY) {
                     body.applyForceToCenter(Vec2(moveForce, 0f))
                 }
+            }
+
+            movementFunctions.forEach {
+                it.afterProcessMove(this)
             }
         }
     }
@@ -403,7 +414,7 @@ class PlayerSystem @Inject constructor(
         // Listen for player destruction.
         engine.addEntityListener(Family.one(Player::class.java).get(), object : EntityListener {
             override fun entityRemoved(entity: Entity) {
-                val player =destroyPlayer(entity)
+                val player = destroyPlayer(entity)
 
                 if (player.reset) {
                     with(player.lastSpawn) {
