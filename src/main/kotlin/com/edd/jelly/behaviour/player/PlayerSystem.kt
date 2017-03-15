@@ -17,8 +17,8 @@ import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.pixels
-import com.edd.jelly.util.resources.ResourceManager
-import com.edd.jelly.util.resources.get
+import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold

@@ -9,7 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
-import com.edd.jelly.util.resources.ResourceManager
+import com.edd.jelly.core.resources.ResourceManager
 import com.google.inject.Inject
 
 class JellyMapLoader @Inject constructor(

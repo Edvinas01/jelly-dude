@@ -1,4 +1,4 @@
-package com.edd.jelly.util.resources
+package com.edd.jelly.core.resources
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
