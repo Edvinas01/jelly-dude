@@ -87,7 +87,7 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_SPEED = 5
     }
 
-    private val movementFunctions = scriptManager.getHooks(MovementFunction::class.java)
+    private val movementFunctions = scriptManager.hook(MovementFunction::class.java)
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)

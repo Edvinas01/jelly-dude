@@ -34,9 +34,12 @@ import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.google.inject.name.Named
 import jdk.nashorn.api.scripting.NashornScriptEngine
+import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
+import java.nio.file.FileSystems
+import java.nio.file.WatchService
 import javax.script.Compilable
 import javax.script.ScriptEngineManager
 
@@ -150,6 +153,11 @@ class GameModule(private val game: Game) : Module {
 
     @Provides @Singleton
     fun scriptEngine() = ScriptEngineManager().getEngineByName("nashorn") as NashornScriptEngine
+
+    @Provides @Singleton
+    fun watchService(): FileAlterationMonitor {
+        return FileAlterationMonitor(2000)
+    }
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

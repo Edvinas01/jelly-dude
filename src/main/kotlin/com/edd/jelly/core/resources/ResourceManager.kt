@@ -34,7 +34,6 @@ class ResourceManager @Inject constructor() {
     val mainAtlas: TextureAtlas
 
     init {
-        println("lod meh")
         mainAtlas = getAtlas(MAIN_ATLAS_NAME)
     }
 

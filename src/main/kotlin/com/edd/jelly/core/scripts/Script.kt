@@ -4,4 +4,5 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror
 
 class Script(val name: String,
              val functions: Set<String>,
-             val scriptObject: ScriptObjectMirror)
+             val scriptObject: ScriptObjectMirror,
+             val hooked: MutableList<Class<*>> = mutableListOf<Class<*>>())

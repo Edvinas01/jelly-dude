@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Guice
 import com.google.inject.Injector
+import org.apache.commons.io.monitor.FileAlterationMonitor
 
 class Game : ApplicationAdapter() {
 
@@ -23,7 +24,12 @@ class Game : ApplicationAdapter() {
             engine.addSystem(s)
         }
 
-        injector.getInstance(Messaging::class.java).ready()
+        injector.getInstance(Messaging::class.java)
+                .ready()
+
+        injector.getInstance(FileAlterationMonitor::class.java)
+                .start()
+
         Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
     }
 

@@ -38,6 +38,12 @@ sourceCompatibility = 1.8
 project.ext.mainClassName = 'com.edd.jelly.Launcher'
 project.ext.assetsDir = new File('resources');
 
+// See:
+// http://stackoverflow.com/questions/38131237/mixing-java-and-kotlin-in-gradle-project-kotlin-cannot-find-java-class
+sourceSets {
+    main.java.srcDirs = ['src/main/kotlin']
+}
+
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
@@ -76,6 +82,9 @@ dependencies {
 
     // Dependency injection.
     compile "com.google.inject:guice:$guiceVersion"
+
+    // Other.
+    compile 'commons-io:commons-io:2.5'
 
 //    Still not sure which type of box2d to use... So leaving these here just in case.
 //    compile files('libs/liquidfun/gdx-liquidfun-natives.jar')

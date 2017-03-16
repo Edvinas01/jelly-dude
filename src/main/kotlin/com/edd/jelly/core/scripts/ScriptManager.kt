@@ -1,67 +1,169 @@
 package com.edd.jelly.core.scripts
 
-import com.edd.jelly.exception.GameException
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import jdk.nashorn.api.scripting.NashornScriptEngine
 import jdk.nashorn.api.scripting.ScriptObjectMirror
-import java.io.InputStreamReader
+import org.apache.commons.io.monitor.FileAlterationListener
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor
+import org.apache.commons.io.monitor.FileAlterationMonitor
+import org.apache.commons.io.monitor.FileAlterationObserver
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.script.Invocable
-import javax.script.ScriptException
 
 @Singleton
-class ScriptManager @Inject constructor(private val engine: NashornScriptEngine) {
+class ScriptManager @Inject constructor(
+        private val engine: NashornScriptEngine,
+        fileMonitor: FileAlterationMonitor
+) {
 
-    private val scripts: Map<String, Script>
+    /*
+
+    functionType -> [
+        function
+    ]
+
+    scriptName -> [
+        type
+    ]
+
+     */
+
+    inner class Hook<out T>(
+            val function: T,
+            val script: Script
+    )
+
+    private val scripts: MutableMap<String, Script>
+
+    private val hooks = mutableMapOf<Class<*>, MutableList<*>>()
 
     private companion object {
+        val JS_FILE_TYPE = ".js"
         val SCRIPT_DIRECTORY = "scripts/"
         val DESCRIBE_FUNCTION = "main"
     }
 
     init {
         scripts = loadScripts()
+
+        fileMonitor.addObserver(FileAlterationObserver(SCRIPT_DIRECTORY).apply {
+            addListener(createFileListener())
+        })
     }
 
     /**
-     * Get hooks based on provided hook type. Don't call this function very often!
+     * Create a hook for a given type interface and return hook functions for this type.
      */
-    fun <T> getHooks(hookType: Class<T>): List<T> {
-        val mustContain = hookType.methods.map {
-            it.name
-        }
+    fun <T> hook(hookType: Class<T>): List<T> {
 
-        return scripts.values.filter { s ->
-            s.functions.containsAll(mustContain)
-        }.map {
-            engine.getInterface(it.scriptObject, hookType)
+        @Suppress("UNCHECKED_CAST")
+        return hooks.getOrPut(hookType, defaultValue = {
+            val hookList = mutableListOf<T>()
+
+            // Function names which are required for this hook.
+            val requiredFunctions = hookType.methods.map {
+                it.name
+            }
+
+            // Applicable scripts which have the required functions.
+            scripts.values.filter {
+                it.functions.containsAll(requiredFunctions)
+            }.forEach {
+                hookList.add(engine.getInterface(it.scriptObject, hookType))
+                it.hooked.add(hookType)
+            }
+
+            hookList
+        }) as List<T>
+    }
+
+    /**
+     * Create script change listener.
+     */
+    private fun createFileListener(): FileAlterationListener {
+        return object : FileAlterationListenerAdaptor() {
+            override fun onFileCreate(file: File) {
+                println("Create: ${file.name}")
+            }
+
+            override fun onFileChange(file: File) {
+                loadScript(file)?.let { s ->
+                    scripts.put(s.name, s)?.let {
+
+                        // Old hooks.
+                        it.hooked.forEach {
+
+                            val requiredFunctions = it.methods.map {
+                                it.name
+                            }
+
+                            if (s.functions.containsAll(requiredFunctions)) {
+
+                            }
+
+                            s.scriptObject.values.filter {
+                                it.functions.containsAll(requiredFunctions)
+                            }.forEach {
+                                hookList.add(engine.getInterface(it.scriptObject, hookType))
+                                it.hooked.add(hookType)
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onFileDelete(file: File) {
+                println("Delete: ${file.name}")
+            }
         }
     }
 
-    private fun loadScripts(): Map<String, Script> {
-        val scripts = mutableMapOf<String, Script>()
+    /**
+     * Load a single script from a given file.
+     */
+    private fun loadScript(file: File): Script? {
+        val content = file.readText()
+        try {
+            engine.compile(content).let {
+                it.eval()
 
-        for (name in InputStreamReader(ClassLoader.getSystemResourceAsStream(SCRIPT_DIRECTORY)).readLines()) {
-            val content = InputStreamReader(ClassLoader.getSystemResourceAsStream("$SCRIPT_DIRECTORY/$name"))
-                    .readText()
-
-            try {
-                engine.compile(content).apply {
-                    eval()
-
-                    try {
-                        val res = (engine as Invocable).invokeFunction(DESCRIBE_FUNCTION) as ScriptObjectMirror
-                        val formedName = if (name.contains(".")) name.takeWhile { it != '.' } else name
-
-                        scripts.put(formedName, Script(formedName, res.keys.toSet(), res))
-                    } catch (e: NoSuchMethodException) {
-                        throw GameException("Script $name must \"$DESCRIBE_FUNCTION\" function")
-                    }
-                }
-            } catch (e: ScriptException) {
-                throw GameException("Could not compile script with name: $name", e)
+                val result = (engine as Invocable).invokeFunction(DESCRIBE_FUNCTION) as ScriptObjectMirror
+                return Script(
+                        file.path,
+                        result.keys.toSet(),
+                        result
+                )
             }
+        } catch (e: Exception) {
+            e.printStackTrace() // TODO LOGGING
         }
-        return scripts
+        return null
+    }
+
+    /**
+     * Load all scripts from script directory.
+     */
+    private fun loadScripts(): MutableMap<String, Script> {
+        val map = mutableMapOf<String, Script>()
+        try {
+
+            // Load initial scripts.
+            Files.walk(Paths.get(SCRIPT_DIRECTORY))
+                    .filter { Files.isRegularFile(it) }
+                    .map(Path::toFile)
+                    .filter { it.name.endsWith(JS_FILE_TYPE) }
+                    .forEach {
+                        loadScript(it)?.let {
+                            map.put(it.name, it)
+                        }
+                    }
+        } catch (e: NoSuchFileException) {
+            e.printStackTrace() // TODO LOGGING
+        }
+        return map
     }
 }
