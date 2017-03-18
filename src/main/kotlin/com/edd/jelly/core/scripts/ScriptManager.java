@@ -4,10 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,24 +22,18 @@ import java.util.stream.Stream;
 public final class ScriptManager {
 
     private static final String MAIN_FUNCTION_NAME = "main";
-    private static final String FILE_EXTENSION = ".js";
     private static final String SCRIPT_DIRECTORY = "scripts/";
-
-    private final FileAlterationMonitor monitor;
-    private final NashornScriptEngine engine;
+    private static final String FILE_EXTENSION = ".js";
 
     private final Map<Class<?>, List<?>> hooks = new HashMap<>();
     private Map<String, Script> scripts;
 
+    private final NashornScriptEngine engine;
+
     @Inject
-    public ScriptManager(FileAlterationMonitor monitor,
-                         NashornScriptEngine engine) {
-
-        this.monitor = monitor;
+    public ScriptManager(NashornScriptEngine engine) {
         this.engine = engine;
-
         this.scripts = loadScripts();
-        System.out.println();
     }
 
     /**
@@ -55,11 +48,51 @@ public final class ScriptManager {
         @SuppressWarnings("unchecked")
         List<T> hookFunctions = (List<T>) hooks.get(hookType);
 
-        // Lazy hook function initialization.
         if (hookFunctions == null) {
             hookFunctions = new ArrayList<>();
             hooks.put(hookType, hookFunctions);
         }
+        hookFunctions.addAll(getHookFunctions(hookType));
+        return Collections.unmodifiableList(hookFunctions);
+    }
+
+    /**
+     * Create file change observer for scripts.
+     */
+    public FileAlterationObserver createObserver() {
+        FileAlterationObserver observer = new FileAlterationObserver(SCRIPT_DIRECTORY);
+        observer.addListener(new ScriptListener(this));
+        return observer;
+    }
+
+    /**
+     * Check if file is a script.
+     */
+    boolean isScript(File file) {
+        return file.getPath().endsWith(FILE_EXTENSION);
+    }
+
+    /**
+     * Reload all loaded scripts and hooks.
+     */
+    void reloadScripts() {
+
+        // Load new scripts.
+        scripts = loadScripts();
+
+        // Reload hooks according to new scripts.
+        hooks.forEach((type, functions) -> {
+            functions.clear();
+
+            //noinspection unchecked
+            ((List<Object>) functions).addAll(getHookFunctions(type));
+        });
+    }
+
+    /**
+     * Get hook functions for a hook type from scripts.
+     */
+    private <T> List<T> getHookFunctions(Class<T> hookType) {
 
         // Function names which are required to support this hook.
         Set<String> requiredFunctions = Stream
@@ -67,24 +100,26 @@ public final class ScriptManager {
                 .map(Method::getName)
                 .collect(Collectors.toSet());
 
-        // Register all hooks from scripts, which are applicable for these hooks.
-        hookFunctions.addAll(scripts.values()
+        if (requiredFunctions.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Fin scripts, which are applicable for this hook.
+        return scripts.values()
                 .stream()
                 .filter(s -> s.getReturnFunctions().containsAll(requiredFunctions))
                 .map(s -> engine.getInterface(s.getReturnObject(), hookType))
-                .collect(Collectors.toList()));
-
-        return Collections.unmodifiableList(hookFunctions);
+                .collect(Collectors.toList());
     }
 
     /**
      * Load all scripts from script directory.
      */
-    public Map<String, Script> loadScripts() {
+    private Map<String, Script> loadScripts() {
         try {
             return Files.walk(Paths.get(SCRIPT_DIRECTORY))
                     .map(Path::toFile)
-                    .filter(f -> f.getPath().endsWith(FILE_EXTENSION))
+                    .filter(this::isScript)
                     .map(this::loadScript)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

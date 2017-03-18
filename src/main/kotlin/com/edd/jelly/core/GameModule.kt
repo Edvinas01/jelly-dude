@@ -11,21 +11,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.edd.jelly.behaviour.level.LevelSystem
-import com.edd.jelly.behaviour.physics.ParticleGroupSynchronizationSystem
-import com.edd.jelly.behaviour.physics.PhysicsDebugSystem
-import com.edd.jelly.behaviour.physics.PhysicsSynchronizationSystem
-import com.edd.jelly.behaviour.physics.PhysicsSystem
+import com.edd.jelly.behaviour.physics.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
-import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.core.events.Messaging
-import com.edd.jelly.util.Configuration
-import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.core.scripts.ScriptManager
+import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.debug.DebugSystem
+import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.Binder
@@ -38,9 +35,6 @@ import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
-import java.nio.file.FileSystems
-import java.nio.file.WatchService
-import javax.script.Compilable
 import javax.script.ScriptEngineManager
 
 class GameModule(private val game: Game) : Module {
@@ -155,8 +149,10 @@ class GameModule(private val game: Game) : Module {
     fun scriptEngine() = ScriptEngineManager().getEngineByName("nashorn") as NashornScriptEngine
 
     @Provides @Singleton
-    fun watchService(): FileAlterationMonitor {
-        return FileAlterationMonitor(2000)
+    fun watchService(manager: ScriptManager): FileAlterationMonitor {
+        return FileAlterationMonitor(2000).apply {
+            addObserver(manager.createObserver())
+        }
     }
 }
 
