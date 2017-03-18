@@ -1,7 +1,10 @@
 function main() {
     return {
         beforeProcessMove: function (player) {
-            Printer.printPlayerDetails(player);
+			player.canJump = true;
+			player.airTime = 0;
+			
+            Printer.printDetails(player);
         },
         afterProcessMove: function (player) {
         }

@@ -24,6 +24,7 @@ public final class ScriptManager {
     private static final String MAIN_FUNCTION_NAME = "main";
     private static final String SCRIPT_DIRECTORY = "scripts/";
     private static final String FILE_EXTENSION = ".js";
+    private static final String CONTEXT_NAME = "game";
 
     private final Map<Class<?>, List<?>> hooks = new HashMap<>();
     private Map<String, Script> scripts;
@@ -31,8 +32,12 @@ public final class ScriptManager {
     private final NashornScriptEngine engine;
 
     @Inject
-    public ScriptManager(NashornScriptEngine engine) {
+    public ScriptManager(NashornScriptEngine engine,
+                         ScriptGameContext context) {
+
         this.engine = engine;
+        this.engine.put(CONTEXT_NAME, context);
+
         this.scripts = loadScripts();
     }
 

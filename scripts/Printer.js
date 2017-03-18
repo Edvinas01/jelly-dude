@@ -1,7 +1,11 @@
 var Printer = (function () {
     return {
-        printPlayerDetails: function (player) {
-            print('HP: ' + player.health)
+        printDetails: function (player) {
+            if (player) {
+                print('FPS: ' + game.getFps() + ', HP: ' + player.health);
+            } else {
+                print('FPS: ' + game.getFps());
+            }
         }
     }
 })();

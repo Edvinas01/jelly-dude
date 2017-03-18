@@ -118,6 +118,8 @@ class PlayerSystem @Inject constructor(
      */
     private fun processMovement(player: Player, deltaTime: Float) {
         with(player) {
+
+            // TODO will crash the game if any of the scripts fail
             movementFunctions.forEach {
                 it.beforeProcessMove(this)
             }
