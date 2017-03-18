@@ -1,3 +1,4 @@
+/*
 package com.edd.jelly.core.scripts
 
 import com.google.inject.Inject
@@ -20,7 +21,8 @@ class ScriptManager @Inject constructor(
         fileMonitor: FileAlterationMonitor
 ) {
 
-    /*
+    */
+/*
 
     functionType -> [
         function
@@ -30,16 +32,20 @@ class ScriptManager @Inject constructor(
         type
     ]
 
-     */
+        Jumps -> [ jumpProcessor: {}, jumpProcessor: {} ]
+        (Script) -> [ ref: jumpProcessor: {} ]
+     *//*
+
 
     inner class Hook<out T>(
-            val function: T,
+            val functions: T,
             val script: Script
     )
 
     private val scripts: MutableMap<String, Script>
 
     private val hooks = mutableMapOf<Class<*>, MutableList<*>>()
+
 
     private companion object {
         val JS_FILE_TYPE = ".js"
@@ -55,9 +61,11 @@ class ScriptManager @Inject constructor(
         })
     }
 
-    /**
+    */
+/**
      * Create a hook for a given type interface and return hook functions for this type.
-     */
+     *//*
+
     fun <T> hook(hookType: Class<T>): List<T> {
 
         @Suppress("UNCHECKED_CAST")
@@ -74,45 +82,64 @@ class ScriptManager @Inject constructor(
                 it.functions.containsAll(requiredFunctions)
             }.forEach {
                 hookList.add(engine.getInterface(it.scriptObject, hookType))
-                it.hooked.add(hookType)
             }
-
             hookList
         }) as List<T>
     }
 
-    /**
+    */
+/**
      * Create script change listener.
-     */
+     *//*
+
     private fun createFileListener(): FileAlterationListener {
         return object : FileAlterationListenerAdaptor() {
             override fun onFileCreate(file: File) {
-                println("Create: ${file.name}")
+                loadScript(file)?.let { s ->
+
+                    hooks.forEach { h ->
+                        h.
+                    }
+                }
             }
 
             override fun onFileChange(file: File) {
+
+
+                loadScript(file)?.let {
+
+                }
+
+
+                // Load the changed script to see if it compiles.
                 loadScript(file)?.let { s ->
+
+                    // Replace existing script with new loaded one.
                     scripts.put(s.name, s)?.let {
 
-                        // Old hooks.
-                        it.hooked.forEach {
-
-                            val requiredFunctions = it.methods.map {
-                                it.name
-                            }
-
-                            if (s.functions.containsAll(requiredFunctions)) {
-
-                            }
-
-                            s.scriptObject.values.filter {
-                                it.functions.containsAll(requiredFunctions)
-                            }.forEach {
-                                hookList.add(engine.getInterface(it.scriptObject, hookType))
-                                it.hooked.add(hookType)
-                            }
-                        }
+                        // Reload hooks for the old script.
+//
+//
+//                        it.hooked.forEach {
+//
+//                            val requiredFunctions = it.methods.map {
+//                                it.name
+//                            }
+//
+//                            if (s.functions.containsAll(requiredFunctions)) {
+//
+//                            }
+//
+//                            s.scriptObject.values.filter {
+//                                it.functions.containsAll(requiredFunctions)
+//                            }.forEach {
+//                                hookList.add(engine.getInterface(it.scriptObject, hookType))
+//                                it.hooked.add(hookType)
+//                            }
+//                        }
                     }
+                } ?: {
+                    false
                 }
             }
 
@@ -122,14 +149,16 @@ class ScriptManager @Inject constructor(
         }
     }
 
-    /**
+    */
+/**
      * Load a single script from a given file.
-     */
+     *//*
+
     private fun loadScript(file: File): Script? {
         val content = file.readText()
         try {
-            engine.compile(content).let {
-                it.eval()
+            engine.compile(content).let { s ->
+                s.eval()
 
                 val result = (engine as Invocable).invokeFunction(DESCRIBE_FUNCTION) as ScriptObjectMirror
                 return Script(
@@ -144,9 +173,11 @@ class ScriptManager @Inject constructor(
         return null
     }
 
-    /**
+    */
+/**
      * Load all scripts from script directory.
-     */
+     *//*
+
     private fun loadScripts(): MutableMap<String, Script> {
         val map = mutableMapOf<String, Script>()
         try {
@@ -166,4 +197,4 @@ class ScriptManager @Inject constructor(
         }
         return map
     }
-}
+}*/
