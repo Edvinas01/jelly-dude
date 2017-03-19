@@ -17,8 +17,8 @@ import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
-import com.edd.jelly.util.resources.ResourceManager
-import com.edd.jelly.util.resources.get
+import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
 import com.google.inject.Inject
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
