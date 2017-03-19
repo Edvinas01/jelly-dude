@@ -29,15 +29,15 @@ public final class ScriptManager {
     private final Map<Class<?>, List<?>> hooks = new HashMap<>();
     private Map<String, Script> scripts;
 
+    private final ScriptGameContext context;
     private final NashornScriptEngine engine;
 
     @Inject
     public ScriptManager(NashornScriptEngine engine,
                          ScriptGameContext context) {
 
+        this.context = context;
         this.engine = engine;
-        this.engine.put(CONTEXT_NAME, context);
-
         this.scripts = loadScripts();
     }
 
@@ -142,6 +142,10 @@ public final class ScriptManager {
      */
     private Optional<Script> loadScript(File script) {
         try (FileReader reader = new FileReader(script)) {
+
+            // Make sure that script context is always new for each script.
+            engine.setContext(createContext());
+
             return runMain(engine.compile(reader))
                     .map(m -> new Script(script.getPath(), m.keySet(), m));
 
@@ -166,5 +170,14 @@ public final class ScriptManager {
             e.printStackTrace(); // TODO logging
         }
         return Optional.empty();
+    }
+
+    /**
+     * Create a fresh script context.
+     */
+    private SimpleScriptContext createContext() {
+        SimpleScriptContext ctx = new SimpleScriptContext();
+        ctx.setAttribute(CONTEXT_NAME, context, ScriptContext.ENGINE_SCOPE);
+        return ctx;
     }
 }
