@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.edd.jelly.core.Game
 import com.edd.jelly.util.Configuration
+import com.edd.jelly.util.UncaughtExceptionLogger
 
 class Launcher : ApplicationAdapter() {
 
@@ -12,6 +13,7 @@ class Launcher : ApplicationAdapter() {
 
         @JvmStatic
         fun main(args: Array<String>) {
+            Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionLogger())
 
             val configuration = LwjglApplicationConfiguration()
 
