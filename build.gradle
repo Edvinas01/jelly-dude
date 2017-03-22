@@ -63,6 +63,12 @@ task dist(type: Jar) {
 
 dist.dependsOn classes
 
+idea {
+    module {
+        excludeDirs += file('logs')
+    }
+}
+
 dependencies {
 
     // Kotlin!

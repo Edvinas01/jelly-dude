@@ -1,12 +1,14 @@
 package com.edd.jelly.core.scripts;
 
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-// TODO logging for scripts
 public final class ScriptListener extends FileAlterationListenerAdaptor {
 
+    private static final Logger LOG = LogManager.getLogger(ScriptListener.class);
     private final ScriptManager manager;
 
     ScriptListener(ScriptManager manager) {
@@ -16,8 +18,7 @@ public final class ScriptListener extends FileAlterationListenerAdaptor {
     @Override
     public void onFileCreate(File file) {
         if (manager.isScript(file)) {
-
-            System.out.printf("New script created: %s\n", file.getPath());
+            LOG.trace("{} created", file.getPath());
             manager.reloadScripts();
         }
     }
@@ -25,8 +26,7 @@ public final class ScriptListener extends FileAlterationListenerAdaptor {
     @Override
     public void onFileChange(File file) {
         if (manager.isScript(file)) {
-
-            System.out.printf("Modified script: %s\n", file.getPath());
+            LOG.trace("{} modified", file.getPath());
             manager.reloadScripts();
         }
     }
@@ -34,8 +34,7 @@ public final class ScriptListener extends FileAlterationListenerAdaptor {
     @Override
     public void onFileDelete(File file) {
         if (manager.isScript(file)) {
-
-            System.out.printf("Deleted script: %s\n", file.getPath());
+            LOG.trace("{} deleted", file.getPath());
             manager.reloadScripts();
         }
     }
