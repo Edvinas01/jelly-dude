@@ -8,13 +8,20 @@ import com.edd.jelly.core.events.Messaging
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.apache.commons.io.monitor.FileAlterationMonitor
+import org.apache.logging.log4j.LogManager
 
 class Game : ApplicationAdapter() {
+
+    companion object {
+        private val LOG = LogManager.getLogger(Game::class.java)
+    }
 
     internal lateinit var engine: Engine
     internal lateinit var injector: Injector
 
     override fun create() {
+        LOG.info("Starting game")
+
         engine = Engine()
 
         injector = Guice.createInjector(GameModule(this))

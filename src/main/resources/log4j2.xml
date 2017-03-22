@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%highlight{%-5p}{FATAL=bright red, ERROR=red, WARN=yellow, INFO=magenta, DEBUG=cyan, TRACE=blue}] %d{HH:mm:ss.SSS} (%F:%L): %m%n"/>
+        </Console>
+        <File name="FILE" fileName="logs/jelly-dude.log">
+
+            <!-- [%thread] include if thread is required -->
+            <PatternLayout pattern="[%-5p] %d{HH:mm:ss.SSS} %c{1.}: %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>

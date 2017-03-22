@@ -5,6 +5,8 @@ import com.google.inject.Singleton;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.script.*;
 import java.io.File;
@@ -13,13 +15,14 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Singleton
 public final class ScriptManager {
+
+    private static final Logger LOG = LogManager.getLogger(ScriptManager.class);
 
     private static final String MAIN_FUNCTION_NAME = "main";
     private static final String SCRIPT_DIRECTORY = "scripts/";
@@ -55,8 +58,11 @@ public final class ScriptManager {
 
         if (hookFunctions == null) {
             hookFunctions = new ArrayList<>();
+
+            LOG.debug("Registering hook of type: {}", hookType.getSimpleName());
             hooks.put(hookType, hookFunctions);
         }
+
         hookFunctions.addAll(getHookFunctions(hookType));
         return Collections.unmodifiableList(hookFunctions);
     }
@@ -81,6 +87,7 @@ public final class ScriptManager {
      * Reload all loaded scripts and hooks.
      */
     void reloadScripts() {
+        LOG.debug("Reloading scripts and hooks");
 
         // Load new scripts.
         scripts = loadScripts();
@@ -122,7 +129,7 @@ public final class ScriptManager {
      */
     private Map<String, Script> loadScripts() {
         try {
-            return Files.walk(Paths.get(SCRIPT_DIRECTORY))
+            return Files.walk(getScriptDirectory().toPath())
                     .map(Path::toFile)
                     .filter(this::isScript)
                     .map(this::loadScript)
@@ -131,7 +138,7 @@ public final class ScriptManager {
                     .collect(Collectors.toMap(Script::getName, s -> s));
 
         } catch (IOException e) {
-            e.printStackTrace(); // TODO logging
+            LOG.error("Could not load scripts", e);
 
             return Collections.emptyMap();
         }
@@ -141,16 +148,25 @@ public final class ScriptManager {
      * Load and compile script file contents.
      */
     private Optional<Script> loadScript(File script) {
+        String name = script.getPath();
         try (FileReader reader = new FileReader(script)) {
 
             // Make sure that script context is always new for each script.
             engine.setContext(createContext());
 
-            return runMain(engine.compile(reader))
-                    .map(m -> new Script(script.getPath(), m.keySet(), m));
+            return runMain(engine
+                    .compile(reader))
+                    .map(m -> {
+                        LOG.debug("{} loaded", name);
+                        return new Script(name, m.keySet(), m);
+                    });
 
-        } catch (IOException | ScriptException e) {
-            e.printStackTrace(); // TODO logging
+        } catch (IOException e) {
+            LOG.error("{} could not be loaded", name, e);
+        } catch (ScriptException e) {
+            LOG.error("{} could not be executed:\n {}", name, e.getMessage());
+        } catch (NoSuchMethodException e) {
+            LOG.debug("{} doesn't have a {}() function", name, MAIN_FUNCTION_NAME);
         }
         return Optional.empty();
     }
@@ -158,16 +174,14 @@ public final class ScriptManager {
     /**
      * Attempt to run the main function of a script.
      */
-    private Optional<ScriptObjectMirror> runMain(CompiledScript script) {
-        try {
-            script.eval();
-            Object result = engine.invokeFunction(MAIN_FUNCTION_NAME);
+    private Optional<ScriptObjectMirror> runMain(CompiledScript script)
+            throws ScriptException, NoSuchMethodException {
 
-            if (result instanceof ScriptObjectMirror) {
-                return Optional.of((ScriptObjectMirror) result);
-            }
-        } catch (ScriptException | NoSuchMethodException e) {
-            e.printStackTrace(); // TODO logging
+        script.eval();
+        Object result = engine.invokeFunction(MAIN_FUNCTION_NAME);
+
+        if (result instanceof ScriptObjectMirror) {
+            return Optional.of((ScriptObjectMirror) result);
         }
         return Optional.empty();
     }
@@ -179,5 +193,18 @@ public final class ScriptManager {
         SimpleScriptContext ctx = new SimpleScriptContext();
         ctx.setAttribute(CONTEXT_NAME, context, ScriptContext.ENGINE_SCOPE);
         return ctx;
+    }
+
+    /**
+     * Get script directory, if it doesn't exist, it will get created.
+     */
+    private File getScriptDirectory() {
+        File scripts = new File(SCRIPT_DIRECTORY);
+        if (!scripts.exists() || scripts.isFile()) {
+
+            //noinspection ResultOfMethodCallIgnored
+            scripts.mkdir();
+        }
+        return scripts;
     }
 }
