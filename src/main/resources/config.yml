@@ -1,5 +1,7 @@
 game:
   debug: true
+  gravity: -9.81
+  particleRadius: 0.1
 
 video:
   screen:

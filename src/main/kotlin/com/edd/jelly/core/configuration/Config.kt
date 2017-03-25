@@ -1,6 +1,6 @@
 package com.edd.jelly.core.configuration
 
-class Config(
+data class Config(
         val game: Game,
         val video: Video
 ) {
@@ -8,16 +8,16 @@ class Config(
     /**
      * General game configuration settings.
      */
-    class Game(val debug: Boolean)
+    data class Game(val debug: Boolean, val gravity: Float, val particleRadius: Float)
 
     /**
      * Video configuration.
      */
-    class Video(val screen: Screen, val fpsLimit: Int) {
+    data class Video(val screen: Screen, val fpsLimit: Int) {
 
         /**
          * Screen configuration.
          */
-        class Screen(val fullscreen: Boolean, val width: Int, val height: Int)
+        data class Screen(val fullscreen: Boolean, val width: Int, val height: Int)
     }
 }

@@ -23,7 +23,6 @@ import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.debug.DebugSystem
-import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.Binder
@@ -100,8 +99,11 @@ class GameModule(private val game: Game) : Module {
     fun shapeRenderer(): ShapeRenderer = ShapeRenderer()
 
     @Provides @Singleton
-    fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {
-        particleRadius = Configuration.PARTICLE_RADIUS
+    fun world(configurations: Configurations): World {
+        val game = configurations.config.game
+        return World(Vec2(0f, game.gravity)).apply {
+            particleRadius = game.particleRadius
+        }
     }
 
     @Provides @Singleton
