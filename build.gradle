@@ -36,7 +36,7 @@ version = '0.1'
 sourceCompatibility = 1.8
 
 project.ext.mainClassName = 'com.edd.jelly.Launcher'
-project.ext.assetsDir = new File('resources');
+project.ext.assetsDir = new File('resources')
 
 // See:
 // http://stackoverflow.com/questions/38131237/mixing-java-and-kotlin-in-gradle-project-kotlin-cannot-find-java-class
@@ -83,7 +83,7 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-    // Ashley.
+    // ECS - Ashley.
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
     // Dependency injection.
@@ -93,7 +93,10 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.8.1'
     compile 'org.apache.logging.log4j:log4j-api:2.8.1'
 
-    // Other.
+    // Other useful libraries.
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0.pr1'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0.pr1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1'
     compile 'commons-io:commons-io:2.5'
 
     // JBox2d + Liquid fun dependencies.

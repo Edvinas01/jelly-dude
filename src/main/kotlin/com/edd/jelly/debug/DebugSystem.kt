@@ -5,18 +5,26 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.edd.jelly.core.configuration.Configurations
 import com.google.inject.Inject
 
 class DebugSystem @Inject constructor(
         private val shapeRenderer: ShapeRenderer,
-        private val camera: OrthographicCamera
+        private val camera: OrthographicCamera,
+        configurations: Configurations
 ) : EntitySystem() {
+
+    private val game = configurations.config.game
 
     override fun addedToEngine(engine: Engine?) {
         super.addedToEngine(engine)
     }
 
     override fun update(deltaTime: Float) {
+        if (!game.debug) {
+            return
+        }
+
         with(camera.position) {
             shapeRenderer.projectionMatrix = camera.combined
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line)

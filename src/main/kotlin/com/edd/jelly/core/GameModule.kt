@@ -18,6 +18,7 @@ import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.core.tiled.JellyMapRenderer
@@ -46,6 +47,8 @@ class GameModule(private val game: Game) : Module {
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
         binder.requireAtInjectOnConstructors()
+        binder.bind(Configurations::class.java)
+                .toInstance(game.configurations)
     }
 
     @Provides @Singleton
