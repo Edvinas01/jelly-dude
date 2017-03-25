@@ -1,5 +1,6 @@
 package com.edd.jelly.core.scripts;
 
+import com.edd.jelly.util.Configuration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -25,7 +26,7 @@ public final class ScriptManager {
     private static final Logger LOG = LogManager.getLogger(ScriptManager.class);
 
     private static final String MAIN_FUNCTION_NAME = "main";
-    private static final String SCRIPT_DIRECTORY = "scripts/";
+    private static final String SCRIPT_DIRECTORY = Configuration.ASSETS_FOLDER + "scripts/";
     private static final String FILE_EXTENSION = ".js";
     private static final String CONTEXT_NAME = "game";
 

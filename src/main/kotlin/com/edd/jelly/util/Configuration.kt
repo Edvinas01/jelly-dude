@@ -5,13 +5,15 @@ package com.edd.jelly.util
  */
 object Configuration {
 
-    val SCREEN_WIDTH = 800
-    val SCREEN_HEIGHT = 600
-    val FPS_LIMIT = 60
+    const val SCREEN_WIDTH = 800
+    const val SCREEN_HEIGHT = 600
+    const val FPS_LIMIT = 60
 
-    val FULLSCREEN = false
-    val RESIZABLE = false
+    const val FULLSCREEN = false
+    const val RESIZABLE = false
 
-    val GRAVITY = -9.81f
-    val PARTICLE_RADIUS = 0.1f
+    const val GRAVITY = -9.81f
+    const val PARTICLE_RADIUS = 0.1f
+
+    const val ASSETS_FOLDER = "assets/"
 }
