@@ -10,7 +10,10 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.script.*;
+import javax.script.CompiledScript;
+import javax.script.ScriptContext;
+import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,7 +34,7 @@ public final class ScriptManager {
     private static final String FILE_EXTENSION = ".js";
     private static final String CONTEXT_NAME = "game";
 
-    private final Map<Class<?>, List<?>> hooks = new HashMap<>();
+    private final Map<Class<?>, Hook<?>> hooks = new HashMap<>();
     private Map<String, Script> scripts;
 
     private final ScriptGameContext context;
@@ -57,20 +60,20 @@ public final class ScriptManager {
      * @param <T>      hook type.
      * @return iterable of hooks, never null.
      */
-    public <T> Iterable<T> hook(Class<T> hookType) {
+    public <T> Hook<T> hook(Class<T> hookType) {
 
         @SuppressWarnings("unchecked")
-        List<T> hookFunctions = (List<T>) hooks.get(hookType);
+        Hook<T> hooks = (Hook<T>) this.hooks.get(hookType);
 
-        if (hookFunctions == null) {
-            hookFunctions = new ArrayList<>();
+        if (hooks == null) {
+            hooks = new Hook<>(hookType, LOG);
 
             LOG.debug("Registering hook of type: {}", hookType.getSimpleName());
-            hooks.put(hookType, hookFunctions);
+            this.hooks.put(hookType, hooks);
         }
 
-        hookFunctions.addAll(getHookFunctions(hookType));
-        return Collections.unmodifiableList(hookFunctions);
+        hooks.addFunctions(getHookFunctions(hookType));
+        return hooks;
     }
 
     /**
@@ -93,7 +96,7 @@ public final class ScriptManager {
      * Reload all loaded scripts and hooks.
      */
     void reloadScripts() {
-        if (game.getScripting()) {
+        if (!game.getScripting()) {
             return;
         }
 
@@ -103,11 +106,10 @@ public final class ScriptManager {
         scripts = loadScripts();
 
         // Reload hooks according to new scripts.
-        hooks.forEach((type, functions) -> {
-            functions.clear();
+        hooks.forEach((type, hook) -> {
 
             //noinspection unchecked
-            ((List<Object>) functions).addAll(getHookFunctions(type));
+            ((Hook<Object>) hook).setFunctions((Collection<Object>) getHookFunctions(type));
         });
     }
 

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
-import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject
 
@@ -24,11 +23,10 @@ class DebugSystem @Inject constructor(
         super.addedToEngine(engine)
 
         setProcessing(game.debug)
-        messaging.listen(object : Listener<ConfigChangedEvent> {
-            override fun listen(event: ConfigChangedEvent) {
-                setProcessing(event.config.game.debug)
-            }
-        })
+
+        messaging.listen<ConfigChangedEvent> {
+            setProcessing(it.config.game.debug)
+        }
     }
 
     override fun update(deltaTime: Float) {

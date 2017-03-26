@@ -87,7 +87,7 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_SPEED = 5
     }
 
-    private val movementFunctions = scriptManager.hook(MovementFunction::class.java)
+    private val movementHook = scriptManager.hook(MovementFunction::class.java)
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
@@ -118,9 +118,7 @@ class PlayerSystem @Inject constructor(
      */
     private fun processMovement(player: Player, deltaTime: Float) {
         with(player) {
-
-            // TODO will crash the game if any of the scripts fail
-            movementFunctions.forEach {
+            movementHook.run {
                 it.beforeProcessMove(this)
             }
 
@@ -157,7 +155,7 @@ class PlayerSystem @Inject constructor(
                 }
             }
 
-            movementFunctions.forEach {
+            movementHook.run {
                 it.afterProcessMove(this)
             }
         }
