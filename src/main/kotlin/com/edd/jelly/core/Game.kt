@@ -20,12 +20,18 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
     internal lateinit var engine: Engine
     internal lateinit var injector: Injector
 
+    val messaging = Messaging().stop()
+
+    init {
+        configurations.setup(this)
+    }
+
     override fun create() {
         LOG.info("Starting game")
 
         engine = Engine()
-
         injector = Guice.createInjector(GameModule(this))
+
         injector.getInstance(Systems::class.java).systems.map {
             injector.getInstance(it)
         }.forEach { s ->
@@ -33,7 +39,7 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
         }
 
         injector.getInstance(Messaging::class.java)
-                .ready()
+                .start()
 
         injector.getInstance(FileAlterationMonitor::class.java)
                 .start()

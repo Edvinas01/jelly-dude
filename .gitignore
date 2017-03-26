@@ -9,3 +9,6 @@
 build/
 logs/
 out/
+
+# Files which get created on run-time
+assets/config.yml

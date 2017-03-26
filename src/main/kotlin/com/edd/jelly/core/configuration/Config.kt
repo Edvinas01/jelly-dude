@@ -8,7 +8,10 @@ data class Config(
     /**
      * General game configuration settings.
      */
-    data class Game(val debug: Boolean, val gravity: Float, val particleRadius: Float)
+    data class Game(val scripting: Boolean,
+                    val debug: Boolean,
+                    val gravity: Float,
+                    val particleRadius: Float)
 
     /**
      * Video configuration.

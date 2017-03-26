@@ -1,5 +1,6 @@
 package com.edd.jelly.core.scripts;
 
+import com.edd.jelly.core.configuration.Config;
 import com.edd.jelly.core.configuration.Configurations;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -35,13 +36,17 @@ public final class ScriptManager {
 
     private final ScriptGameContext context;
     private final NashornScriptEngine engine;
+    private final Config.Game game;
 
     @Inject
     public ScriptManager(NashornScriptEngine engine,
-                         ScriptGameContext context) {
+                         ScriptGameContext context,
+                         Configurations configurations) {
 
         this.context = context;
         this.engine = engine;
+        this.game = configurations.getConfig().getGame();
+
         this.scripts = loadScripts();
     }
 
@@ -88,6 +93,10 @@ public final class ScriptManager {
      * Reload all loaded scripts and hooks.
      */
     void reloadScripts() {
+        if (game.getScripting()) {
+            return;
+        }
+
         LOG.debug("Reloading scripts and hooks");
 
         // Load new scripts.
@@ -106,6 +115,9 @@ public final class ScriptManager {
      * Get hook functions for a hook type from scripts.
      */
     private <T> List<T> getHookFunctions(Class<T> hookType) {
+        if (!game.getScripting()) {
+            return Collections.emptyList();
+        }
 
         // Function names which are required to support this hook.
         Set<String> requiredFunctions = Stream
@@ -129,6 +141,10 @@ public final class ScriptManager {
      * Load all scripts from script directory.
      */
     private Map<String, Script> loadScripts() {
+        if (!game.getScripting()) {
+            return Collections.emptyMap();
+        }
+
         try {
             return Files.walk(getScriptDirectory().toPath())
                     .map(Path::toFile)

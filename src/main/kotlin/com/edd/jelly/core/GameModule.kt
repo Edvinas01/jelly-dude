@@ -46,8 +46,12 @@ class GameModule(private val game: Game) : Module {
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
         binder.requireAtInjectOnConstructors()
+
         binder.bind(Configurations::class.java)
                 .toInstance(game.configurations)
+
+        binder.bind(Messaging::class.java)
+                .toInstance(game.messaging)
     }
 
     @Provides @Singleton
@@ -137,9 +141,6 @@ class GameModule(private val game: Game) : Module {
     fun engine(): Engine = game.engine
 
     @Provides @Singleton
-    fun messaging() = Messaging().pause()
-
-    @Provides @Singleton
     fun messagingContactListener(messaging: Messaging) =
             MessagingContactListener(messaging)
 
@@ -154,9 +155,13 @@ class GameModule(private val game: Game) : Module {
     fun scriptEngine() = ScriptEngineManager().getEngineByName("nashorn") as NashornScriptEngine
 
     @Provides @Singleton
-    fun watchService(manager: ScriptManager): FileAlterationMonitor {
+    fun watchService(configurations: Configurations,
+                     manager: ScriptManager): FileAlterationMonitor {
+
         return FileAlterationMonitor(2000).apply {
-            addObserver(manager.createObserver())
+            if (configurations.config.game.debug) {
+                addObserver(manager.createObserver())
+            }
         }
     }
 }

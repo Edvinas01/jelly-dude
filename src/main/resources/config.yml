@@ -1,8 +1,17 @@
+# General game settings.
 game:
+
+  # Enable all script functions.
+  scripting: true
+
+  # Enable debug mode.
   debug: true
+
+  # Physics.
   gravity: -9.81
   particleRadius: 0.1
 
+# Video settings.
 video:
   screen:
     fullscreen: false
