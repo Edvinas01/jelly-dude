@@ -18,11 +18,11 @@ import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.debug.DebugSystem
-import com.edd.jelly.util.Configuration
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.Binder
@@ -46,6 +46,12 @@ class GameModule(private val game: Game) : Module {
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
         binder.requireAtInjectOnConstructors()
+
+        binder.bind(Configurations::class.java)
+                .toInstance(game.configurations)
+
+        binder.bind(Messaging::class.java)
+                .toInstance(game.messaging)
     }
 
     @Provides @Singleton
@@ -97,8 +103,11 @@ class GameModule(private val game: Game) : Module {
     fun shapeRenderer(): ShapeRenderer = ShapeRenderer()
 
     @Provides @Singleton
-    fun world(): World = World(Vec2(0f, Configuration.GRAVITY)).apply {
-        particleRadius = Configuration.PARTICLE_RADIUS
+    fun world(configurations: Configurations): World {
+        val game = configurations.config.game
+        return World(Vec2(0f, game.gravity)).apply {
+            particleRadius = game.particleRadius
+        }
     }
 
     @Provides @Singleton
@@ -132,9 +141,6 @@ class GameModule(private val game: Game) : Module {
     fun engine(): Engine = game.engine
 
     @Provides @Singleton
-    fun messaging() = Messaging().pause()
-
-    @Provides @Singleton
     fun messagingContactListener(messaging: Messaging) =
             MessagingContactListener(messaging)
 
@@ -149,9 +155,13 @@ class GameModule(private val game: Game) : Module {
     fun scriptEngine() = ScriptEngineManager().getEngineByName("nashorn") as NashornScriptEngine
 
     @Provides @Singleton
-    fun watchService(manager: ScriptManager): FileAlterationMonitor {
+    fun watchService(configurations: Configurations,
+                     manager: ScriptManager): FileAlterationMonitor {
+
         return FileAlterationMonitor(2000).apply {
-            addObserver(manager.createObserver())
+            if (configurations.config.game.debug) {
+                addObserver(manager.createObserver())
+            }
         }
     }
 }

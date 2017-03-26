@@ -61,7 +61,7 @@ class Messaging {
     /**
      * Ready up messaging and clear waiting list.
      */
-    fun ready(): Messaging {
+    fun start(): Messaging {
         ready = true
         waiting.forEach {
             send(it)
@@ -73,7 +73,7 @@ class Messaging {
     /**
      * Pause messaging.
      */
-    fun pause(): Messaging {
+    fun stop(): Messaging {
         ready = false
         return this
     }
