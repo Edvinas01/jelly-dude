@@ -391,7 +391,7 @@ class PlayerSystem @Inject constructor(
             groundContacts.clear()
             contacts.clear()
 
-            for ((key, value) in stickyJoints) {
+            for ((_, value) in stickyJoints) {
                 world.destroyJoint(value)
             }
             stickyJoints.clear()

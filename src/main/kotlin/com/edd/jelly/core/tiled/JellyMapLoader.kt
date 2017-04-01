@@ -134,7 +134,7 @@ class JellyMapLoader @Inject constructor(
     private fun <T : MapLayer> T.getString(name: String): String? {
         return this.properties.get(name)?.let {
             it as String
-        } ?: null
+        }
     }
 
     /**
