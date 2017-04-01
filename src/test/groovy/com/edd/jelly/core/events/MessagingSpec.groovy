@@ -13,7 +13,7 @@ class MessagingSpec extends Specification {
     def "Should receive one event"() {
         given:
         def received
-        messaging.listen(new Listener<TestEvent>() {
+        messaging.listen(TestEvent.class, new Listener<TestEvent>() {
 
             @Override
             void listen(TestEvent event) {
@@ -32,7 +32,7 @@ class MessagingSpec extends Specification {
     def "Should receive no events"() {
         given:
         def received = []
-        messaging.listen(new Listener<ThirdTestEvent>() {
+        messaging.listen(ThirdTestEvent.class, new Listener<ThirdTestEvent>() {
 
             @Override
             void listen(ThirdTestEvent event) {
@@ -46,6 +46,47 @@ class MessagingSpec extends Specification {
 
         then:
         received.isEmpty()
+    }
+
+    def "Should not send events"() {
+        given:
+        def counter = 0
+
+        messaging.stop()
+        messaging.listen(TestEvent.class, new Listener<TestEvent>() {
+
+            @Override
+            void listen(TestEvent event) {
+                counter++
+            }
+        })
+
+        when:
+        messaging.send(new TestEvent())
+
+        then:
+        counter == 0
+    }
+
+    def "Should send events later"() {
+        given:
+        def received = null
+
+        messaging.stop()
+        messaging.listen(TestEvent.class, new Listener<TestEvent>() {
+
+            @Override
+            void listen(TestEvent event) {
+                received = event
+            }
+        })
+
+        when:
+        messaging.send(new TestEvent())
+        messaging.start()
+
+        then:
+        received != null && received instanceof TestEvent
     }
 
     class TestEvent implements Event {

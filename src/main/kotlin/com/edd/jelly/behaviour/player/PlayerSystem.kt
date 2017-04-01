@@ -428,64 +428,56 @@ class PlayerSystem @Inject constructor(
         })
 
         // Listen for when player stops touching an object.
-        messaging.listen(object : Listener<EndContactEvent> {
-            override fun listen(event: EndContactEvent) {
-                resolveContact(event.contact)?.let {
-                    with(it.first) {
+        messaging.listen<EndContactEvent> { (contact) ->
+            resolveContact(contact)?.let {
+                with(it.first) {
 
-                        // Cleanup the contacts.
-                        groundContacts.remove(event.contact)
-                        contacts.remove(event.contact)
-                    }
+                    // Cleanup the contacts.
+                    groundContacts.remove(contact)
+                    contacts.remove(contact)
                 }
             }
-        })
+        }
 
         // Listen for when player starts touching an object.
-        messaging.listen(object : Listener<BeginContactEvent> {
-            override fun listen(event: BeginContactEvent) {
+        messaging.listen<BeginContactEvent> { (contact) ->
 
-                // Did a player trigger this contact?
-                resolveContact(event.contact)?.let {
-                    with(event.contact) {
+            // Did a player trigger this contact?
+            resolveContact(contact)?.let {
+                with(contact) {
 
-                        // Always populate the list of all contacts.
-                        it.first.contacts.add(this)
+                    // Always populate the list of all contacts.
+                    it.first.contacts.add(this)
 
-                        val manifold = WorldManifold()
-                        getWorldManifold(manifold)
+                    val manifold = WorldManifold()
+                    getWorldManifold(manifold)
 
-                        // Player hit the upper part of the body.
-                        if (manifold.normal.y > 0) {
-                            with(it.first) {
-                                groundContacts.add(event.contact)
+                    // Player hit the upper part of the body.
+                    if (manifold.normal.y > 0) {
+                        with(it.first) {
+                            groundContacts.add(contact)
 
-                                // Enough contacts registered to reset player air time.
-                                if (testContactRatio(MIN_CONTACT_RATIO)) {
-                                    airTime = 0f
-                                }
+                            // Enough contacts registered to reset player air time.
+                            if (testContactRatio(MIN_CONTACT_RATIO)) {
+                                airTime = 0f
                             }
                         }
                     }
                 }
             }
-        })
+        }
 
         // Listen for player inputs.
-        messaging.listen(object : Listener<PlayerInputEvent> {
-            override fun listen(event: PlayerInputEvent) {
-                if (event.reset) {
-                    engine.removeEntity(event.player)
-                }
+        messaging.listen<PlayerInputEvent> { (player, reset) ->
+            if (reset) {
+                engine.removeEntity(player)
             }
-        })
+        }
 
         // Listen for level loads.
-        messaging.listen(object : Listener<LevelLoadedEvent> {
-            override fun listen(event: LevelLoadedEvent) {
-                spawnPlayer(event.x, event.y)
-            }
-        })
+        messaging.listen<LevelLoadedEvent> { (x, y) ->
+            spawnPlayer(x, y)
+        }
     }
 
     /**
