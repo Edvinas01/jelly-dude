@@ -10,6 +10,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.apache.logging.log4j.LogManager
+import kotlin.system.measureTimeMillis
 
 class Game(val configurations: Configurations) : ApplicationAdapter() {
 
@@ -32,11 +33,7 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
         engine = Engine()
         injector = Guice.createInjector(GameModule(this))
 
-        injector.getInstance(Systems::class.java).systems.map {
-            injector.getInstance(it)
-        }.forEach { s ->
-            engine.addSystem(s)
-        }
+        initSystems()
 
         injector.getInstance(Messaging::class.java)
                 .start()
@@ -53,5 +50,19 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
 
     override fun dispose() {
         super.dispose()
+    }
+
+    /**
+     * Initialize systems.
+     */
+    private fun initSystems() {
+        val millis = measureTimeMillis {
+            injector.getInstance(Systems::class.java).systems.map {
+                injector.getInstance(it)
+            }.forEach { s ->
+                engine.addSystem(s)
+            }
+        }
+        LOG.info("Started systems after {}ms", millis)
     }
 }

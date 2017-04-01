@@ -23,11 +23,9 @@ class PhysicsDebugSystem @Inject constructor(private val messaging: Messaging,
 
         setProcessing(game.debug)
 
-        messaging.listen(object : Listener<ConfigChangedEvent> {
-            override fun listen(event: ConfigChangedEvent) {
-                setProcessing(event.config.game.debug)
-            }
-        })
+        messaging.listen<ConfigChangedEvent> {
+            setProcessing(it.config.game.debug)
+        }
     }
 
     override fun update(deltaTime: Float) {

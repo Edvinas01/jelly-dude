@@ -8,7 +8,6 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.edd.jelly.behaviour.physics.Physics
-import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
@@ -65,12 +64,10 @@ class LevelSystem @Inject constructor(
      * Initialize listeners for this system.
      */
     private fun initListeners() {
-        messaging.listen(object : Listener<LoadNewLevelEvent> {
-            override fun listen(event: LoadNewLevelEvent) {
-                unloadLevel()
-                loadLevel(event.levelName)
-            }
-        })
+        messaging.listen<LoadNewLevelEvent> {
+            unloadLevel()
+            loadLevel(it.levelName)
+        }
 
         // Listen for level removals.
         engine.addEntityListener(Family.all(JellyMap::class.java).get(), object : EntityListenerAdapter() {

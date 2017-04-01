@@ -1,8 +1,5 @@
 package com.edd.jelly.core.events
 
-import com.edd.jelly.exception.GameException
-import java.lang.reflect.ParameterizedType
-
 class Messaging {
 
     private val listeners = mutableMapOf<Class<out Event>, MutableList<Listener<Event>>>()
@@ -10,38 +7,14 @@ class Messaging {
     private var ready = true
 
     /**
-     * Register a new listener for a specific event type.
+     * Register a new listener for a specific event type by providing a lambda function.
      */
-    fun <T : Event> listen(listener: Listener<T>) {
-
-        // Actual listener event type, which will be looked up from generic parameters.
-        var actualType: Class<out Event>? = null
-
-        for (type in listener.javaClass.genericInterfaces) {
-            if (type is ParameterizedType) {
-                if (Listener::class.java.isAssignableFrom(type.rawType as Class<*>)) {
-
-                    // First parameter of a listener generic param is the event type.
-                    @Suppress("UNCHECKED_CAST")
-                    with(type.actualTypeArguments[0] as Class<Event>) {
-                        actualType = this
-                    }
-                }
+    inline fun <reified T : Event> listen(crossinline listener: (T) -> Unit) {
+        listen(T::class.java, object : Listener<T> {
+            override fun listen(event: T) {
+                listener(event)
             }
-        }
-
-        // Register the listener if type is found.
-        actualType?.let { type ->
-            var existing = listeners[type]
-            if (existing == null) {
-                existing = mutableListOf<Listener<Event>>()
-                listeners[type] = existing
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            existing.add(listener as Listener<Event>)
-
-        } ?: throw GameException("Type ${listener.javaClass} is not a valid listener type")
+        })
     }
 
     /**
@@ -76,5 +49,19 @@ class Messaging {
     fun stop(): Messaging {
         ready = false
         return this
+    }
+
+    /**
+     * Register a listener of provided event type.
+     */
+    fun <T : Event> listen(type: Class<T>, listener: Listener<T>) {
+        var existing = listeners[type]
+        if (existing == null) {
+            existing = mutableListOf<Listener<Event>>()
+            listeners[type] = existing
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        existing.add(listener as Listener<Event>)
     }
 }
