@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.assets.AssetManager
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Guice
@@ -18,6 +19,7 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
         private val LOG = LogManager.getLogger(Game::class.java)
     }
 
+    internal lateinit var assetManager: AssetManager
     internal lateinit var engine: Engine
     internal lateinit var injector: Injector
 
@@ -33,6 +35,8 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
         engine = Engine()
         injector = Guice.createInjector(GameModule(this))
 
+        assetManager = injector.getInstance(AssetManager::class.java)
+
         initSystems()
 
         injector.getInstance(Messaging::class.java)
@@ -45,6 +49,11 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
     }
 
     override fun render() {
+
+        // Make sure all the assets are loaded before doing anything.
+        if (!assetManager.update()) {
+            return
+        }
         engine.update(Gdx.graphics.deltaTime)
     }
 

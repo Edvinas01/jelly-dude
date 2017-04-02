@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -164,6 +165,9 @@ class GameModule(private val game: Game) : Module {
             }
         }
     }
+
+    @Provides @Singleton
+    fun assetManager() = AssetManager()
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)
