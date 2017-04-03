@@ -9,5 +9,4 @@ cache:
   directories:
   - ~/.gradle
 notifications:
-  email:
-    on_success: change
+  email: false
