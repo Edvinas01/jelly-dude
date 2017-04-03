@@ -1,6 +1,6 @@
 package com.edd.jelly.core.configuration
 
-import com.edd.jelly.core.Game
+import com.edd.jelly.core.JellyGame
 import com.edd.jelly.core.events.Messaging
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -39,7 +39,7 @@ class Configurations {
     /**
      * Setup configuration settings for the game.
      */
-    fun setup(game: Game) {
+    fun setup(game: JellyGame) {
         messaging = game.messaging
     }
 

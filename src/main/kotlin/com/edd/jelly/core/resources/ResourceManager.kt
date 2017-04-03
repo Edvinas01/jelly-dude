@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.google.inject.Inject
 import com.google.inject.Singleton
 
@@ -27,6 +28,7 @@ class ResourceManager @Inject constructor() {
     private val textures = mutableMapOf<String, Texture>()
     private val atlases = mutableMapOf<String, TextureAtlas>()
     private val fonts = mutableMapOf<String, BitmapFont>()
+    val skin: Skin
 
     /**
      * Main texture atlas.
@@ -35,6 +37,7 @@ class ResourceManager @Inject constructor() {
 
     init {
         mainAtlas = getAtlas(MAIN_ATLAS_NAME)
+        skin = Skin(Gdx.files.internal("ui/uiskin.json"))
     }
 
     /**

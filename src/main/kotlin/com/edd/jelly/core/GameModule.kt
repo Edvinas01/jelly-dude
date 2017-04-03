@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.edd.jelly.behaviour.level.LevelSystem
 import com.edd.jelly.behaviour.physics.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
@@ -26,10 +28,7 @@ import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.debug.DebugSystem
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
-import com.google.inject.Binder
-import com.google.inject.Module
-import com.google.inject.Provides
-import com.google.inject.Singleton
+import com.google.inject.*
 import com.google.inject.name.Named
 import jdk.nashorn.api.scripting.NashornScriptEngine
 import org.apache.commons.io.monitor.FileAlterationMonitor
@@ -38,11 +37,7 @@ import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
 import javax.script.ScriptEngineManager
 
-class GameModule(private val game: Game) : Module {
-
-    companion object {
-        const val UI_CAMERA = "uiCamera"
-    }
+class GameModule(private val game: JellyGame) : Module {
 
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
@@ -128,14 +123,9 @@ class GameModule(private val game: Game) : Module {
         }
     }
 
-    @Provides @Singleton @Named(UI_CAMERA)
-    fun uiCamera(): OrthographicCamera {
-        val width = Gdx.graphics.width.toFloat()
-        val height = Gdx.graphics.height.toFloat()
-
-        return OrthographicCamera(width, height).apply {
-            setToOrtho(false, width, height)
-        }
+    @Provides @Singleton @GuiCamera
+    fun uiCamera() = OrthographicCamera().apply {
+        setToOrtho(false)
     }
 
     @Provides @Singleton
@@ -171,3 +161,6 @@ class GameModule(private val game: Game) : Module {
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)
+
+@BindingAnnotation
+annotation class GuiCamera

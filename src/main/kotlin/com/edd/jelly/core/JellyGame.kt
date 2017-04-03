@@ -2,21 +2,23 @@ package com.edd.jelly.core
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.ui.MainMenu
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.apache.logging.log4j.LogManager
 import kotlin.system.measureTimeMillis
 
-class Game(val configurations: Configurations) : ApplicationAdapter() {
+class JellyGame(val configurations: Configurations) : Game() {
 
     companion object {
-        private val LOG = LogManager.getLogger(Game::class.java)
+        private val LOG = LogManager.getLogger(JellyGame::class.java)
     }
 
     internal lateinit var assetManager: AssetManager
@@ -45,7 +47,13 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
         injector.getInstance(FileAlterationMonitor::class.java)
                 .start()
 
-        Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
+        val multiplexer = injector.getInstance(InputMultiplexer::class.java)
+        val mainMenu = injector.getInstance(MainMenu::class.java)
+
+        multiplexer.addProcessor(0, mainMenu.stage)
+        Gdx.input.inputProcessor = multiplexer
+
+        setScreen(mainMenu)
     }
 
     override fun render() {
@@ -55,6 +63,8 @@ class Game(val configurations: Configurations) : ApplicationAdapter() {
             return
         }
         engine.update(Gdx.graphics.deltaTime)
+
+        super.render()
     }
 
     override fun dispose() {
