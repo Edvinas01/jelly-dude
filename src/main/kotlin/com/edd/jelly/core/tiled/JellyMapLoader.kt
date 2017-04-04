@@ -7,11 +7,17 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.core.resources.ResourceManager
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.stream.Collectors
 
 @Singleton
 class JellyMapLoader @Inject constructor(
@@ -20,13 +26,15 @@ class JellyMapLoader @Inject constructor(
         private val camera: OrthographicCamera
 ) {
 
+    val metadata = loadMeta()
+
     private enum class LayerType {
         PARALLAX,
         DEFAULT
     }
 
     private companion object {
-        val LEVEL_DIRECTORY = "levels"
+        val LEVEL_DIRECTORY = "levels/"
         val LEVEL_FILE_TYPE = "tmx"
 
         val BACKGROUND_TEXTURE = "background_texture"
@@ -125,7 +133,7 @@ class JellyMapLoader @Inject constructor(
      * Get tiled map by name.
      */
     private fun getTiledMap(name: String): TiledMap {
-        return tmxMapLoader.load("$LEVEL_DIRECTORY/$name/$name.$LEVEL_FILE_TYPE")
+        return tmxMapLoader.load("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY$name/$name.$LEVEL_FILE_TYPE")
     }
 
     /**
@@ -142,7 +150,7 @@ class JellyMapLoader @Inject constructor(
      */
     private fun <T : MapLayer> T.getFloat(name: String, default: Float = 0f): Float {
         return this.properties.get(name)?.let {
-            if (it is Float) it else default
+            it as? Float ?: default
         } ?: default
     }
 
@@ -153,5 +161,20 @@ class JellyMapLoader @Inject constructor(
         return this.properties.get(name)?.let {
             it is Boolean && it
         } ?: default
+    }
+
+    /**
+     * Load all level metadata (files are loaded NOT from classpath).
+     */
+    private fun loadMeta(): List<JellyMapMetadata> {
+        return Files
+                .walk(Paths.get("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY"))
+                .skip(1)
+                .map(Path::toFile)
+                .filter(File::isDirectory)
+                .map {
+                    JellyMapMetadata(it.name)
+                }
+                .collect(Collectors.toList())
     }
 }

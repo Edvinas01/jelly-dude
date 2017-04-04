@@ -5,6 +5,7 @@ game:
   scripting: false
 
   # Enable debug mode.
+  uiDebug: true
   debug: true
 
   # Physics.
@@ -15,6 +16,6 @@ game:
 video:
   screen:
     fullscreen: false
-    width: 1900
-    height: 900
+    width: 1000
+    height: 800
   fpsLimit: 100

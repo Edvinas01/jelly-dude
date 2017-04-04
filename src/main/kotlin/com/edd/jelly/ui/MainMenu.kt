@@ -4,30 +4,54 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.Value.percentHeight
+import com.badlogic.gdx.scenes.scene2d.ui.Value.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.GuiCamera
+import com.edd.jelly.core.configuration.Configurations
+import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.tiled.JellyMapLoader
 import com.google.inject.Inject
 
 /**
  * Note that main menu is created on request, it is not a singleton!
  */
+
+// The fill method causes a widget to be sized to the cell
+// To make the logical table take up the entire size of the table widget
 class MainMenu @Inject constructor(
-        resources: ResourceManager,
-        batch: SpriteBatch,
+        private val jellyMapLoader: JellyMapLoader,
+        private val messaging: Messaging,
         @GuiCamera
-        private val camera: OrthographicCamera
+        private val camera: OrthographicCamera,
+        configurations: Configurations,
+        resources: ResourceManager,
+        batch: SpriteBatch
 ) : ScreenAdapter() {
 
+    private companion object {
+        val BUTTON_PADDING = 30f
+
+        val SMALL_BUTTON_HEIGHT = percentHeight(2f)!!
+        val SMALL_BUTTON_WIDTH = percentWidth(4f)!!
+
+        val TABLE_PAD = 16f
+
+        val BUTTON_HEIGHT = percentHeight(10f)!!
+    }
+
     val stage = Stage(FitViewport(camera.viewportWidth, camera.viewportHeight), batch)
+
+    private val config = configurations.config
     private val skin = resources.skin
 
     private val options = optionsTable()
@@ -42,17 +66,69 @@ class MainMenu @Inject constructor(
      */
     private fun optionsTable(): Table {
         val options = Table()
-        options.add(Label("Options", skin))
-        return options
+                .top()
+                .left()
+                .pad(TABLE_PAD)
+
+        options.add(Label("Options", skin).apply {
+            setFontScale(1.5f)
+        }).left()
+
+        return options.debugAll()
     }
 
     /**
      * Create level selection controls.
      */
     private fun levelsTable(): Table {
-        val options = Table()
-        options.add(Label("Levels", skin))
-        return options
+        val levels = Table()
+                .top()
+                .left()
+                .pad(TABLE_PAD)
+
+        val scrollContent = Table()
+                .pad(TABLE_PAD)
+                .top()
+                .left()
+
+        for ((index, meta) in jellyMapLoader.metadata.withIndex()) {
+            if (index > 0 && index % 4 == 0) {
+                scrollContent.row()
+            }
+
+            val levelInfo = Table()
+            levelInfo.add(Label(meta.name, skin).apply {
+                setAlignment(Align.center)
+            }).prefHeight(128f)
+                    .expandX()
+                    .fillX()
+                    .row()
+
+            val play = TextButton("Play ${meta.name}", skin)
+            play.addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
+                    messaging.send(LoadNewLevelEvent(meta.name))
+                }
+            })
+            levelInfo.add(play).fillX()
+
+            scrollContent.add(levelInfo)
+                    .expandX()
+                    .fill()
+                    .pad(16f)
+        }
+
+        levels.add(Label("Levels", skin).apply {
+            setFontScale(1.5f)
+        }).left()
+
+        val scroll = ScrollPane(scrollContent, skin)
+        scroll.setFadeScrollBars(false)
+
+        levels.row()
+        levels.add(scroll).fill().expand()
+
+        return levels.debugAll()
     }
 
     /**
@@ -65,17 +141,17 @@ class MainMenu @Inject constructor(
 
         // Buttons and such.
         val controls = Table()
+                .top()
+                .left()
 
         // Add controls to the root table.
         rootTable.add(controls)
                 .width(camera.viewportWidth / 4)
                 .expandY()
                 .pad(16f)
-                .top()
-                .left()
 
         // Placeholder for play or options menu.
-        val dynamicCell = rootTable.add().expand()
+        val dynamicCell = rootTable.add().expand().fill()
 
         // Main menu label.
         val menuLabel = Label("Main Menu", skin).apply {
@@ -92,36 +168,28 @@ class MainMenu @Inject constructor(
         val levelsButton = TextButton("Play", skin)
         levelsButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                if (levelsButton.isChecked) {
-                    dynamicCell.setActor<Table>(levels)
-                } else {
-                    dynamicCell.setActor<Actor>(null)
-                }
+                dynamicCell.setActor<Table>(levels)
             }
         })
 
         controls.add(levelsButton)
-                .prefHeight(percentHeight(25f))
+                .prefHeight(BUTTON_HEIGHT)
                 .fill()
-                .pad(16f)
+                .pad(BUTTON_PADDING)
                 .row()
 
         // Options menu button.
         val optionsButton = TextButton("Options", skin)
         optionsButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                if (optionsButton.isChecked) {
-                    dynamicCell.setActor<Table>(options)
-                } else {
-                    dynamicCell.setActor<Actor>(null)
-                }
+                dynamicCell.setActor<Table>(options)
             }
         })
 
         controls.add(optionsButton)
-                .prefHeight(percentHeight(25f))
+                .prefHeight(BUTTON_HEIGHT)
                 .fill()
-                .pad(16f)
+                .pad(BUTTON_PADDING)
                 .row()
 
         // Exit button.
@@ -133,11 +201,15 @@ class MainMenu @Inject constructor(
         })
 
         controls.add(exitButton)
-                .prefHeight(percentHeight(25f))
+                .prefHeight(BUTTON_HEIGHT)
                 .fill()
-                .pad(16f)
+                .pad(BUTTON_PADDING)
 
-        return rootTable.debugAll()
+        if (config.game.uiDebug) {
+            return rootTable.debugAll()
+        } else {
+            return rootTable
+        }
     }
 
     override fun render(delta: Float) {

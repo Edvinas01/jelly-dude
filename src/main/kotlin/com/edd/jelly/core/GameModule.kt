@@ -5,14 +5,14 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.edd.jelly.behaviour.level.LevelSystem
 import com.edd.jelly.behaviour.physics.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
@@ -136,7 +136,9 @@ class GameModule(private val game: JellyGame) : Module {
             MessagingContactListener(messaging)
 
     @Provides @Singleton
-    fun tmxMapLoader() = TmxMapLoader()
+    fun tmxMapLoader() = TmxMapLoader(InternalFileHandleResolver().apply {
+
+    })
 
     @Provides @Singleton
     fun layeredTiledMapRenderer(camera: OrthographicCamera, batch: SpriteBatch) =
