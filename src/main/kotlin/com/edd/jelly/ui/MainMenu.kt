@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
@@ -27,7 +24,7 @@ import com.google.inject.Inject
  */
 
 // The fill method causes a widget to be sized to the cell
-// To make the logical table take up the entire size of the table widget
+// Expand to make the logical table take up the entire size of the table widget
 class MainMenu @Inject constructor(
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
@@ -87,7 +84,6 @@ class MainMenu @Inject constructor(
                 .pad(TABLE_PAD)
 
         val scrollContent = Table()
-                .pad(TABLE_PAD)
                 .top()
                 .left()
 
@@ -99,7 +95,7 @@ class MainMenu @Inject constructor(
             val levelInfo = Table()
             levelInfo.add(Label(meta.name, skin).apply {
                 setAlignment(Align.center)
-            }).prefHeight(128f)
+            }).prefHeight(170f)
                     .expandX()
                     .fillX()
                     .row()
@@ -113,9 +109,9 @@ class MainMenu @Inject constructor(
             levelInfo.add(play).fillX()
 
             scrollContent.add(levelInfo)
-                    .expandX()
+                    .width(percentWidth(0.23f, scrollContent))
+                    .pad(percentWidth(0.01f, scrollContent))
                     .fill()
-                    .pad(16f)
         }
 
         levels.add(Label("Levels", skin).apply {
@@ -126,7 +122,7 @@ class MainMenu @Inject constructor(
         scroll.setFadeScrollBars(false)
 
         levels.row()
-        levels.add(scroll).fill().expand()
+        levels.add(scroll).expand().fill()
 
         return levels.debugAll()
     }
