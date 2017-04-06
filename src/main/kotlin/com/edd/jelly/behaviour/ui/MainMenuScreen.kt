@@ -1,16 +1,17 @@
-package com.edd.jelly.ui
+package com.edd.jelly.behaviour.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.ui.Value.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Value.percentHeight
+import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.GuiCamera
 import com.edd.jelly.core.configuration.Configurations
@@ -25,28 +26,23 @@ import com.google.inject.Inject
 
 // The fill method causes a widget to be sized to the cell
 // Expand to make the logical table take up the entire size of the table widget
-class MainMenu @Inject constructor(
+class MainMenuScreen @Inject constructor(
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
-        @GuiCamera
-        private val camera: OrthographicCamera,
         configurations: Configurations,
         resources: ResourceManager,
+        @GuiCamera
+        camera: OrthographicCamera,
         batch: SpriteBatch
-) : ScreenAdapter() {
+) : StagedScreen(camera, batch) {
 
     private companion object {
         val BUTTON_PADDING = 30f
-
-        val SMALL_BUTTON_HEIGHT = percentHeight(2f)!!
-        val SMALL_BUTTON_WIDTH = percentWidth(4f)!!
 
         val TABLE_PAD = 16f
 
         val BUTTON_HEIGHT = percentHeight(10f)!!
     }
-
-    val stage = Stage(FitViewport(camera.viewportWidth, camera.viewportHeight), batch)
 
     private val config = configurations.config
     private val skin = resources.skin
@@ -206,18 +202,5 @@ class MainMenu @Inject constructor(
         } else {
             return rootTable
         }
-    }
-
-    override fun render(delta: Float) {
-        stage.act(delta)
-        stage.draw()
-    }
-
-    override fun dispose() {
-        stage.dispose()
-    }
-
-    override fun resize(width: Int, height: Int) {
-        stage.viewport.update(width, height, true)
     }
 }

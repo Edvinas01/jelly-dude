@@ -19,6 +19,8 @@ class Configurations {
          * Folder where all game resources and assets are held.
          */
         const val ASSETS_FOLDER = "assets/"
+
+        const val MENU_LEVEL_NAME = "menu"
     }
 
     // Configurations have to be loaded before Guice, so can't use DI here.
@@ -29,7 +31,7 @@ class Configurations {
         enable(JsonParser.Feature.ALLOW_YAML_COMMENTS)
     }
 
-    var messaging: Messaging? = null
+    private var messaging: Messaging? = null
     val config: Config = load()
 
     init {

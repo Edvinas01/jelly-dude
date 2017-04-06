@@ -3,7 +3,6 @@ package com.edd.jelly.behaviour.test
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
@@ -69,7 +68,6 @@ class TestSystem @Inject constructor(
 
             // Handle mode changing.
             when (keycode) {
-                Input.Keys.ESCAPE -> Gdx.app.exit()
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX

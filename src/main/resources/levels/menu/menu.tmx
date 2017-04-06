@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="59">
+ <properties>
+  <property name="exclude" type="bool" value="false"/>
+ </properties>
+ <tileset firstgid="1" name="neon_tileset" tilewidth="16" tileheight="16" tilecount="64" columns="8">
+  <image source="../../textures/neon_tileset.png" width="128" height="128"/>
+ </tileset>
+ <layer name="tiles" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJztmEEKwzAMBEPf0B77/2+WHgxB2MaOV5Jl7YAOgQQ0mw0huS5CCCGEEOLFV0wmas6RMpD3bnb32vnR/HvHI9dH7n/k7iKQ9yyb/5+o3SWEEEJ2J/u7lf55ye6+u7/WjhHcC+hdI7kXVnc+5Tty5p9O5H8/o9TyON2ZEEIIIYSQ7HzEePICzAh3X/nd45nHGzA9Ws69scwC4d/qwqx3LwstEP6tLiD87zlogPYvPUC6a3YB7V8G7a7VBS1/+Y7YtQta/lZ9WM3Byl+rB6vPg5W/dg5PM7D218zhSQZe/jIHVB6zGXj79/KwyMDbV6Mbp/ivdGM0A2+nlSwQGXh7IPqwkoG3g0UXehl4727RhQz+MofR+QG9jFo3
+  </data>
+ </layer>
+ <objectgroup name="entities"/>
+ <layer name="foreground_tiles" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt2EEKgzAQBVDvYl3p0vufrZsGNB1IodCi/71NYJiFhJj5ZJoAAAAAAAAAAAAA7uHx7w/4obmobR/2VbWrWYva/lqXQV9VI88ybiHE8SwkzZFKNUeS7OMWiHOH3PgNufHsODOdjbN+P9IyRb8fqZmi/SMyBYyl3ZNNmxf9PZkyV9u86N/wZK53T6qtBV8=
+  </data>
+ </layer>
+ <objectgroup name="collision"/>
+</map>

@@ -13,7 +13,6 @@ import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
-import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.pixels
@@ -88,9 +87,12 @@ class PlayerSystem @Inject constructor(
     }
 
     private val movementHook = scriptManager.hook(MovementFunction::class.java)
+    private val playerInputs = PlayerInputAdapter(messaging)
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+
+        inputMultiplexer.addProcessor(playerInputs)
 
         // Initialize player event listeners.
         initListeners()
@@ -379,7 +381,7 @@ class PlayerSystem @Inject constructor(
         }
 
         engine.addEntity(entity)
-        inputMultiplexer.forPlayer(entity)
+        playerInputs.player = entity
         return entity
     }
 
@@ -400,8 +402,8 @@ class PlayerSystem @Inject constructor(
             for (body in joint.bodies) {
                 world.destroyBody(body)
             }
-            inputMultiplexer.removeForPlayer()
 
+            playerInputs.player = null
             return this
         }
     }
@@ -499,18 +501,5 @@ class PlayerSystem @Inject constructor(
             return Pair(dataB, contact.fixtureA.body)
         }
         return null
-    }
-
-    private fun InputMultiplexer.removeForPlayer() {
-        processors.filter {
-            it is PlayerInputAdapter
-        }.forEach {
-            removeProcessor(it)
-        }
-    }
-
-    private fun InputMultiplexer.forPlayer(player: Entity) {
-        removeForPlayer()
-        addProcessor(PlayerInputAdapter(messaging, player))
     }
 }

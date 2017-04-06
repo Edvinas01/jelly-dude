@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.core.InternalMapLoader
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
@@ -22,6 +23,9 @@ import java.util.stream.Collectors
 @Singleton
 class JellyMapLoader @Inject constructor(
         private val resourceManager: ResourceManager,
+
+        @InternalMapLoader
+        private val internalTmxMapLoader: TmxMapLoader,
         private val tmxMapLoader: TmxMapLoader,
         private val camera: OrthographicCamera
 ) {
@@ -45,8 +49,8 @@ class JellyMapLoader @Inject constructor(
     /**
      * Load jelly map by name.
      */
-    fun loadMap(name: String): JellyMap {
-        val map = getTiledMap(name)
+    fun loadMap(name: String, internal: Boolean = false): JellyMap {
+        val map = getTiledMap(name, internal)
 
         // Required main layer.
         val entities: MapLayer = map.layers[ENTITY_LAYER]
@@ -107,6 +111,7 @@ class JellyMapLoader @Inject constructor(
             }
         }
         return JellyMap(
+                name,
                 map,
                 backgroundLayers,
                 foregroundLayers,
@@ -120,20 +125,24 @@ class JellyMapLoader @Inject constructor(
     /**
      * Get spawn point from entities layer.
      */
-    private fun getSpawn(entities: MapLayer): Vector2 {
+    private fun getSpawn(entities: MapLayer): Vector2? {
         return entities.objects.find {
             it is EllipseMapObject && SPAWN_NAME == it.name
         }?.let {
             val ellipse = (it as EllipseMapObject).ellipse
             Vector2(ellipse.x, ellipse.y)
-        } ?: throw GameException("$SPAWN_NAME circle object must exist somewhere in the map")
+        }
     }
 
     /**
      * Get tiled map by name.
      */
-    private fun getTiledMap(name: String): TiledMap {
-        return tmxMapLoader.load("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY$name/$name.$LEVEL_FILE_TYPE")
+    private fun getTiledMap(name: String, internal: Boolean): TiledMap {
+        val actualName = "$LEVEL_DIRECTORY$name/$name.$LEVEL_FILE_TYPE"
+        if (internal) {
+            return internalTmxMapLoader.load(actualName)
+        }
+        return tmxMapLoader.load("${Configurations.ASSETS_FOLDER}$actualName")
     }
 
     /**

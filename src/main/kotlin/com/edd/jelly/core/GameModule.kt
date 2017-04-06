@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -21,6 +20,7 @@ import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
+import com.edd.jelly.behaviour.ui.UISystem
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
@@ -29,7 +29,6 @@ import com.edd.jelly.debug.DebugSystem
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.*
-import com.google.inject.name.Named
 import jdk.nashorn.api.scripting.NashornScriptEngine
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
@@ -73,9 +72,13 @@ class GameModule(private val game: JellyGame) : Module {
                 // Rendering.
                 RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java,
-                DebugSystem::class.java
+                DebugSystem::class.java,
+                UISystem::class.java
         ))
     }
+
+    @Provides @Singleton
+    fun game() = game
 
     @Provides @Singleton
     fun earClippingTriangulator(): EarClippingTriangulator {
@@ -136,9 +139,10 @@ class GameModule(private val game: JellyGame) : Module {
             MessagingContactListener(messaging)
 
     @Provides @Singleton
-    fun tmxMapLoader() = TmxMapLoader(InternalFileHandleResolver().apply {
+    fun tmxMapLoader() = TmxMapLoader(InternalFileHandleResolver())
 
-    })
+    @Provides @Singleton @InternalMapLoader
+    fun internalTmxMapLoader() = TmxMapLoader()
 
     @Provides @Singleton
     fun layeredTiledMapRenderer(camera: OrthographicCamera, batch: SpriteBatch) =
@@ -166,3 +170,6 @@ data class Systems(val systems: List<Class<out EntitySystem>>)
 
 @BindingAnnotation
 annotation class GuiCamera
+
+@BindingAnnotation
+annotation class InternalMapLoader

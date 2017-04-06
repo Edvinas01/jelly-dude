@@ -8,11 +8,12 @@ import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.ComponentResolver
 
 class JellyMap internal constructor(
+        val name: String,
         val tiledMap: TiledMap,
         val backgroundLayers: Collection<MapLayer>,
         val foregroundLayers: Collection<MapLayer>,
         val background: Texture?,
-        val spawn: Vector2
+        val spawn: Vector2?
 ) : Component {
     companion object : ComponentResolver<JellyMap>(JellyMap::class.java)
 }

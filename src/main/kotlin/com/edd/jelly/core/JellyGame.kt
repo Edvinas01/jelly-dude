@@ -1,14 +1,13 @@
 package com.edd.jelly.core
 
 import com.badlogic.ashley.core.Engine
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
+import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
-import com.edd.jelly.ui.MainMenu
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.apache.commons.io.monitor.FileAlterationMonitor
@@ -47,13 +46,10 @@ class JellyGame(val configurations: Configurations) : Game() {
         injector.getInstance(FileAlterationMonitor::class.java)
                 .start()
 
-        val multiplexer = injector.getInstance(InputMultiplexer::class.java)
-        val mainMenu = injector.getInstance(MainMenu::class.java)
+        Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
 
-        multiplexer.addProcessor(0, mainMenu.stage)
-        Gdx.input.inputProcessor = multiplexer
-
-        setScreen(mainMenu)
+//        messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true)) // todo BLOOP :V
+        messaging.send(LoadNewLevelEvent("test", false))
     }
 
     override fun render() {
