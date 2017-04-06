@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
 
+/**
+ * Root UI screen class for the game. Used to reduce boilerplate.
+ */
 abstract class StagedScreen constructor(
         protected val camera: OrthographicCamera,
         batch: SpriteBatch

@@ -38,9 +38,7 @@ class MainMenuScreen @Inject constructor(
 
     private companion object {
         val BUTTON_PADDING = 30f
-
         val TABLE_PAD = 16f
-
         val BUTTON_HEIGHT = percentHeight(10f)!!
     }
 
@@ -143,26 +141,48 @@ class MainMenuScreen @Inject constructor(
                 .pad(16f)
 
         // Placeholder for play or options menu.
-        val dynamicCell = rootTable.add().expand().fill()
+        val dynamicCell = rootTable
+                .add()
+                .expand()
+                .fill()
 
         // Main menu label.
         val menuLabel = Label("Main Menu", skin).apply {
             setFontScale(2f)
         }
 
+        // Button to open levels menu.
+        val levelsButton = TextButton("Play", skin).apply {
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
+                    dynamicCell.setActor<Table>(levels)
+                }
+            })
+        }
+
+        // Options menu button.
+        val optionsButton = TextButton("Options", skin).apply {
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
+                    dynamicCell.setActor<Table>(options)
+                }
+            })
+        }
+
+        // Exit button.
+        val exitButton = TextButton("Exit", skin).apply {
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
+                    Gdx.app.exit()
+                }
+            })
+        }
+
         controls.add(menuLabel)
-                .prefHeight(percentHeight(25f))
+                .prefHeight(percentHeight(25f)) // todo precentages wrong
                 .expand()
                 .padBottom(32f)
                 .row()
-
-        // Button to open levels menu.
-        val levelsButton = TextButton("Play", skin)
-        levelsButton.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent, x: Float, y: Float) {
-                dynamicCell.setActor<Table>(levels)
-            }
-        })
 
         controls.add(levelsButton)
                 .prefHeight(BUTTON_HEIGHT)
@@ -170,27 +190,11 @@ class MainMenuScreen @Inject constructor(
                 .pad(BUTTON_PADDING)
                 .row()
 
-        // Options menu button.
-        val optionsButton = TextButton("Options", skin)
-        optionsButton.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent, x: Float, y: Float) {
-                dynamicCell.setActor<Table>(options)
-            }
-        })
-
         controls.add(optionsButton)
                 .prefHeight(BUTTON_HEIGHT)
                 .fill()
                 .pad(BUTTON_PADDING)
                 .row()
-
-        // Exit button.
-        val exitButton = TextButton("Exit", skin)
-        exitButton.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent, x: Float, y: Float) {
-                Gdx.app.exit()
-            }
-        })
 
         controls.add(exitButton)
                 .prefHeight(BUTTON_HEIGHT)

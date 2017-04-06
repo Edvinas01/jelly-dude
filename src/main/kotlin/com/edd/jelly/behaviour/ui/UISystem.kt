@@ -21,6 +21,8 @@ class UISystem @Inject constructor(
 
     override fun addedToEngine(engine: Engine) {
         initListeners()
+
+        // Initially always load main menu.
         setRootScreen(injector.getInstance(MainMenuScreen::class.java))
     }
 
@@ -41,6 +43,9 @@ class UISystem @Inject constructor(
         game.screen = screen
     }
 
+    /**
+     * Initialize UI listeners.
+     */
     private fun initListeners() {
         messaging.listen<LevelLoadedEvent> {
             setRootScreen(injector.getInstance(GameScreen::class.java))

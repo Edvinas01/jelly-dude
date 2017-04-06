@@ -28,6 +28,11 @@ class GameScreen @Inject constructor(
         batch: SpriteBatch
 ) : StagedScreen(camera, batch) {
 
+    private companion object {
+        const val BUTTON_WIDTH = 0.2f
+        const val PADDING = 0.02f
+    }
+
     private val skin = resourceManager.skin
     private val menu = createMenuTable()
 
@@ -47,6 +52,9 @@ class GameScreen @Inject constructor(
         })
     }
 
+    /**
+     * Create pause menu table.
+     */
     private fun createMenuTable(): Table {
         val label = Label("Paused", skin).apply {
             setAlignment(Align.center)
@@ -81,19 +89,21 @@ class GameScreen @Inject constructor(
             setFillParent(true)
         }
 
+        val padding = percentHeight(PADDING, root)
+
         root.add(Table().apply {
             add(label)
-                    .padBottom(percentHeight(0.02f, root))
-                    .width(percentWidth(0.2f, root))
+                    .padBottom(padding)
+                    .width(percentWidth(BUTTON_WIDTH, root))
                     .row()
 
             add(restartButton)
-                    .padBottom(percentHeight(0.02f, root))
+                    .padBottom(padding)
                     .fillX()
                     .row()
 
             add(mainMenuButton)
-                    .padBottom(percentHeight(0.02f, root))
+                    .padBottom(padding)
                     .fillX()
                     .row()
 
@@ -101,7 +111,6 @@ class GameScreen @Inject constructor(
                     .fillX()
                     .row()
         })
-
-        return root.debugAll()
+        return root
     }
 }

@@ -33,6 +33,9 @@ class LevelSystem @Inject constructor(
         initListeners()
     }
 
+    /**
+     * Get currently running map info.
+     */
     private fun getCurrentMap(): JellyMap {
         if (maps.size() > 1) {
             throw GameException("Only one map must be loaded")
@@ -78,11 +81,14 @@ class LevelSystem @Inject constructor(
      * Initialize listeners for this system.
      */
     private fun initListeners() {
+
+        // Listen for new level load requests.
         messaging.listen<LoadNewLevelEvent> {
             unloadLevel()
             loadLevel(it.name, it.internal)
         }
 
+        // Listen for level restarts.
         messaging.listen<RestartLevelEvent> {
             val name = getCurrentMap().name
 
