@@ -1,82 +1,82 @@
 
 uiskin.png
-size: 1024,1024
+size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 apptheme_btn_check_off_disabled_focused_holo_light
   rotate: false
-  xy: 514, 582
+  xy: 1, 13
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_off_disabled_holo_light
   rotate: false
-  xy: 514, 533
+  xy: 983, 453
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_off_focused_holo_light
   rotate: false
-  xy: 529, 257
+  xy: 417, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_off_holo_light
   rotate: false
-  xy: 578, 257
+  xy: 466, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_off_pressed_holo_light
   rotate: false
-  xy: 627, 257
+  xy: 515, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_on_disabled_focused_holo_light
   rotate: false
-  xy: 676, 257
+  xy: 564, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_on_disabled_holo_light
   rotate: false
-  xy: 725, 257
+  xy: 613, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_on_focused_holo_light
   rotate: false
-  xy: 774, 257
+  xy: 662, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_on_holo_light
   rotate: false
-  xy: 823, 257
+  xy: 711, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_check_on_pressed_holo_light
   rotate: false
-  xy: 626, 882
+  xy: 760, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_colored_disabled_focused_holo_light
   rotate: false
-  xy: 872, 257
+  xy: 74, 139
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -85,7 +85,7 @@ apptheme_btn_colored_disabled_focused_holo_light
   index: -1
 apptheme_btn_default_disabled_focused_holo_light
   rotate: false
-  xy: 872, 257
+  xy: 74, 139
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -94,7 +94,7 @@ apptheme_btn_default_disabled_focused_holo_light
   index: -1
 apptheme_btn_colored_disabled_holo_light
   rotate: false
-  xy: 488, 214
+  xy: 114, 193
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -103,7 +103,7 @@ apptheme_btn_colored_disabled_holo_light
   index: -1
 apptheme_btn_default_disabled_holo_light
   rotate: false
-  xy: 488, 214
+  xy: 114, 193
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -112,7 +112,7 @@ apptheme_btn_default_disabled_holo_light
   index: -1
 apptheme_btn_colored_focused_holo_light
   rotate: false
-  xy: 586, 807
+  xy: 114, 144
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -121,7 +121,7 @@ apptheme_btn_colored_focused_holo_light
   index: -1
 apptheme_btn_default_focused_holo_light
   rotate: false
-  xy: 586, 807
+  xy: 114, 144
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -130,7 +130,7 @@ apptheme_btn_default_focused_holo_light
   index: -1
 apptheme_btn_colored_normal_holo_light
   rotate: false
-  xy: 582, 758
+  xy: 1942, 878
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -139,7 +139,7 @@ apptheme_btn_colored_normal_holo_light
   index: -1
 apptheme_btn_colored_pressed_holo_light
   rotate: false
-  xy: 675, 831
+  xy: 159, 280
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -148,7 +148,7 @@ apptheme_btn_colored_pressed_holo_light
   index: -1
 apptheme_btn_default_normal_holo_light
   rotate: false
-  xy: 755, 897
+  xy: 199, 280
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -157,7 +157,7 @@ apptheme_btn_default_normal_holo_light
   index: -1
 apptheme_btn_default_pressed_holo_light
   rotate: false
-  xy: 715, 846
+  xy: 154, 231
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -166,119 +166,119 @@ apptheme_btn_default_pressed_holo_light
   index: -1
 apptheme_btn_radio_off_disabled_focused_holo_light
   rotate: false
-  xy: 975, 927
+  xy: 809, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_off_disabled_holo_light
   rotate: false
-  xy: 292, 214
+  xy: 858, 353
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_off_focused_holo_light
   rotate: false
-  xy: 341, 214
+  xy: 1403, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_off_holo_light
   rotate: false
-  xy: 390, 214
+  xy: 1452, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_off_pressed_holo_light
   rotate: false
-  xy: 439, 214
+  xy: 1501, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_on_disabled_focused_holo_light
   rotate: false
-  xy: 528, 208
+  xy: 1550, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_on_disabled_holo_light
   rotate: false
-  xy: 577, 208
+  xy: 1599, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_on_focused_holo_light
   rotate: false
-  xy: 626, 208
+  xy: 1648, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_on_holo_light
   rotate: false
-  xy: 675, 208
+  xy: 1697, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_radio_on_pressed_holo_light
   rotate: false
-  xy: 724, 208
+  xy: 1746, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_off_focused_holo_light
   rotate: false
-  xy: 73, 233
+  xy: 1, 217
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_off_normal_holo_light
   rotate: false
-  xy: 698, 946
+  xy: 113, 329
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_off_pressed_holo_light
   rotate: false
-  xy: 146, 233
+  xy: 1099, 842
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_on_focused_holo_light
   rotate: false
-  xy: 771, 946
+  xy: 1, 144
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_on_normal_holo_light
   rotate: false
-  xy: 219, 233
+  xy: 186, 329
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_rating_star_on_pressed_holo_light
   rotate: false
-  xy: 844, 946
+  xy: 1172, 842
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 apptheme_btn_toggle_off_disabled_focused_holo_light
   rotate: false
-  xy: 795, 897
+  xy: 154, 182
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -287,7 +287,7 @@ apptheme_btn_toggle_off_disabled_focused_holo_light
   index: -1
 apptheme_btn_toggle_off_disabled_holo_light
   rotate: false
-  xy: 755, 848
+  xy: 194, 231
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -296,7 +296,7 @@ apptheme_btn_toggle_off_disabled_holo_light
   index: -1
 apptheme_btn_toggle_off_focused_holo_light
   rotate: false
-  xy: 835, 897
+  xy: 194, 182
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 14, 10
@@ -305,7 +305,7 @@ apptheme_btn_toggle_off_focused_holo_light
   index: -1
 apptheme_btn_toggle_off_normal_holo_light
   rotate: false
-  xy: 795, 848
+  xy: 154, 133
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -314,7 +314,7 @@ apptheme_btn_toggle_off_normal_holo_light
   index: -1
 apptheme_btn_toggle_off_pressed_holo_light
   rotate: false
-  xy: 875, 897
+  xy: 194, 133
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -323,7 +323,7 @@ apptheme_btn_toggle_off_pressed_holo_light
   index: -1
 apptheme_btn_toggle_on_disabled_focused_holo_light
   rotate: false
-  xy: 835, 848
+  xy: 1982, 878
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -332,7 +332,7 @@ apptheme_btn_toggle_on_disabled_focused_holo_light
   index: -1
 apptheme_btn_toggle_on_disabled_holo_light
   rotate: false
-  xy: 875, 848
+  xy: 1032, 471
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 10, 14
@@ -341,7 +341,7 @@ apptheme_btn_toggle_on_disabled_holo_light
   index: -1
 apptheme_btn_toggle_on_focused_holo_light
   rotate: false
-  xy: 622, 748
+  xy: 1032, 422
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -350,7 +350,7 @@ apptheme_btn_toggle_on_focused_holo_light
   index: -1
 apptheme_btn_toggle_on_normal_holo_light
   rotate: false
-  xy: 672, 782
+  xy: 1245, 823
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -359,7 +359,7 @@ apptheme_btn_toggle_on_normal_holo_light
   index: -1
 apptheme_btn_toggle_on_pressed_holo_light
   rotate: false
-  xy: 662, 733
+  xy: 1285, 823
   size: 39, 48
   split: 18, 18, 24, 21
   pad: 18, 18, 12, 12
@@ -368,14 +368,14 @@ apptheme_btn_toggle_on_pressed_holo_light
   index: -1
 apptheme_fastscroll_thumb_default_holo
   rotate: false
-  xy: 1, 136
+  xy: 1027, 745
   size: 45, 81
   orig: 45, 81
   offset: 0, 0
   index: -1
 apptheme_fastscroll_thumb_default_holo_h
   rotate: false
-  xy: 1, 5
+  xy: 1, 1
   size: 47, 11
   split: 3, 3, 3, 3
   pad: 1, 1, 1, 1
@@ -384,7 +384,7 @@ apptheme_fastscroll_thumb_default_holo_h
   index: -1
 apptheme_fastscroll_thumb_default_holo_v
   rotate: false
-  xy: 273, 185
+  xy: 2031, 967
   size: 11, 47
   split: 3, 3, 3, 3
   pad: 1, 1, 1, 1
@@ -393,14 +393,14 @@ apptheme_fastscroll_thumb_default_holo_v
   index: -1
 apptheme_fastscroll_thumb_pressed_holo
   rotate: false
-  xy: 514, 737
+  xy: 1, 62
   size: 45, 81
   orig: 45, 81
   offset: 0, 0
   index: -1
 apptheme_fastscroll_thumb_pressed_holo_h
   rotate: false
-  xy: 917, 954
+  xy: 259, 337
   size: 57, 21
   split: 8, 8, 8, 8
   pad: 6, 6, 6, 6
@@ -409,7 +409,7 @@ apptheme_fastscroll_thumb_pressed_holo_h
   index: -1
 apptheme_fastscroll_thumb_pressed_holo_v
   rotate: false
-  xy: 560, 761
+  xy: 1073, 769
   size: 21, 57
   split: 8, 8, 8, 8
   pad: 6, 6, 6, 6
@@ -418,14 +418,14 @@ apptheme_fastscroll_thumb_pressed_holo_v
   index: -1
 apptheme_ic_navigation_drawer
   rotate: false
-  xy: 108, 110
+  xy: 47, 85
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 apptheme_list_activated_holo
   rotate: false
-  xy: 662, 787
+  xy: 1942, 868
   size: 9, 9
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -434,7 +434,7 @@ apptheme_list_activated_holo
   index: -1
 apptheme_list_focused_holo
   rotate: false
-  xy: 47, 144
+  xy: 1099, 832
   size: 9, 9
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -443,7 +443,7 @@ apptheme_list_focused_holo
   index: -1
 apptheme_list_longpressed_holo
   rotate: false
-  xy: 82, 99
+  xy: 2031, 957
   size: 9, 9
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -452,7 +452,7 @@ apptheme_list_longpressed_holo
   index: -1
 apptheme_list_pressed_holo_light
   rotate: false
-  xy: 730, 836
+  xy: 1856, 831
   size: 9, 9
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -461,7 +461,7 @@ apptheme_list_pressed_holo_light
   index: -1
 apptheme_list_selector_disabled_holo_light
   rotate: false
-  xy: 47, 154
+  xy: 2009, 951
   size: 21, 63
   split: 11, 9, 30, 32
   pad: 0, 0, 0, 0
@@ -470,7 +470,7 @@ apptheme_list_selector_disabled_holo_light
   index: -1
 apptheme_progress_bg_holo_light
   rotate: false
-  xy: 285, 208
+  xy: 1072, 495
   size: 6, 24
   split: 0, 0, 0, 21
   pad: 0, 0, 0, 0
@@ -479,7 +479,7 @@ apptheme_progress_bg_holo_light
   index: -1
 apptheme_progress_primary_holo_light
   rotate: false
-  xy: 514, 508
+  xy: 1856, 841
   size: 33, 24
   split: 0, 30, 0, 21
   pad: 0, 0, 0, 0
@@ -488,7 +488,7 @@ apptheme_progress_primary_holo_light
   index: -1
 apptheme_progress_secondary_holo_light
   rotate: false
-  xy: 267, 159
+  xy: 97, 114
   size: 6, 24
   split: 0, 0, 0, 21
   pad: 0, 0, 0, 0
@@ -497,7 +497,7 @@ apptheme_progress_secondary_holo_light
   index: -1
 apptheme_progress_vertical_bg_holo_light
   rotate: false
-  xy: 917, 947
+  xy: 911, 407
   size: 24, 6
   split: 10, 10, 0, 0
   orig: 24, 6
@@ -505,7 +505,7 @@ apptheme_progress_vertical_bg_holo_light
   index: -1
 apptheme_progress_vertical_primary_holo_light
   rotate: false
-  xy: 996, 985
+  xy: 47, 110
   size: 24, 33
   split: 11, 12, 30, 0
   pad: 9, 11, 0, 0
@@ -514,133 +514,133 @@ apptheme_progress_vertical_primary_holo_light
   index: -1
 apptheme_progressbar_indeterminate_holo1
   rotate: false
-  xy: 1, 481
+  xy: 1, 477
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo2
   rotate: false
-  xy: 1, 456
+  xy: 1027, 990
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo3
   rotate: false
-  xy: 1, 431
+  xy: 1, 452
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo4
   rotate: false
-  xy: 1, 406
+  xy: 1027, 965
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo5
   rotate: false
-  xy: 1, 381
+  xy: 1, 427
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo6
   rotate: false
-  xy: 1, 356
+  xy: 1027, 940
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo7
   rotate: false
-  xy: 1, 331
+  xy: 1, 402
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_progressbar_indeterminate_holo8
   rotate: false
-  xy: 1, 306
+  xy: 1027, 915
   size: 909, 24
   orig: 909, 24
   offset: 0, 0
   index: -1
 apptheme_rate_star_big_half_holo_light
   rotate: false
-  xy: 1, 17
+  xy: 1027, 626
   size: 52, 52
   orig: 52, 52
   offset: 0, 0
   index: -1
 apptheme_rate_star_big_off_holo_light
   rotate: false
-  xy: 514, 684
+  xy: 1027, 573
   size: 52, 52
   orig: 52, 52
   offset: 0, 0
   index: -1
 apptheme_rate_star_big_on_holo_light
   rotate: false
-  xy: 514, 631
+  xy: 1027, 520
   size: 52, 52
   orig: 52, 52
   offset: 0, 0
   index: -1
 apptheme_rate_star_small_half_holo_light
   rotate: false
-  xy: 133, 110
+  xy: 1916, 841
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 apptheme_rate_star_small_off_holo_light
   rotate: false
-  xy: 158, 110
+  xy: 72, 114
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 apptheme_rate_star_small_on_holo_light
   rotate: false
-  xy: 183, 110
+  xy: 72, 89
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 apptheme_scrubber_control_disabled_holo
   rotate: false
-  xy: 773, 208
+  xy: 1795, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_scrubber_control_focused_holo
   rotate: false
-  xy: 822, 208
+  xy: 1844, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_scrubber_control_normal_holo
   rotate: false
-  xy: 871, 208
+  xy: 1893, 866
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_scrubber_control_pressed_holo
   rotate: false
-  xy: 626, 833
+  xy: 983, 404
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 apptheme_scrubber_primary_holo
   rotate: false
-  xy: 560, 742
+  xy: 317, 340
   size: 15, 18
   split: 0, 0, 0, 15
   pad: 0, 0, 0, 0
@@ -649,7 +649,7 @@ apptheme_scrubber_primary_holo
   index: -1
 apptheme_scrubber_secondary_holo
   rotate: false
-  xy: 51, 73
+  xy: 1073, 750
   size: 15, 18
   split: 0, 0, 0, 15
   pad: 0, 0, 0, 0
@@ -658,7 +658,7 @@ apptheme_scrubber_secondary_holo
   index: -1
 apptheme_scrubber_track_holo_light
   rotate: false
-  xy: 548, 514
+  xy: 239, 310
   size: 15, 18
   split: 0, 0, 0, 15
   pad: 0, 0, 0, 0
@@ -667,14 +667,14 @@ apptheme_scrubber_track_holo_light
   index: -1
 apptheme_slider_knob
   rotate: false
-  xy: 1, 70
+  xy: 1027, 679
   size: 49, 65
   orig: 49, 65
   offset: 0, 0
   index: -1
 apptheme_spinner_colored_disabled_holo_light
   rotate: false
-  xy: 702, 733
+  xy: 1365, 823
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -683,7 +683,7 @@ apptheme_spinner_colored_disabled_holo_light
   index: -1
 apptheme_spinner_disabled_holo_light
   rotate: false
-  xy: 702, 733
+  xy: 1365, 823
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -692,7 +692,7 @@ apptheme_spinner_disabled_holo_light
   index: -1
 apptheme_spinner_colored_focused_holo_light
   rotate: false
-  xy: 712, 782
+  xy: 1559, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -701,7 +701,7 @@ apptheme_spinner_colored_focused_holo_light
   index: -1
 apptheme_spinner_colored_normal_holo_light
   rotate: false
-  xy: 736, 733
+  xy: 1593, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -710,7 +710,7 @@ apptheme_spinner_colored_normal_holo_light
   index: -1
 apptheme_spinner_colored_pressed_holo_light
   rotate: false
-  xy: 69, 135
+  xy: 1627, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -719,7 +719,7 @@ apptheme_spinner_colored_pressed_holo_light
   index: -1
 apptheme_spinner_default_holo_light
   rotate: false
-  xy: 103, 135
+  xy: 1661, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -728,7 +728,7 @@ apptheme_spinner_default_holo_light
   index: -1
 apptheme_spinner_focused_holo_light
   rotate: false
-  xy: 137, 135
+  xy: 1695, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -737,7 +737,7 @@ apptheme_spinner_focused_holo_light
   index: -1
 apptheme_spinner_pressed_holo_light
   rotate: false
-  xy: 171, 135
+  xy: 1729, 817
   size: 33, 48
   split: 6, 24, 6, 39
   pad: 6, 24, 10, 12
@@ -746,7 +746,7 @@ apptheme_spinner_pressed_holo_light
   index: -1
 apptheme_switch_bg_disabled_holo_light
   rotate: false
-  xy: 205, 141
+  xy: 1763, 823
   size: 30, 42
   split: 14, 15, 21, 20
   pad: 3, 3, 3, 3
@@ -755,7 +755,7 @@ apptheme_switch_bg_disabled_holo_light
   index: -1
 apptheme_switch_bg_focused_holo_light
   rotate: false
-  xy: 236, 141
+  xy: 1794, 823
   size: 30, 42
   split: 14, 15, 21, 20
   pad: 3, 3, 3, 3
@@ -764,7 +764,7 @@ apptheme_switch_bg_focused_holo_light
   index: -1
 apptheme_switch_bg_holo_light
   rotate: false
-  xy: 51, 92
+  xy: 1825, 823
   size: 30, 42
   split: 14, 15, 21, 20
   pad: 3, 3, 3, 3
@@ -773,7 +773,7 @@ apptheme_switch_bg_holo_light
   index: -1
 apptheme_switch_thumb_activated_holo_light
   rotate: false
-  xy: 292, 263
+  xy: 259, 359
   size: 78, 42
   split: 36, 36, 3, 3
   pad: 21, 21, 3, 3
@@ -782,7 +782,7 @@ apptheme_switch_thumb_activated_holo_light
   index: -1
 apptheme_switch_thumb_disabled_holo_light
   rotate: false
-  xy: 917, 976
+  xy: 1245, 872
   size: 78, 42
   split: 36, 36, 3, 3
   pad: 21, 21, 3, 3
@@ -791,7 +791,7 @@ apptheme_switch_thumb_disabled_holo_light
   index: -1
 apptheme_switch_thumb_holo_light
   rotate: false
-  xy: 371, 263
+  xy: 338, 359
   size: 78, 42
   split: 36, 36, 3, 3
   pad: 21, 21, 3, 3
@@ -800,7 +800,7 @@ apptheme_switch_thumb_holo_light
   index: -1
 apptheme_switch_thumb_pressed_holo_light
   rotate: false
-  xy: 450, 263
+  xy: 1324, 872
   size: 78, 42
   split: 36, 36, 3, 3
   pad: 21, 21, 3, 3
@@ -809,7 +809,7 @@ apptheme_switch_thumb_pressed_holo_light
   index: -1
 apptheme_tab_selected_focused_holo
   rotate: false
-  xy: 69, 205
+  xy: 154, 280
   size: 3, 12
   split: 0, 0, 0, 9
   pad: 0, 0, 0, 0
@@ -818,7 +818,7 @@ apptheme_tab_selected_focused_holo
   index: -1
 apptheme_tab_selected_holo
   rotate: false
-  xy: 69, 192
+  xy: 907, 389
   size: 3, 12
   split: 0, 0, 0, 9
   pad: 0, 0, 0, 0
@@ -827,7 +827,7 @@ apptheme_tab_selected_holo
   index: -1
 apptheme_tab_selected_pressed_holo
   rotate: false
-  xy: 285, 195
+  xy: 234, 267
   size: 3, 12
   split: 0, 0, 0, 9
   pad: 0, 0, 0, 0
@@ -836,7 +836,7 @@ apptheme_tab_selected_pressed_holo
   index: -1
 apptheme_tab_unselected_focused_holo
   rotate: false
-  xy: 582, 812
+  xy: 259, 330
   size: 3, 6
   split: 0, 0, 0, 3
   pad: 0, 0, 0, 0
@@ -845,7 +845,7 @@ apptheme_tab_unselected_focused_holo
   index: -1
 apptheme_tab_unselected_holo
   rotate: false
-  xy: 622, 800
+  xy: 1937, 920
   size: 3, 6
   split: 0, 0, 0, 3
   pad: 0, 0, 0, 0
@@ -854,7 +854,7 @@ apptheme_tab_unselected_holo
   index: -1
 apptheme_tab_unselected_pressed_holo
   rotate: false
-  xy: 69, 185
+  xy: 1027, 513
   size: 3, 6
   split: 0, 0, 0, 3
   pad: 0, 0, 0, 0
@@ -863,28 +863,28 @@ apptheme_tab_unselected_pressed_holo
   index: -1
 apptheme_text_select_handle_left
   rotate: false
-  xy: 1, 218
+  xy: 911, 414
   size: 71, 87
   orig: 71, 87
   offset: 0, 0
   index: -1
 apptheme_text_select_handle_middle
   rotate: false
-  xy: 514, 819
+  xy: 1937, 927
   size: 71, 87
   orig: 71, 87
   offset: 0, 0
   index: -1
 apptheme_text_select_handle_right
   rotate: false
-  xy: 626, 931
+  xy: 1027, 827
   size: 71, 87
   orig: 71, 87
   offset: 0, 0
   index: -1
 apptheme_textarea_default_holo_light
   rotate: false
-  xy: 586, 856
+  xy: 74, 239
   size: 39, 50
   split: 18, 18, 32, 15
   pad: 18, 18, 12, 12
@@ -893,7 +893,7 @@ apptheme_textarea_default_holo_light
   index: -1
 apptheme_textarea_disabled_holo_light
   rotate: false
-  xy: 675, 880
+  xy: 74, 188
   size: 39, 50
   split: 18, 18, 32, 15
   pad: 18, 18, 12, 12
@@ -902,7 +902,7 @@ apptheme_textarea_disabled_holo_light
   index: -1
 apptheme_textarea_focused_holo_light
   rotate: false
-  xy: 715, 895
+  xy: 114, 242
   size: 39, 50
   split: 18, 18, 32, 15
   pad: 18, 18, 12, 12
@@ -911,7 +911,7 @@ apptheme_textarea_focused_holo_light
   index: -1
 apptheme_textfield_activated_holo_light
   rotate: false
-  xy: 73, 184
+  xy: 1325, 823
   size: 39, 48
   split: 18, 18, 30, 15
   pad: 18, 18, 10, 12
@@ -920,7 +920,7 @@ apptheme_textfield_activated_holo_light
   index: -1
 apptheme_textfield_default_holo_light
   rotate: false
-  xy: 113, 184
+  xy: 1399, 817
   size: 39, 48
   split: 18, 18, 30, 15
   pad: 18, 18, 10, 12
@@ -929,7 +929,7 @@ apptheme_textfield_default_holo_light
   index: -1
 apptheme_textfield_disabled_focused_holo_light
   rotate: false
-  xy: 153, 184
+  xy: 1439, 817
   size: 39, 48
   split: 18, 18, 30, 15
   pad: 18, 18, 10, 12
@@ -938,7 +938,7 @@ apptheme_textfield_disabled_focused_holo_light
   index: -1
 apptheme_textfield_disabled_holo_light
   rotate: false
-  xy: 193, 184
+  xy: 1479, 817
   size: 39, 48
   split: 18, 18, 30, 15
   pad: 18, 18, 10, 12
@@ -947,7 +947,7 @@ apptheme_textfield_disabled_holo_light
   index: -1
 apptheme_textfield_focused_holo_light
   rotate: false
-  xy: 233, 184
+  xy: 1519, 817
   size: 39, 48
   split: 18, 18, 30, 15
   pad: 18, 18, 10, 12
@@ -956,7 +956,7 @@ apptheme_textfield_focused_holo_light
   index: -1
 card
   rotate: false
-  xy: 626, 797
+  xy: 113, 293
   size: 45, 35
   split: 7, 7, 8, 8
   orig: 45, 35
@@ -964,22 +964,15 @@ card
   index: -1
 cursor
   rotate: false
-  xy: 582, 808
+  xy: 1095, 823
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
   offset: 0, 0
   index: -1
-default
-  rotate: false
-  xy: 1, 506
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
 default-splitpane
   rotate: false
-  xy: 576, 757
+  xy: 114, 140
   size: 5, 3
   split: 0, 5, 0, 0
   orig: 5, 3
@@ -987,7 +980,7 @@ default-splitpane
   index: -1
 default-splitpane-vertical
   rotate: false
-  xy: 205, 135
+  xy: 1399, 866
   size: 3, 5
   split: 0, 0, 0, 5
   orig: 3, 5
@@ -995,23 +988,37 @@ default-splitpane-vertical
   index: -1
 dialog_holo_light
   rotate: false
-  xy: 514, 907
+  xy: 1, 290
   size: 111, 111
   split: 18, 18, 75, 19
   pad: 18, 18, 77, 19
   orig: 111, 111
   offset: 0, 0
   index: -1
+roboto
+  rotate: false
+  xy: 1, 502
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: 18
+roboto
+  rotate: false
+  xy: 514, 502
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: 32
 selection
   rotate: false
-  xy: 672, 831
+  xy: 72, 142
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 tooltip
   rotate: false
-  xy: 82, 109
+  xy: 1890, 840
   size: 25, 25
   split: 12, 12, 12, 12
   orig: 25, 25
@@ -1019,21 +1026,21 @@ tooltip
   index: -1
 tree-minus
   rotate: false
-  xy: 698, 931
+  xy: 2009, 936
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 tree-plus
   rotate: false
-  xy: 715, 831
+  xy: 1032, 407
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 1, 1
+  xy: 1095, 819
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

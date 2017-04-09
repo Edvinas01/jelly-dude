@@ -129,8 +129,6 @@ class MainMenuScreen @Inject constructor(
     private fun setActive(actor: Table) {
         val activeActor = active.actor
 
-        // todo un-toggle buttons
-
         if (activeActor != null && activeActor == actor) {
             active.setActor<Table>(null)
         } else {
@@ -146,10 +144,6 @@ class MainMenuScreen @Inject constructor(
             top().left().setFillParent(true)
         }
 
-        // TODO, use different fonts for text, headers and etc...
-        val windowStyle = skin.get(Window.WindowStyle::class.java)
-        val titleStyle = Label.LabelStyle(windowStyle.titleFont, windowStyle.titleFontColor)
-
         val controls = Window("Menu", skin).apply {
             isMovable = false
             isModal = false
@@ -157,9 +151,7 @@ class MainMenuScreen @Inject constructor(
 
         // Main header.
         rootTable
-                .add(Label("Jelly Dude", titleStyle).apply {
-                    setScale(1.5f)
-                })
+                .add(Label("Jelly Dude", skin, "title"))
                 .height(percentHeight(0.1f, rootTable))
                 .colspan(2)
                 .fill()
@@ -186,28 +178,30 @@ class MainMenuScreen @Inject constructor(
         val buttonPad = percentHeight(0.05f, controls)
 
         // Button for showing level selection window.
-        val playCell = controls.add(TextButton("Play", skin, TOGGLE_STYLE).apply {
+        val playButton = TextButton("Play", skin, TOGGLE_STYLE).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     setActive(levels)
                 }
             })
-        })
+        }
 
-        playCell.padBottom(buttonPad)
+        controls.add(playButton)
+                .padBottom(buttonPad)
                 .fillX()
                 .row()
 
         // Button for showing options window.
-        val optionsCell = controls.add(TextButton("Options", skin, TOGGLE_STYLE).apply {
+        val optionsButton = TextButton("Options", skin, TOGGLE_STYLE).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     setActive(options)
                 }
             })
-        })
+        }
 
-        optionsCell.padBottom(buttonPad)
+        controls.add(optionsButton)
+                .padBottom(buttonPad)
                 .fillX()
                 .row()
 
@@ -219,6 +213,13 @@ class MainMenuScreen @Inject constructor(
                 }
             })
         })
+
+        // Make sure only one control button is checked at a time.
+        ButtonGroup(playButton, optionsButton).apply {
+            setMaxCheckCount(1)
+            setMinCheckCount(0)
+            setUncheckLast(true)
+        }
 
         exitCell.fillX()
                 .expand()
