@@ -78,6 +78,16 @@
       fontColor: default,
       downFontColor: inverse,
       disabledFontColor: grey
+    },
+    toggle-simple: {
+      down: apptheme_btn_default_pressed_holo_light,
+      up: apptheme_btn_default_normal_holo_light,
+      disabled: apptheme_btn_default_disabled_holo_light,
+      checked: apptheme_btn_default_pressed_holo_light,
+      font: default-font,
+      fontColor: default,
+      downFontColor: inverse,
+      disabledFontColor: grey
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {

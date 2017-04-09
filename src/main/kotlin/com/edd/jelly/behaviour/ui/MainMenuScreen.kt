@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.*
@@ -32,14 +33,19 @@ class MainMenuScreen @Inject constructor(
 ) : StagedScreen(camera, batch) {
 
     private companion object {
+        const val TOGGLE_STYLE = "toggle-simple"
         const val PAD = 8f
     }
 
     private val options = options(resources.skin)
     private val levels = levels(resources.skin, resources.mainAtlas)
+    private val active: Cell<Actor>
 
     init {
-        stage.addActor(mainTable(resources.skin))
+        val (root, active) = mainTable(resources.skin)
+
+        this.stage.addActor(root)
+        this.active = active
     }
 
     /**
@@ -118,9 +124,24 @@ class MainMenuScreen @Inject constructor(
     }
 
     /**
+     * Set active control table.
+     */
+    private fun setActive(actor: Table) {
+        val activeActor = active.actor
+
+        // todo un-toggle buttons
+
+        if (activeActor != null && activeActor == actor) {
+            active.setActor<Table>(null)
+        } else {
+            active.setActor<Table>(actor)
+        }
+    }
+
+    /**
      * Initialize root table with controls.
      */
-    private fun mainTable(skin: Skin): Table {
+    private fun mainTable(skin: Skin): Pair<Table, Cell<Actor>> {
         val rootTable = Table().apply {
             top().left().setFillParent(true)
         }
@@ -165,16 +186,10 @@ class MainMenuScreen @Inject constructor(
         val buttonPad = percentHeight(0.05f, controls)
 
         // Button for showing level selection window.
-        val playCell = controls.add(TextButton("Play", skin).apply {
+        val playCell = controls.add(TextButton("Play", skin, TOGGLE_STYLE).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    val actor = selected.actor
-
-                    if (actor != null && actor == levels) {
-                        selected.setActor<Table>(null)
-                    } else {
-                        selected.setActor<Table>(levels)
-                    }
+                    setActive(levels)
                 }
             })
         })
@@ -184,16 +199,10 @@ class MainMenuScreen @Inject constructor(
                 .row()
 
         // Button for showing options window.
-        val optionsCell = controls.add(TextButton("Options", skin).apply {
+        val optionsCell = controls.add(TextButton("Options", skin, TOGGLE_STYLE).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    val actor = selected.actor
-
-                    if (actor != null && actor == options) {
-                        selected.setActor<Table>(null)
-                    } else {
-                        selected.setActor<Table>(options)
-                    }
+                    setActive(options)
                 }
             })
         })
@@ -216,6 +225,6 @@ class MainMenuScreen @Inject constructor(
                 .bottom()
                 .left()
 
-        return rootTable
+        return Pair(rootTable, selected)
     }
 }
