@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
-import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World

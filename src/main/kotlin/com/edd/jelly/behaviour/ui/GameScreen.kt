@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.behaviour.level.RestartLevelEvent
 import com.edd.jelly.core.GuiCamera
+import com.edd.jelly.behaviour.pause.PauseEvent
 import com.edd.jelly.core.configuration.Configurations.Companion.MENU_LEVEL_NAME
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
@@ -40,16 +41,27 @@ class GameScreen @Inject constructor(
         stage.addListener(object : InputListener() {
             override fun keyDown(event: InputEvent, keycode: Int): Boolean {
                 if (Input.Keys.ESCAPE == keycode) {
-                    if (stage.actors.contains(menu)) {
+                    val showingMenu = stage.actors.contains(menu)
+
+                    if (showingMenu) {
                         menu.remove()
                     } else {
                         stage.addActor(menu)
                     }
+
+                    pause(!showingMenu)
                     return true
                 }
                 return false
             }
         })
+    }
+
+    /**
+     * Send event to pause the game engine.
+     */
+    private fun pause(pause: Boolean = true) {
+        messaging.send(PauseEvent(pause))
     }
 
     /**

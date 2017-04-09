@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.GuiCamera
-import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.tiled.JellyMapLoader
@@ -29,7 +28,6 @@ import com.google.inject.Inject
 class MainMenuScreen @Inject constructor(
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
-        configurations: Configurations,
         resources: ResourceManager,
         @GuiCamera
         camera: OrthographicCamera,
@@ -42,7 +40,6 @@ class MainMenuScreen @Inject constructor(
         val BUTTON_HEIGHT = percentHeight(10f)!!
     }
 
-    private val config = configurations.config
     private val skin = resources.skin
 
     private val options = optionsTable()
@@ -201,10 +198,6 @@ class MainMenuScreen @Inject constructor(
                 .fill()
                 .pad(BUTTON_PADDING)
 
-        if (config.game.uiDebug) {
-            return rootTable.debugAll()
-        } else {
-            return rootTable
-        }
+        return rootTable.debugAll()
     }
 }

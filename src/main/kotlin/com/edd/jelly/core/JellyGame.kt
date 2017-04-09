@@ -20,8 +20,9 @@ class JellyGame(val configurations: Configurations) : Game() {
         private val LOG = LogManager.getLogger(JellyGame::class.java)
     }
 
+    internal val engine = Engine()
+
     internal lateinit var assetManager: AssetManager
-    internal lateinit var engine: Engine
     internal lateinit var injector: Injector
 
     val messaging = Messaging().stop()
@@ -33,7 +34,6 @@ class JellyGame(val configurations: Configurations) : Game() {
     override fun create() {
         LOG.info("Starting game")
 
-        engine = Engine()
         injector = Guice.createInjector(GameModule(this))
 
         assetManager = injector.getInstance(AssetManager::class.java)

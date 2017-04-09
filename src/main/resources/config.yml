@@ -5,7 +5,6 @@ game:
   scripting: false
 
   # Enable debug mode.
-  uiDebug: true
   debug: true
 
   # Physics.

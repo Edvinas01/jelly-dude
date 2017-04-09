@@ -2,14 +2,12 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.*
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.level.LevelLoadedEvent
+import com.edd.jelly.behaviour.pause.PausingSystem
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
@@ -34,17 +32,11 @@ class PlayerSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
-        private val camera: OrthographicCamera,
         private val world: World,
         scriptManager: ScriptManager
-) : EntitySystem() {
+) : EntitySystem(), PausingSystem {
 
     companion object {
-
-        /**
-         * Speed of the camera which follows the player.
-         */
-        val CAMERA_SPEED = 2f
 
         // Player body constants.
         val PLAYER_TEXTURE_NAME = "slime"
@@ -111,7 +103,6 @@ class PlayerSystem @Inject constructor(
             processHealth(player, entity)
             processStickiness(player)
             processDeflation(player, deltaTime)
-            processCamera(entity.transform, deltaTime)
         }
     }
 
@@ -263,18 +254,6 @@ class PlayerSystem @Inject constructor(
                 }
             }
         }
-    }
-
-    /**
-     * Process camera movements for the player.
-     */
-    private fun processCamera(transform: Transform, deltaTime: Float) {
-        camera.position.lerp(Vector3(
-                transform.position.x,
-                transform.position.y,
-                0f
-        ), deltaTime * CAMERA_SPEED)
-        camera.update()
     }
 
     /**
@@ -501,5 +480,9 @@ class PlayerSystem @Inject constructor(
             return Pair(dataB, contact.fixtureA.body)
         }
         return null
+    }
+
+    override fun paused(pause: Boolean) {
+        playerInputs.disabled = pause
     }
 }

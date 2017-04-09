@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
+import com.edd.jelly.behaviour.camera.CameraPositionSystem
 import com.edd.jelly.behaviour.level.LevelSystem
+import com.edd.jelly.behaviour.pause.PauseSystem
 import com.edd.jelly.behaviour.physics.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
@@ -25,7 +27,6 @@ import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.core.tiled.JellyMapRenderer
-import com.edd.jelly.debug.DebugSystem
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.*
@@ -52,6 +53,7 @@ class GameModule(private val game: JellyGame) : Module {
     @Provides @Singleton
     fun systems(): Systems {
         return Systems(listOf(
+                PauseSystem::class.java,
                 LevelSystem::class.java,
 
                 // Physics simulation.
@@ -69,10 +71,12 @@ class GameModule(private val game: JellyGame) : Module {
                 PlayerSystem::class.java,
                 PlayerSynchronizationSystem::class.java,
 
+                // Camera.
+                CameraPositionSystem::class.java,
+
                 // Rendering.
                 RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java,
-                DebugSystem::class.java,
                 UISystem::class.java
         ))
     }

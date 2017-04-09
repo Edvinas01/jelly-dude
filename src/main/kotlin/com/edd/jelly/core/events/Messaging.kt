@@ -18,6 +18,13 @@ class Messaging {
     }
 
     /**
+     * Register a new listener for a specific event type by providing a concrete listener implementation.
+     */
+    inline fun <reified T : Event> listen(listener: Listener<T>) {
+        listen(T::class.java, listener)
+    }
+
+    /**
      * Send an event of a specific type to all listeners who listen for this event.
      */
     fun <T : Event> send(event: T) {

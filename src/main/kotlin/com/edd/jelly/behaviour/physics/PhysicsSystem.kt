@@ -2,6 +2,7 @@ package com.edd.jelly.behaviour.physics
 
 import com.badlogic.ashley.core.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
+import com.edd.jelly.behaviour.pause.PausingSystem
 import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
@@ -9,7 +10,7 @@ import org.jbox2d.dynamics.World
 class PhysicsSystem @Inject constructor(
         private val messagingContactListener: MessagingContactListener,
         private val world: World
-) : EntitySystem() {
+) : EntitySystem(), PausingSystem {
 
     companion object {
         private val VELOCITY_ITERATIONS = 6

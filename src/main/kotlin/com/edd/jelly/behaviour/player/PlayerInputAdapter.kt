@@ -9,10 +9,11 @@ class PlayerInputAdapter(
         val messaging: Messaging
 ) : InputAdapter() {
 
+    var disabled = true
     var player: Entity? = null
 
     override fun keyDown(keycode: Int): Boolean {
-        if (player == null) {
+        if (disabled || player == null) {
             return false
         }
 
@@ -45,7 +46,7 @@ class PlayerInputAdapter(
     }
 
     override fun keyUp(keycode: Int): Boolean {
-        if (player == null) {
+        if (disabled || player == null) {
             return false
         }
 

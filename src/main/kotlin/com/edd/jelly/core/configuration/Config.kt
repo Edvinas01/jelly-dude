@@ -9,7 +9,6 @@ data class Config(
      * General game configuration settings.
      */
     data class Game(val scripting: Boolean,
-                    val uiDebug: Boolean,
                     val debug: Boolean,
                     val gravity: Float,
                     val particleRadius: Float)
