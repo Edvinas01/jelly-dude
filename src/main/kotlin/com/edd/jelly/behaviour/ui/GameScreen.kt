@@ -6,12 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.Align
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.behaviour.level.RestartLevelEvent
 import com.edd.jelly.core.GuiCamera
@@ -29,13 +26,7 @@ class GameScreen @Inject constructor(
         batch: SpriteBatch
 ) : StagedScreen(camera, batch) {
 
-    private companion object {
-        const val BUTTON_WIDTH = 0.2f
-        const val PADDING = 0.02f
-    }
-
-    private val skin = resourceManager.skin
-    private val menu = createMenuTable()
+    private val menu = createMenuTable(resourceManager.skin)
 
     init {
         stage.addListener(object : InputListener() {
@@ -67,62 +58,57 @@ class GameScreen @Inject constructor(
     /**
      * Create pause menu table.
      */
-    private fun createMenuTable(): Table {
-        val label = Label("Paused", skin).apply {
-            setAlignment(Align.center)
+    private fun createMenuTable(skin: Skin): Table {
+        val root = Table().apply {
+            setFillParent(true)
         }
 
-        val restartButton = TextButton("Restart", skin).apply {
+        val menu = Window("Paused", skin).apply {
+            isMovable = false
+            isModal = false
+        }
+
+        root.add(menu)
+                .width(percentWidth(0.20f, root))
+
+        // Button to restart the level.
+        val restartCell = menu.add(TextButton("Restart", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(RestartLevelEvent)
                 }
             })
-        }
+        })
 
-        val mainMenuButton = TextButton("Main menu", skin).apply {
+        restartCell
+                .fillX()
+                .row()
+
+        // Button to open main menu.
+        val menuCell = menu.add(TextButton("Main menu", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
                     messaging.send(LoadMainMenuEvent)
                 }
             })
-        }
+        })
 
-        val exitButton = TextButton("Exit game", skin).apply {
+        menuCell.fillX()
+                .row()
+
+        // Button to exit the game.
+        val exitCell = menu.add(TextButton("Exit game", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     Gdx.app.exit()
                 }
             })
-        }
-
-        val root = Table().apply {
-            setFillParent(true)
-        }
-
-        val padding = percentHeight(PADDING, root)
-
-        root.add(Table().apply {
-            add(label)
-                    .padBottom(padding)
-                    .width(percentWidth(BUTTON_WIDTH, root))
-                    .row()
-
-            add(restartButton)
-                    .padBottom(padding)
-                    .fillX()
-                    .row()
-
-            add(mainMenuButton)
-                    .padBottom(padding)
-                    .fillX()
-                    .row()
-
-            add(exitButton)
-                    .fillX()
-                    .row()
         })
+
+        exitCell.fillX()
+                .expand()
+
         return root
     }
 }

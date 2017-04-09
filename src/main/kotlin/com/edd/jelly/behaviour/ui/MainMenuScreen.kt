@@ -83,7 +83,7 @@ class MainMenuScreen @Inject constructor(
                     .row()
 
             // Launch level button.
-            val playCell = levelDetails.add(TextButton("Play ${meta.name}", skin).apply {
+            val playCell = levelDetails.add(TextButton(meta.name, skin).apply {
                 label.setWrap(true)
                 label.setEllipsis(true)
 
@@ -96,8 +96,6 @@ class MainMenuScreen @Inject constructor(
 
             playCell.expand()
                     .fill()
-
-            levelDetails.debugAll()
 
             levelContainer
                     .add(levelDetails)

@@ -49,8 +49,7 @@ class JellyGame(val configurations: Configurations) : Game() {
 
         Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
 
-        messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true)) // todo BLOOP :V
-//        messaging.send(LoadNewLevelEvent("test", false))
+        messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
     }
 
     override fun render() {
