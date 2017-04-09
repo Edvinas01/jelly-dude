@@ -48,7 +48,7 @@ class RenderingSystem @Inject constructor(
     }
 
     override fun update(deltaTime: Float) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         renderBackground()

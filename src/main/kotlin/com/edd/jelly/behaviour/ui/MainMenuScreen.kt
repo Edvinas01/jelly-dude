@@ -3,25 +3,25 @@ package com.edd.jelly.behaviour.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.Value.percentHeight
-import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Value.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.Align
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.GuiCamera
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.tiled.JellyMapLoader
 import com.google.inject.Inject
 
 // Some notes to self:
 // The fill() method causes a widget to be sized to the cell.
 // Use expand() to make the logical table take up the entire size of the table widget.
+// Red lines show the cell bounds and the green lines show the widget bounds.
+// The outer blue rectangle shows the size of the table widget. The inner blue rectangle shows the size of the logical
+// table, which is aligned to center by default
 class MainMenuScreen @Inject constructor(
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
@@ -32,193 +32,192 @@ class MainMenuScreen @Inject constructor(
 ) : StagedScreen(camera, batch) {
 
     private companion object {
-        val BUTTON_PADDING = 30f
-        val TABLE_PAD = 16f
+        const val PAD = 8f
     }
 
-    private val skin = resources.skin
-
-    private val options = optionsTable()
-    private val levels = levelsTable()
+    private val options = options(resources.skin)
+    private val levels = levels(resources.skin, resources.mainAtlas)
 
     init {
-        stage.addActor(rootTable())
+        stage.addActor(mainTable(resources.skin))
     }
 
     /**
      * Create options controls.
      */
-    private fun optionsTable(): Table {
-        val options = Table()
-                .top()
-                .left()
-                .pad(TABLE_PAD)
-
-        val scrollContent = Table()
-                .top()
-                .left()
-
-        options.add(Label("Options", skin).apply {
-            setFontScale(1.5f)
-        }).left()
-
-        val scroll = ScrollPane(scrollContent, skin)
-        scroll.setFadeScrollBars(false)
-
-        options.row()
-        options.add(scroll).expand().fill()
-
-        return options.debugAll()
+    private fun options(skin: Skin): Table {
+        return Window("Options", skin).apply {
+            isMovable = false
+            isModal = false
+        }
     }
 
     /**
      * Create level selection controls.
      */
-    private fun levelsTable(): Table {
-        val levels = Table()
-                .top()
-                .left()
-                .pad(TABLE_PAD)
+    private fun levels(skin: Skin, textureAtlas: TextureAtlas): Table {
+        val levels = Window("Levels", skin).apply {
+            isMovable = false
+            isModal = false
+        }
 
-        val scrollContent = Table()
+        val levelContainer = Table()
                 .top()
                 .left()
+
+        val elementPad = percentWidth(0.01f, levelContainer)
+        val elementWidth = percentWidth(0.23f, levelContainer)
 
         for ((index, meta) in jellyMapLoader.metadata.withIndex()) {
             if (index > 0 && index % 4 == 0) {
-                scrollContent.row()
+                levelContainer.row()
             }
 
-            val levelInfo = Table()
-            levelInfo.add(Label(meta.name, skin).apply {
-                setAlignment(Align.center)
-            }).prefHeight(170f)
-                    .expandX()
-                    .fillX()
+            // Details about the level.
+            val levelDetails = Table()
+
+            // Level image.
+            levelDetails
+                    .add(Image(textureAtlas["the_borker"]))
+                    .fill()
                     .row()
 
-            val play = TextButton("Play ${meta.name}", skin)
-            play.addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    messaging.send(LoadNewLevelEvent(meta.name))
-                }
-            })
-            levelInfo.add(play).fillX()
+            // Launch level button.
+            val playCell = levelDetails.add(TextButton("Play ${meta.name}", skin).apply {
+                label.setWrap(true)
+                label.setEllipsis(true)
 
-            scrollContent.add(levelInfo)
-                    .width(percentWidth(0.23f, scrollContent))
-                    .pad(percentWidth(0.01f, scrollContent))
+                addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent, x: Float, y: Float) {
+                        messaging.send(LoadNewLevelEvent(meta.name))
+                    }
+                })
+            })
+
+            playCell.expand()
                     .fill()
+
+            levelDetails.debugAll()
+
+            levelContainer
+                    .add(levelDetails)
+                    .padBottom(PAD)
+                    .padLeft(elementPad)
+                    .padRight(elementPad)
+                    .width(elementWidth)
+                    .expand()
         }
 
-        levels.add(Label("Levels", skin).apply {
-            setFontScale(1.5f)
-        }).left()
+        // Scroll for levels.
+        val scroll = ScrollPane(levelContainer, skin).apply {
+            setFadeScrollBars(false)
+        }
 
-        val scroll = ScrollPane(scrollContent, skin)
-        scroll.setFadeScrollBars(false)
+        levels.add(scroll)
+                .grow()
 
-        levels.row()
-        levels.add(scroll).expand().fill()
-
-        return levels.debugAll()
+        return levels
     }
 
     /**
      * Initialize root table with controls.
      */
-    private fun rootTable(): Table {
+    private fun mainTable(skin: Skin): Table {
         val rootTable = Table().apply {
             top().left().setFillParent(true)
         }
 
-        // Buttons and such.
-        val controls = Table()
+        // TODO, use different fonts for text, headers and etc...
+        val windowStyle = skin.get(Window.WindowStyle::class.java)
+        val titleStyle = Label.LabelStyle(windowStyle.titleFont, windowStyle.titleFontColor)
+
+        val controls = Window("Menu", skin).apply {
+            isMovable = false
+            isModal = false
+        }
+
+        // Main header.
+        rootTable
+                .add(Label("Jelly Dude", titleStyle).apply {
+                    setScale(1.5f)
+                })
+                .height(percentHeight(0.1f, rootTable))
+                .colspan(2)
+                .fill()
+                .pad(PAD)
                 .top()
                 .left()
+                .row()
 
-        // Add controls to the root table.
-        rootTable.add(controls)
+        // Main controls.
+        rootTable
+                .add(controls)
                 .width(percentWidth(0.25f, rootTable))
-                .expandY()
-                .fill()
-                .pad(16f)
-
-        // Placeholder for play or options menu.
-        val dynamicCell = rootTable
-                .add()
                 .expand()
                 .fill()
 
-        // Main menu label.
-        val menuLabel = Label("Main Menu", skin).apply {
-            setFontScale(2f)
-        }
+        // Cell for dropping in control menus.
+        val selected = rootTable
+                .add()
+                .width(percentWidth(0.75f, rootTable))
+                .expand()
+                .fill()
 
-        // Button to open levels menu.
-        val levelsButton = TextButton("Play", skin).apply {
+        // Common padding for control button cells.
+        val buttonPad = percentHeight(0.05f, controls)
+
+        // Button for showing level selection window.
+        val playCell = controls.add(TextButton("Play", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    val actor = dynamicCell.actor
+                    val actor = selected.actor
 
                     if (actor != null && actor == levels) {
-                        dynamicCell.setActor<Table>(null)
+                        selected.setActor<Table>(null)
                     } else {
-                        dynamicCell.setActor<Table>(levels)
+                        selected.setActor<Table>(levels)
                     }
                 }
             })
-        }
+        })
 
-        // Options menu button.
-        val optionsButton = TextButton("Options", skin).apply {
+        playCell.padBottom(buttonPad)
+                .fillX()
+                .row()
+
+        // Button for showing options window.
+        val optionsCell = controls.add(TextButton("Options", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    val actor = dynamicCell.actor
+                    val actor = selected.actor
 
                     if (actor != null && actor == options) {
-                        dynamicCell.setActor<Table>(null)
+                        selected.setActor<Table>(null)
                     } else {
-                        dynamicCell.setActor<Table>(options)
+                        selected.setActor<Table>(options)
                     }
                 }
             })
-        }
+        })
 
-        // Exit button.
-        val exitButton = TextButton("Exit", skin).apply {
+        optionsCell.padBottom(buttonPad)
+                .fillX()
+                .row()
+
+        // Exit game button.
+        val exitCell = controls.add(TextButton("Exit", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     Gdx.app.exit()
                 }
             })
-        }
+        })
 
-        controls.add(menuLabel)
-                .height(percentHeight(0.25f, controls))
+        exitCell.fillX()
                 .expand()
-                .padBottom(32f)
-                .row()
+                .bottom()
+                .left()
 
-        val buttonHeight = percentHeight(0.1f, controls)
-
-        controls.add(levelsButton)
-                .prefHeight(buttonHeight)
-                .fill()
-                .pad(BUTTON_PADDING)
-                .row()
-
-        controls.add(optionsButton)
-                .prefHeight(buttonHeight)
-                .fill()
-                .pad(BUTTON_PADDING)
-                .row()
-
-        controls.add(exitButton)
-                .prefHeight(buttonHeight)
-                .fill()
-                .pad(BUTTON_PADDING)
-
-        return rootTable.debugAll()
+        return rootTable
     }
 }
