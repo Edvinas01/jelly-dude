@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
 import com.edd.jelly.core.configuration.Configurations
+import com.edd.jelly.core.configuration.Configurations.Companion.MENU_LEVEL_NAME
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -48,8 +49,8 @@ class JellyGame(val configurations: Configurations) : Game() {
 
         Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
 
-//        messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true)) // todo BLOOP :V
-        messaging.send(LoadNewLevelEvent("test", false))
+        messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true)) // todo BLOOP :V
+//        messaging.send(LoadNewLevelEvent("test", false))
     }
 
     override fun render() {

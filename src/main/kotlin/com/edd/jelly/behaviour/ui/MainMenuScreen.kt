@@ -19,12 +19,9 @@ import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.tiled.JellyMapLoader
 import com.google.inject.Inject
 
-/**
- * Note that main menu is created on request, it is not a singleton!
- */
-
-// The fill method causes a widget to be sized to the cell
-// Expand to make the logical table take up the entire size of the table widget
+// Some notes to self:
+// The fill() method causes a widget to be sized to the cell.
+// Use expand() to make the logical table take up the entire size of the table widget.
 class MainMenuScreen @Inject constructor(
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
@@ -37,7 +34,6 @@ class MainMenuScreen @Inject constructor(
     private companion object {
         val BUTTON_PADDING = 30f
         val TABLE_PAD = 16f
-        val BUTTON_HEIGHT = percentHeight(10f)!!
     }
 
     private val skin = resources.skin
@@ -58,9 +54,19 @@ class MainMenuScreen @Inject constructor(
                 .left()
                 .pad(TABLE_PAD)
 
+        val scrollContent = Table()
+                .top()
+                .left()
+
         options.add(Label("Options", skin).apply {
             setFontScale(1.5f)
         }).left()
+
+        val scroll = ScrollPane(scrollContent, skin)
+        scroll.setFadeScrollBars(false)
+
+        options.row()
+        options.add(scroll).expand().fill()
 
         return options.debugAll()
     }
@@ -133,8 +139,9 @@ class MainMenuScreen @Inject constructor(
 
         // Add controls to the root table.
         rootTable.add(controls)
-                .width(camera.viewportWidth / 4)
+                .width(percentWidth(0.25f, rootTable))
                 .expandY()
+                .fill()
                 .pad(16f)
 
         // Placeholder for play or options menu.
@@ -152,7 +159,13 @@ class MainMenuScreen @Inject constructor(
         val levelsButton = TextButton("Play", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    dynamicCell.setActor<Table>(levels)
+                    val actor = dynamicCell.actor
+
+                    if (actor != null && actor == levels) {
+                        dynamicCell.setActor<Table>(null)
+                    } else {
+                        dynamicCell.setActor<Table>(levels)
+                    }
                 }
             })
         }
@@ -161,7 +174,13 @@ class MainMenuScreen @Inject constructor(
         val optionsButton = TextButton("Options", skin).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    dynamicCell.setActor<Table>(options)
+                    val actor = dynamicCell.actor
+
+                    if (actor != null && actor == options) {
+                        dynamicCell.setActor<Table>(null)
+                    } else {
+                        dynamicCell.setActor<Table>(options)
+                    }
                 }
             })
         }
@@ -176,25 +195,27 @@ class MainMenuScreen @Inject constructor(
         }
 
         controls.add(menuLabel)
-                .prefHeight(percentHeight(25f)) // todo precentages wrong
+                .height(percentHeight(0.25f, controls))
                 .expand()
                 .padBottom(32f)
                 .row()
 
+        val buttonHeight = percentHeight(0.1f, controls)
+
         controls.add(levelsButton)
-                .prefHeight(BUTTON_HEIGHT)
+                .prefHeight(buttonHeight)
                 .fill()
                 .pad(BUTTON_PADDING)
                 .row()
 
         controls.add(optionsButton)
-                .prefHeight(BUTTON_HEIGHT)
+                .prefHeight(buttonHeight)
                 .fill()
                 .pad(BUTTON_PADDING)
                 .row()
 
         controls.add(exitButton)
-                .prefHeight(BUTTON_HEIGHT)
+                .prefHeight(buttonHeight)
                 .fill()
                 .pad(BUTTON_PADDING)
 
