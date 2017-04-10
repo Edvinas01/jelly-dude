@@ -19,14 +19,22 @@ import com.edd.jelly.core.resources.ResourceManager
 import com.google.inject.Inject
 
 class GameScreen @Inject constructor(
+        private val resourceManager: ResourceManager,
         private val messaging: Messaging,
-        resourceManager: ResourceManager,
         @GuiCamera
         camera: OrthographicCamera,
         batch: SpriteBatch
 ) : StagedScreen(camera, batch) {
 
-    private val menu = createMenuTable(resourceManager.skin)
+    private val skin = resourceManager.skin
+
+    // Pause window widgets.
+    private val pauseWindow = Window("Paused", skin, "jelly")
+    private val restartButton = TextButton("Restart", skin)
+    private val mainMenuButton = TextButton("Main menu", skin)
+    private val exitButton = TextButton("Exit game", skin)
+
+    private val menu = createMenuTable()
 
     init {
         stage.addListener(object : InputListener() {
@@ -58,21 +66,21 @@ class GameScreen @Inject constructor(
     /**
      * Create pause menu table.
      */
-    private fun createMenuTable(skin: Skin): Table {
+    private fun createMenuTable(): Table {
         val root = Table().apply {
             setFillParent(true)
         }
 
-        val menu = Window("Paused", skin, "jelly").apply {
+        pauseWindow.apply {
             isMovable = false
             isModal = false
         }
 
-        root.add(menu)
-                .width(percentWidth(0.20f, root))
+        root.add(pauseWindow)
+                .prefWidth(percentWidth(0.20f, root))
 
         // Button to restart the level.
-        val restartCell = menu.add(TextButton("Restart", skin).apply {
+        val restartCell = pauseWindow.add(restartButton.apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(RestartLevelEvent)
@@ -86,7 +94,7 @@ class GameScreen @Inject constructor(
                 .row()
 
         // Button to open main menu.
-        val menuCell = menu.add(TextButton("Main menu", skin).apply {
+        val menuCell = pauseWindow.add(mainMenuButton.apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
@@ -99,7 +107,7 @@ class GameScreen @Inject constructor(
                 .row()
 
         // Button to exit the game.
-        val exitCell = menu.add(TextButton("Exit game", skin).apply {
+        val exitCell = pauseWindow.add(exitButton.apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     Gdx.app.exit()
@@ -111,5 +119,12 @@ class GameScreen @Inject constructor(
                 .expand()
 
         return root
+    }
+
+    override fun updateLanguage() {
+        pauseWindow.titleLabel.setText(resourceManager.getMessage("pauseWindowTitle"))
+        restartButton.setText(resourceManager.getMessage("pauseRestartButton"))
+        mainMenuButton.setText(resourceManager.getMessage("pauseMenuButton"))
+        exitButton.setText(resourceManager.getMessage("pauseExitButton"))
     }
 }

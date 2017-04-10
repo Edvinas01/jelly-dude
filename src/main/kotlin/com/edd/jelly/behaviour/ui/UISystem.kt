@@ -3,8 +3,8 @@ package com.edd.jelly.behaviour.ui
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.InputMultiplexer
-import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.core.JellyGame
+import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
 import com.google.inject.Inject
@@ -37,7 +37,10 @@ class UISystem @Inject constructor(
             } else {
                 throw GameException("Screen must of type ${StagedScreen::class}")
             }
+
+            current.dispose()
         }
+        screen.updateLanguage()
 
         inputMultiplexer.addProcessor(0, screen.stage)
         game.screen = screen
@@ -47,6 +50,13 @@ class UISystem @Inject constructor(
      * Initialize UI listeners.
      */
     private fun initListeners() {
+        messaging.listen<ConfigChangedEvent> {
+            val screen = game.screen
+            if (screen != null && screen is StagedScreen) {
+                screen.updateLanguage()
+            }
+        }
+
         messaging.listen<LoadGameScreenEvent> {
             setRootScreen(injector.getInstance(GameScreen::class.java))
         }

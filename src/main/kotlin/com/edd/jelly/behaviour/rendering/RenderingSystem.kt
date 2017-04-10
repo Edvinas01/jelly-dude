@@ -51,6 +51,10 @@ class RenderingSystem @Inject constructor(
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
+        // Seems that scene2d messes things up and this fixes it.
+        // http://badlogicgames.com/forum/viewtopic.php?f=11&t=4672
+        spriteBatch.setColor(1f, 1f, 1f, 1f)
+
         renderBackground()
         renderEntities()
         renderPolygons()

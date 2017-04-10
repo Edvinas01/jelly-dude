@@ -28,4 +28,6 @@ abstract class StagedScreen constructor(
     override fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
     }
+
+    open fun updateLanguage() = Unit
 }
