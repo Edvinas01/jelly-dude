@@ -70,11 +70,7 @@ class LevelSystem @Inject constructor(
             add(map)
         })
 
-        map.spawn?.let {
-            with(it) {
-                messaging.send(LevelLoadedEvent(x.meters, y.meters))
-            }
-        }
+        messaging.send(LevelLoadedEvent(map))
     }
 
     /**

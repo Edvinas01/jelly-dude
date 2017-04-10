@@ -456,8 +456,10 @@ class PlayerSystem @Inject constructor(
         }
 
         // Listen for level loads.
-        messaging.listen<LevelLoadedEvent> { (x, y) ->
-            spawnPlayer(x, y)
+        messaging.listen<LevelLoadedEvent> { (map) ->
+            map.spawn?.let {
+                spawnPlayer(it.x, it.y)
+            }
         }
     }
 

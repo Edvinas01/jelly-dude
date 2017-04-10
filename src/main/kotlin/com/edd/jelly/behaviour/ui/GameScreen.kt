@@ -63,7 +63,7 @@ class GameScreen @Inject constructor(
             setFillParent(true)
         }
 
-        val menu = Window("Paused", skin).apply {
+        val menu = Window("Paused", skin, "jelly").apply {
             isMovable = false
             isModal = false
         }
@@ -76,6 +76,7 @@ class GameScreen @Inject constructor(
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(RestartLevelEvent)
+                    messaging.send(LoadGameScreenEvent)
                 }
             })
         })
@@ -89,7 +90,7 @@ class GameScreen @Inject constructor(
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
-                    messaging.send(LoadMainMenuEvent)
+                    messaging.send(LoadMainMenuScreenEvent)
                 }
             })
         })

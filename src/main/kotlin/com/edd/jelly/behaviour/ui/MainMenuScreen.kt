@@ -52,7 +52,7 @@ class MainMenuScreen @Inject constructor(
      * Create options controls.
      */
     private fun options(skin: Skin): Table {
-        return Window("Options", skin).apply {
+        return Window("Options", skin, "jelly").apply {
             isMovable = false
             isModal = false
         }
@@ -62,7 +62,7 @@ class MainMenuScreen @Inject constructor(
      * Create level selection controls.
      */
     private fun levels(skin: Skin, textureAtlas: TextureAtlas): Table {
-        val levels = Window("Levels", skin).apply {
+        val levels = Window("Levels", skin, "jelly").apply {
             isMovable = false
             isModal = false
         }
@@ -96,6 +96,7 @@ class MainMenuScreen @Inject constructor(
                 addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         messaging.send(LoadNewLevelEvent(meta.name))
+                        messaging.send(LoadGameScreenEvent)
                     }
                 })
             })
@@ -144,7 +145,7 @@ class MainMenuScreen @Inject constructor(
             top().left().setFillParent(true)
         }
 
-        val controls = Window("Menu", skin).apply {
+        val controls = Window("Menu", skin, "jelly").apply {
             isMovable = false
             isModal = false
         }

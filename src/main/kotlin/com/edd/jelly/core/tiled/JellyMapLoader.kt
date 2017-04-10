@@ -2,6 +2,8 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -38,12 +40,12 @@ class JellyMapLoader @Inject constructor(
     }
 
     private companion object {
-        val LEVEL_DIRECTORY = "levels/"
-        val LEVEL_FILE_TYPE = "tmx"
+        const val LEVEL_DIRECTORY = "levels/"
+        const val LEVEL_FILE_TYPE = "tmx"
 
-        val BACKGROUND_TEXTURE = "background_texture"
-        val ENTITY_LAYER = "entities"
-        val SPAWN_NAME = "start"
+        const val BACKGROUND_TEXTURE = "background_texture"
+        const val ENTITY_LAYER = "entities"
+        const val SPAWN_NAME = "start"
     }
 
     /**
@@ -118,8 +120,22 @@ class JellyMapLoader @Inject constructor(
                 map.properties.get(BACKGROUND_TEXTURE)?.let {
                     resourceManager.getTexture(it as String)
                 },
-                getSpawn(entities)
+                getSpawn(entities),
+                getFocusPoints(entities)
         )
+    }
+
+    /**
+     * Get focus points of the map (aka points of interest).
+     */
+    private fun getFocusPoints(entities: MapLayer): List<Vector2> {
+        return entities.objects.filter {
+            it.getBoolean("focusPoint") && it is EllipseMapObject
+        }.map {
+            with((it as EllipseMapObject).ellipse) {
+                Vector2(x.meters, y.meters)
+            }
+        }
     }
 
     /**
@@ -130,7 +146,7 @@ class JellyMapLoader @Inject constructor(
             it is EllipseMapObject && SPAWN_NAME == it.name
         }?.let {
             val ellipse = (it as EllipseMapObject).ellipse
-            Vector2(ellipse.x, ellipse.y)
+            Vector2(ellipse.x.meters, ellipse.y.meters)
         }
     }
 
@@ -167,6 +183,15 @@ class JellyMapLoader @Inject constructor(
      * Get boolean value from map layer properties.
      */
     private fun <T : MapLayer> T.getBoolean(name: String, default: Boolean = false): Boolean {
+        return this.properties.get(name)?.let {
+            it is Boolean && it
+        } ?: default
+    }
+
+    /**
+     * Get boolean value from map object properties.
+     */
+    private fun <T : MapObject> T.getBoolean(name: String, default: Boolean = false): Boolean {
         return this.properties.get(name)?.let {
             it is Boolean && it
         } ?: default

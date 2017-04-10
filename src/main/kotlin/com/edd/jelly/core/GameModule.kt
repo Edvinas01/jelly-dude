@@ -35,6 +35,7 @@ import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
+import java.util.*
 import javax.script.ScriptEngineManager
 
 class GameModule(private val game: JellyGame) : Module {
@@ -168,6 +169,9 @@ class GameModule(private val game: JellyGame) : Module {
 
     @Provides @Singleton
     fun assetManager() = AssetManager()
+
+    @Provides @Singleton
+    fun random() = Random(System.nanoTime())
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

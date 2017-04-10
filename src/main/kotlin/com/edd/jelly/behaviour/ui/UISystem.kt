@@ -47,11 +47,11 @@ class UISystem @Inject constructor(
      * Initialize UI listeners.
      */
     private fun initListeners() {
-        messaging.listen<LevelLoadedEvent> {
+        messaging.listen<LoadGameScreenEvent> {
             setRootScreen(injector.getInstance(GameScreen::class.java))
         }
 
-        messaging.listen<LoadMainMenuEvent> {
+        messaging.listen<LoadMainMenuScreenEvent> {
             setRootScreen(injector.getInstance(MainMenuScreen::class.java))
         }
     }
