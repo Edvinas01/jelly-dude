@@ -2,23 +2,37 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.core.InternalMapLoader
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.core.resources.ResourceManager
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.stream.Collectors
 
 @Singleton
 class JellyMapLoader @Inject constructor(
         private val resourceManager: ResourceManager,
+
+        @InternalMapLoader
+        private val internalTmxMapLoader: TmxMapLoader,
         private val tmxMapLoader: TmxMapLoader,
         private val camera: OrthographicCamera
 ) {
+
+    val metadata = loadMeta()
 
     private enum class LayerType {
         PARALLAX,
@@ -26,19 +40,19 @@ class JellyMapLoader @Inject constructor(
     }
 
     private companion object {
-        val LEVEL_DIRECTORY = "levels"
-        val LEVEL_FILE_TYPE = "tmx"
+        const val LEVEL_DIRECTORY = "levels/"
+        const val LEVEL_FILE_TYPE = "tmx"
 
-        val BACKGROUND_TEXTURE = "background_texture"
-        val ENTITY_LAYER = "entities"
-        val SPAWN_NAME = "start"
+        const val BACKGROUND_TEXTURE = "background_texture"
+        const val ENTITY_LAYER = "entities"
+        const val SPAWN_NAME = "start"
     }
 
     /**
      * Load jelly map by name.
      */
-    fun loadMap(name: String): JellyMap {
-        val map = getTiledMap(name)
+    fun loadMap(name: String, internal: Boolean = false): JellyMap {
+        val map = getTiledMap(name, internal)
 
         // Required main layer.
         val entities: MapLayer = map.layers[ENTITY_LAYER]
@@ -99,33 +113,52 @@ class JellyMapLoader @Inject constructor(
             }
         }
         return JellyMap(
+                name,
                 map,
                 backgroundLayers,
                 foregroundLayers,
                 map.properties.get(BACKGROUND_TEXTURE)?.let {
                     resourceManager.getTexture(it as String)
                 },
-                getSpawn(entities)
+                getSpawn(entities),
+                getFocusPoints(entities)
         )
+    }
+
+    /**
+     * Get focus points of the map (aka points of interest).
+     */
+    private fun getFocusPoints(entities: MapLayer): List<Vector2> {
+        return entities.objects.filter {
+            it.getBoolean("focusPoint") && it is EllipseMapObject
+        }.map {
+            with((it as EllipseMapObject).ellipse) {
+                Vector2(x.meters, y.meters)
+            }
+        }
     }
 
     /**
      * Get spawn point from entities layer.
      */
-    private fun getSpawn(entities: MapLayer): Vector2 {
+    private fun getSpawn(entities: MapLayer): Vector2? {
         return entities.objects.find {
             it is EllipseMapObject && SPAWN_NAME == it.name
         }?.let {
             val ellipse = (it as EllipseMapObject).ellipse
-            Vector2(ellipse.x, ellipse.y)
-        } ?: throw GameException("$SPAWN_NAME circle object must exist somewhere in the map")
+            Vector2(ellipse.x.meters, ellipse.y.meters)
+        }
     }
 
     /**
      * Get tiled map by name.
      */
-    private fun getTiledMap(name: String): TiledMap {
-        return tmxMapLoader.load("$LEVEL_DIRECTORY/$name/$name.$LEVEL_FILE_TYPE")
+    private fun getTiledMap(name: String, internal: Boolean): TiledMap {
+        val actualName = "$LEVEL_DIRECTORY$name/$name.$LEVEL_FILE_TYPE"
+        if (internal) {
+            return internalTmxMapLoader.load(actualName)
+        }
+        return tmxMapLoader.load("${Configurations.ASSETS_FOLDER}$actualName")
     }
 
     /**
@@ -142,7 +175,7 @@ class JellyMapLoader @Inject constructor(
      */
     private fun <T : MapLayer> T.getFloat(name: String, default: Float = 0f): Float {
         return this.properties.get(name)?.let {
-            if (it is Float) it else default
+            it as? Float ?: default
         } ?: default
     }
 
@@ -153,5 +186,29 @@ class JellyMapLoader @Inject constructor(
         return this.properties.get(name)?.let {
             it is Boolean && it
         } ?: default
+    }
+
+    /**
+     * Get boolean value from map object properties.
+     */
+    private fun <T : MapObject> T.getBoolean(name: String, default: Boolean = false): Boolean {
+        return this.properties.get(name)?.let {
+            it is Boolean && it
+        } ?: default
+    }
+
+    /**
+     * Load all level metadata (files are loaded NOT from classpath).
+     */
+    private fun loadMeta(): List<JellyMapMetadata> {
+        return Files
+                .walk(Paths.get("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY"))
+                .skip(1)
+                .map(Path::toFile)
+                .filter(File::isDirectory)
+                .map {
+                    JellyMapMetadata(it.name)
+                }
+                .collect(Collectors.toList())
     }
 }

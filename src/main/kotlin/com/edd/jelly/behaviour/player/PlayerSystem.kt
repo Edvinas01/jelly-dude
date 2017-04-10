@@ -2,18 +2,15 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.*
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.level.LevelLoadedEvent
+import com.edd.jelly.behaviour.pause.PausingSystem
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
-import com.edd.jelly.core.events.Listener
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.pixels
@@ -35,17 +32,11 @@ class PlayerSystem @Inject constructor(
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
-        private val camera: OrthographicCamera,
         private val world: World,
         scriptManager: ScriptManager
-) : EntitySystem() {
+) : EntitySystem(), PausingSystem {
 
     companion object {
-
-        /**
-         * Speed of the camera which follows the player.
-         */
-        val CAMERA_SPEED = 2f
 
         // Player body constants.
         val PLAYER_TEXTURE_NAME = "slime"
@@ -88,9 +79,12 @@ class PlayerSystem @Inject constructor(
     }
 
     private val movementHook = scriptManager.hook(MovementFunction::class.java)
+    private val playerInputs = PlayerInputAdapter(messaging)
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+
+        inputMultiplexer.addProcessor(playerInputs)
 
         // Initialize player event listeners.
         initListeners()
@@ -109,7 +103,6 @@ class PlayerSystem @Inject constructor(
             processHealth(player, entity)
             processStickiness(player)
             processDeflation(player, deltaTime)
-            processCamera(entity.transform, deltaTime)
         }
     }
 
@@ -264,18 +257,6 @@ class PlayerSystem @Inject constructor(
     }
 
     /**
-     * Process camera movements for the player.
-     */
-    private fun processCamera(transform: Transform, deltaTime: Float) {
-        camera.position.lerp(Vector3(
-                transform.position.x,
-                transform.position.y,
-                0f
-        ), deltaTime * CAMERA_SPEED)
-        camera.update()
-    }
-
-    /**
      * Create polygon region from provided transform position, size and body vertices.
      */
     private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
@@ -379,7 +360,7 @@ class PlayerSystem @Inject constructor(
         }
 
         engine.addEntity(entity)
-        inputMultiplexer.forPlayer(entity)
+        playerInputs.player = entity
         return entity
     }
 
@@ -400,8 +381,8 @@ class PlayerSystem @Inject constructor(
             for (body in joint.bodies) {
                 world.destroyBody(body)
             }
-            inputMultiplexer.removeForPlayer()
 
+            playerInputs.player = null
             return this
         }
     }
@@ -475,8 +456,10 @@ class PlayerSystem @Inject constructor(
         }
 
         // Listen for level loads.
-        messaging.listen<LevelLoadedEvent> { (x, y) ->
-            spawnPlayer(x, y)
+        messaging.listen<LevelLoadedEvent> { (map) ->
+            map.spawn?.let {
+                spawnPlayer(it.x, it.y)
+            }
         }
     }
 
@@ -501,16 +484,7 @@ class PlayerSystem @Inject constructor(
         return null
     }
 
-    private fun InputMultiplexer.removeForPlayer() {
-        processors.filter {
-            it is PlayerInputAdapter
-        }.forEach {
-            removeProcessor(it)
-        }
-    }
-
-    private fun InputMultiplexer.forPlayer(player: Entity) {
-        removeForPlayer()
-        addProcessor(PlayerInputAdapter(messaging, player))
+    override fun paused(pause: Boolean) {
+        playerInputs.disabled = pause
     }
 }

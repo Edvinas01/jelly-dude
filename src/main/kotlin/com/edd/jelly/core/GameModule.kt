@@ -4,13 +4,17 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.EarClippingTriangulator
+import com.edd.jelly.behaviour.camera.CameraPositionSystem
 import com.edd.jelly.behaviour.level.LevelSystem
+import com.edd.jelly.behaviour.pause.PauseSystem
 import com.edd.jelly.behaviour.physics.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
@@ -18,30 +22,23 @@ import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
+import com.edd.jelly.behaviour.ui.UISystem
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.core.tiled.JellyMapRenderer
-import com.edd.jelly.debug.DebugSystem
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
-import com.google.inject.Binder
-import com.google.inject.Module
-import com.google.inject.Provides
-import com.google.inject.Singleton
-import com.google.inject.name.Named
+import com.google.inject.*
 import jdk.nashorn.api.scripting.NashornScriptEngine
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
 import org.jbox2d.particle.ParticleSystem
+import java.util.*
 import javax.script.ScriptEngineManager
 
-class GameModule(private val game: Game) : Module {
-
-    companion object {
-        const val UI_CAMERA = "uiCamera"
-    }
+class GameModule(private val game: JellyGame) : Module {
 
     override fun configure(binder: Binder) {
         binder.requireExactBindingAnnotations()
@@ -57,6 +54,7 @@ class GameModule(private val game: Game) : Module {
     @Provides @Singleton
     fun systems(): Systems {
         return Systems(listOf(
+                PauseSystem::class.java,
                 LevelSystem::class.java,
 
                 // Physics simulation.
@@ -74,12 +72,18 @@ class GameModule(private val game: Game) : Module {
                 PlayerSystem::class.java,
                 PlayerSynchronizationSystem::class.java,
 
+                // Camera.
+                CameraPositionSystem::class.java,
+
                 // Rendering.
                 RenderingSystem::class.java,
                 PhysicsDebugSystem::class.java,
-                DebugSystem::class.java
+                UISystem::class.java
         ))
     }
+
+    @Provides @Singleton
+    fun game() = game
 
     @Provides @Singleton
     fun earClippingTriangulator(): EarClippingTriangulator {
@@ -127,14 +131,9 @@ class GameModule(private val game: Game) : Module {
         }
     }
 
-    @Provides @Singleton @Named(UI_CAMERA)
-    fun uiCamera(): OrthographicCamera {
-        val width = Gdx.graphics.width.toFloat()
-        val height = Gdx.graphics.height.toFloat()
-
-        return OrthographicCamera(width, height).apply {
-            setToOrtho(false, width, height)
-        }
+    @Provides @Singleton @GuiCamera
+    fun uiCamera() = OrthographicCamera().apply {
+        setToOrtho(false)
     }
 
     @Provides @Singleton
@@ -145,7 +144,10 @@ class GameModule(private val game: Game) : Module {
             MessagingContactListener(messaging)
 
     @Provides @Singleton
-    fun tmxMapLoader() = TmxMapLoader()
+    fun tmxMapLoader() = TmxMapLoader(InternalFileHandleResolver())
+
+    @Provides @Singleton @InternalMapLoader
+    fun internalTmxMapLoader() = TmxMapLoader()
 
     @Provides @Singleton
     fun layeredTiledMapRenderer(camera: OrthographicCamera, batch: SpriteBatch) =
@@ -164,6 +166,18 @@ class GameModule(private val game: Game) : Module {
             }
         }
     }
+
+    @Provides @Singleton
+    fun assetManager() = AssetManager()
+
+    @Provides @Singleton
+    fun random() = Random(System.nanoTime())
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)
+
+@BindingAnnotation
+annotation class GuiCamera
+
+@BindingAnnotation
+annotation class InternalMapLoader

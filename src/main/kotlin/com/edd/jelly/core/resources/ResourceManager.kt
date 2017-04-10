@@ -2,10 +2,9 @@ package com.edd.jelly.core.resources
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.google.inject.Inject
 import com.google.inject.Singleton
 
@@ -18,15 +17,11 @@ class ResourceManager @Inject constructor() {
 
         private val ATLAS_FILE_TYPE = "atlas"
         private val MAIN_ATLAS_NAME = "main"
-
-        private val FONT_DIRECTORY = "fonts"
-        private val FONT_SIZE = 16
-        private val MAIN_FONT_NAME = "kong_text"
     }
 
     private val textures = mutableMapOf<String, Texture>()
     private val atlases = mutableMapOf<String, TextureAtlas>()
-    private val fonts = mutableMapOf<String, BitmapFont>()
+    val skin: Skin
 
     /**
      * Main texture atlas.
@@ -35,6 +30,7 @@ class ResourceManager @Inject constructor() {
 
     init {
         mainAtlas = getAtlas(MAIN_ATLAS_NAME)
+        skin = Skin(Gdx.files.internal("ui/uiskin.json"))
     }
 
     /**
@@ -53,30 +49,6 @@ class ResourceManager @Inject constructor() {
             }
             TextureAtlas("$TEXTURE_DIRECTORY/$fullPath")
         })
-    }
-
-    /**
-     * Get main game font.
-     *
-     * @return font.
-     */
-    fun getFont(): BitmapFont {
-        return getFont(MAIN_FONT_NAME)
-    }
-
-    /**
-     * Get font by name.
-     *
-     * @param name font name.
-     * @return font.
-     */
-    fun getFont(name: String): BitmapFont {
-        // todo load by name
-
-        val gen = FreeTypeFontGenerator(Gdx.files.internal("$FONT_DIRECTORY/$name.ttf"))
-        val param = FreeTypeFontGenerator.FreeTypeFontParameter()
-        param.size = 16
-        return gen.generateFont(param)
     }
 
     /**

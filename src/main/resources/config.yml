@@ -2,7 +2,7 @@
 game:
 
   # Enable all script functions.
-  scripting: true
+  scripting: false
 
   # Enable debug mode.
   debug: true

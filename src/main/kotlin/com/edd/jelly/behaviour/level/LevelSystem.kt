@@ -4,32 +4,45 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
-import com.badlogic.gdx.Input
-import com.badlogic.gdx.InputAdapter
-import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.ashley.utils.ImmutableArray
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
+import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.EntityListenerAdapter
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
 class LevelSystem @Inject constructor(
-        private val inputMultiplexer: InputMultiplexer,
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
         private val world: World
 ) : EntitySystem() {
+
+    private lateinit var maps: ImmutableArray<Entity>
 
     companion object {
         val COLLISION_LAYER = "collision"
     }
 
     override fun addedToEngine(engine: Engine) {
+        maps = engine.getEntitiesFor(Family.all(JellyMap::class.java).get())
+
         initListeners()
-        messaging.send(LoadNewLevelEvent("test"))
+    }
+
+    /**
+     * Get currently running map info.
+     */
+    private fun getCurrentMap(): JellyMap {
+        if (maps.size() > 1) {
+            throw GameException("Only one map must be loaded")
+        }
+        return maps.first()?.let {
+            JellyMap.mapper[it]
+        } ?: throw GameException("Map must be loaded")
     }
 
     /**
@@ -42,8 +55,10 @@ class LevelSystem @Inject constructor(
     /**
      * Load level by name.
      */
-    private fun loadLevel(name: String) {
-        val map = jellyMapLoader.loadMap(name)
+    private fun loadLevel(name: String,
+                          internal: Boolean = false) {
+
+        val map = jellyMapLoader.loadMap(name, internal)
         MapBodyBuilder
                 .usingWorld(world)
                 .tiledMapLayer(map.tiledMap, COLLISION_LAYER)
@@ -55,39 +70,32 @@ class LevelSystem @Inject constructor(
             add(map)
         })
 
-        with(map.spawn) {
-            messaging.send(LevelLoadedEvent(x.meters, y.meters))
-        }
+        messaging.send(LevelLoadedEvent(map))
     }
 
     /**
      * Initialize listeners for this system.
      */
     private fun initListeners() {
+
+        // Listen for new level load requests.
         messaging.listen<LoadNewLevelEvent> {
             unloadLevel()
-            loadLevel(it.levelName)
+            loadLevel(it.name, it.internal)
+        }
+
+        // Listen for level restarts.
+        messaging.listen<RestartLevelEvent> {
+            val name = getCurrentMap().name
+
+            unloadLevel()
+            loadLevel(name)
         }
 
         // Listen for level removals.
         engine.addEntityListener(Family.all(JellyMap::class.java).get(), object : EntityListenerAdapter() {
             override fun entityRemoved(entity: Entity) {
                 JellyMap.mapper[entity].tiledMap.dispose()
-            }
-        })
-
-        // TODO only for testing.
-        inputMultiplexer.addProcessor(object : InputAdapter() {
-            override fun keyUp(keycode: Int): Boolean {
-                if (Input.Keys.NUMPAD_1 == keycode) {
-                    messaging.send(LoadNewLevelEvent("test"))
-                    return true
-                }
-                if (Input.Keys.NUMPAD_2 == keycode) {
-                    messaging.send(LoadNewLevelEvent("test2"))
-                    return true
-                }
-                return false
             }
         })
     }

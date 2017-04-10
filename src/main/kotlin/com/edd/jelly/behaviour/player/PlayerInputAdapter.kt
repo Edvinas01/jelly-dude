@@ -6,11 +6,17 @@ import com.badlogic.gdx.InputAdapter
 import com.edd.jelly.core.events.Messaging
 
 class PlayerInputAdapter(
-        val messaging: Messaging,
-        val player: Entity
+        val messaging: Messaging
 ) : InputAdapter() {
 
+    var disabled = true
+    var player: Entity? = null
+
     override fun keyDown(keycode: Int): Boolean {
+        if (disabled || player == null) {
+            return false
+        }
+
         with(Player.mapper[player]) {
             when (keycode) {
                 Keys.W -> movingUp = true
@@ -27,7 +33,7 @@ class PlayerInputAdapter(
 
                     // Send input events that fire off immediately.
                     messaging.send(PlayerInputEvent(
-                            player,
+                            player!!,
                             Keys.R == keycode
                     ))
                 }
@@ -40,6 +46,10 @@ class PlayerInputAdapter(
     }
 
     override fun keyUp(keycode: Int): Boolean {
+        if (disabled || player == null) {
+            return false
+        }
+
         with(Player.mapper[player]) {
             when (keycode) {
                 Keys.W -> movingUp = false
