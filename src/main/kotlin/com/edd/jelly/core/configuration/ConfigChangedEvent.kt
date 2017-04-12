@@ -2,4 +2,4 @@ package com.edd.jelly.core.configuration
 
 import com.edd.jelly.core.events.Event
 
-class ConfigChangedEvent(val config: Config) : Event
+data class ConfigChangedEvent(val config: Config) : Event

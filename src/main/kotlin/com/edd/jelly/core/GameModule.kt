@@ -172,6 +172,9 @@ class GameModule(private val game: JellyGame) : Module {
 
     @Provides @Singleton
     fun random() = Random(System.nanoTime())
+
+    @Provides @Singleton
+    fun objectMapper() = game.configurations.mapper
 }
 
 data class Systems(val systems: List<Class<out EntitySystem>>)

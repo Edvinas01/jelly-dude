@@ -8,7 +8,8 @@ data class Config(
     /**
      * General game configuration settings.
      */
-    data class Game(val scripting: Boolean,
+    data class Game(var language: String,
+                    val scripting: Boolean,
                     val debug: Boolean,
                     val gravity: Float,
                     val particleRadius: Float)
@@ -21,6 +22,6 @@ data class Config(
         /**
          * Screen configuration.
          */
-        data class Screen(val fullscreen: Boolean, val width: Int, val height: Int)
+        data class Screen(var fullscreen: Boolean, val width: Int, val height: Int)
     }
 }

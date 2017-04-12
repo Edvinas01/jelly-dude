@@ -1,0 +1,41 @@
+english:
+  name: English
+  messages:
+    gameTitle: Jelly Dude
+
+    menuWindowTitle: Menu
+    menuPlayButton: Play
+    menuOptionsButton: Options
+
+    levelsWindowTitle: Levels
+
+    optionsWindowTitle: Options
+    optionsLanguageLabel: Language
+    optionsFullscreenLabel: Fullscreen
+    saveButton: Save
+
+    pauseWindowTitle: Paused
+    pauseRestartButton: Restart
+    pauseMenuButton: Main menu
+    exitButton: Exit
+
+lithuanian:
+  name: Lietuvių
+  messages:
+    gameTitle: Želinis Vyrukas
+
+    menuWindowTitle: Meniu
+    menuPlayButton: Žaisti
+    menuOptionsButton: Nustatymai
+
+    levelsWindowTitle: Lygiai
+
+    optionsWindowTitle: Nustatymai
+    optionsLanguageLabel: Kalba
+    optionsFullscreenLabel: Per visą ekraną
+    saveButton: Išsaugoti
+
+    pauseWindowTitle: Pauzė
+    pauseRestartButton: Iš naujo
+    pauseMenuButton: Pagrindinis meniu
+    exitButton: Išeiti

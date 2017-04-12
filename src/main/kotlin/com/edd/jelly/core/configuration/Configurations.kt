@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import org.apache.commons.io.IOUtils
 import java.io.File
 
 class Configurations {
@@ -24,7 +23,7 @@ class Configurations {
     }
 
     // Configurations have to be loaded before Guice, so can't use DI here.
-    private val mapper = ObjectMapper(YAMLFactory()).apply {
+    val mapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(KotlinModule())
 
         enable(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES)
@@ -33,10 +32,6 @@ class Configurations {
 
     private var messaging: Messaging? = null
     val config: Config = load()
-
-    init {
-        create()
-    }
 
     /**
      * Setup configuration settings for the game.
@@ -51,16 +46,6 @@ class Configurations {
     fun save() {
         save(config)
         messaging?.send(ConfigChangedEvent(config))
-    }
-
-    /**
-     * Create default config file which is visible to end-users if it doesn't exist.
-     */
-    private fun create() {
-        val (file, created) = getConfigFile()
-        if (created) {
-            file.writeBytes(IOUtils.toByteArray(ClassLoader.getSystemResourceAsStream(CONFIG_FILE)))
-        }
     }
 
     /**

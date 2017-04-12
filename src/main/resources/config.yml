@@ -1,5 +1,6 @@
 # General game settings.
 game:
+  language: english
 
   # Enable all script functions.
   scripting: false
