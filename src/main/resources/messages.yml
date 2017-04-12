@@ -6,17 +6,18 @@ english:
     menuWindowTitle: Menu
     menuPlayButton: Play
     menuOptionsButton: Options
-    menuExitButton: Exit
 
     levelsWindowTitle: Levels
 
     optionsWindowTitle: Options
     optionsLanguageLabel: Language
+    optionsFullscreenLabel: Fullscreen
+    saveButton: Save
 
     pauseWindowTitle: Paused
     pauseRestartButton: Restart
     pauseMenuButton: Main menu
-    pauseExitButton: Exit
+    exitButton: Exit
 
 lithuanian:
   name: Lietuvių
@@ -26,14 +27,15 @@ lithuanian:
     menuWindowTitle: Meniu
     menuPlayButton: Žaisti
     menuOptionsButton: Nustatymai
-    menuExitButton: Išeiti
 
     levelsWindowTitle: Lygiai
 
     optionsWindowTitle: Nustatymai
     optionsLanguageLabel: Kalba
+    optionsFullscreenLabel: Per visą ekraną
+    saveButton: Išsaugoti
 
     pauseWindowTitle: Pauzė
-    pauseRestartButton: Per naujo
+    pauseRestartButton: Iš naujo
     pauseMenuButton: Pagrindinis meniu
-    pauseExitButton: Išeiti
+    exitButton: Išeiti

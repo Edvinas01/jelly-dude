@@ -5,12 +5,16 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.edd.jelly.behaviour.level.LoadNewLevelEvent
+import com.edd.jelly.core.configuration.ConfigurationChangeEventListener
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.configuration.Configurations.Companion.MENU_LEVEL_NAME
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.util.meters
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.google.inject.Key
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.apache.logging.log4j.LogManager
 import kotlin.system.measureTimeMillis
@@ -47,6 +51,8 @@ class JellyGame(val configurations: Configurations) : Game() {
         injector.getInstance(FileAlterationMonitor::class.java)
                 .start()
 
+        messaging.listen(injector.getInstance(ConfigurationChangeEventListener::class.java))
+
         Gdx.input.inputProcessor = injector.getInstance(InputMultiplexer::class.java)
 
         messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
@@ -65,6 +71,18 @@ class JellyGame(val configurations: Configurations) : Game() {
 
     override fun dispose() {
         super.dispose()
+    }
+
+    override fun resize(width: Int, height: Int) {
+        super.resize(width, height)
+
+        injector.getInstance(OrthographicCamera::class.java).apply {
+            setToOrtho(false, width.meters, height.meters)
+        }
+
+        injector.getInstance(Key.get(OrthographicCamera::class.java, GuiCamera::class.java)).apply {
+            setToOrtho(false, width.toFloat(), height.toFloat())
+        }
     }
 
     /**

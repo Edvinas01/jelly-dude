@@ -22,6 +22,6 @@ data class Config(
         /**
          * Screen configuration.
          */
-        data class Screen(val fullscreen: Boolean, val width: Int, val height: Int)
+        data class Screen(var fullscreen: Boolean, val width: Int, val height: Int)
     }
 }

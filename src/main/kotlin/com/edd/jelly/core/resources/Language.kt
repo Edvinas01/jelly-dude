@@ -1,7 +1,9 @@
 package com.edd.jelly.core.resources
 
-class Language(val internalName: String, val name: String) {
-    override fun toString(): String {
-        return name
-    }
+class Language(
+        private val messages: Map<String, String>,
+        val handle: LanguageHandle
+) {
+
+    operator fun get(key: String) = messages[key] ?: "{$key}"
 }

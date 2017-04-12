@@ -29,12 +29,12 @@ class ResourceManager @Inject constructor(
         const private val MAIN_ATLAS_NAME = "main"
     }
 
-    private val bundles: Map<String, MessageBundle> = objectMapper.readValue(
-            ClassLoader.getSystemResourceAsStream(MESSAGES_FILE),
-            object : TypeReference<Map<String, MessageBundle>>() {}
-    )
+    private val languageMap = loadLanguages(objectMapper)
+    var language = languageMap[configurations.config.game.language]!!
+        private set
 
-    private var bundle = bundles[configurations.config.game.language]!!
+    val languages: Collection<Language>
+        get() = languageMap.values
 
     private val textures = mutableMapOf<String, Texture>()
     private val atlases = mutableMapOf<String, TextureAtlas>()
@@ -89,28 +89,28 @@ class ResourceManager @Inject constructor(
     }
 
     /**
-     * Get messages based of language.
-     */
-    fun getMessage(key: String): String {
-        return bundle.messages.getOrDefault(key, "Missing: $key")
-    }
-
-    /**
-     * Get a list of available language names.
-     */
-    fun getLanguages(): List<Language> {
-        return bundles.map {
-            Language(it.key, it.value.name)
-        }
-    }
-
-    /**
      * Initialize listeners for resource manager.
      */
     private fun initListeners() {
         messaging.listen<ConfigChangedEvent> { (config) ->
-            bundle = bundles[config.game.language]!!
+            language = languageMap[config.game.language]!!
         }
+    }
+
+    /**
+     * Load all internal languages and convert them to a map where key is the language internal name.
+     */
+    private fun loadLanguages(mapper: ObjectMapper): Map<String, Language> {
+        val bundles: Map<String, MessageBundle> = mapper.readValue(
+                ClassLoader.getSystemResourceAsStream(MESSAGES_FILE),
+                object : TypeReference<Map<String, MessageBundle>>() {}
+        )
+
+        return bundles.map {
+            it.key to with(it.value) {
+                Language(messages, LanguageHandle(it.key, name))
+            }
+        }.toMap()
     }
 
     private data class MessageBundle(val name: String, val messages: Map<String, String>)
