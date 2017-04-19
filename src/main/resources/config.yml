@@ -5,6 +5,9 @@ game:
   # Enable all script functions.
   scripting: false
 
+  # If specified, this level will be loaded instead of normal game.
+  debugLevel:
+
   # Enable debug mode.
   debug: true
 

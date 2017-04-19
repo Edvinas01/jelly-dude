@@ -3,7 +3,6 @@ package com.edd.jelly.core.tiled
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -121,7 +120,8 @@ class JellyMapLoader @Inject constructor(
                     resourceManager.getTexture(it as String)
                 },
                 getSpawn(entities),
-                getFocusPoints(entities)
+                getFocusPoints(entities),
+                entities
         )
     }
 

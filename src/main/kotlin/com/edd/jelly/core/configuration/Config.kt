@@ -10,6 +10,7 @@ data class Config(
      */
     data class Game(var language: String,
                     val scripting: Boolean,
+                    val debugLevel: String?,
                     val debug: Boolean,
                     val gravity: Float,
                     val particleRadius: Float)
