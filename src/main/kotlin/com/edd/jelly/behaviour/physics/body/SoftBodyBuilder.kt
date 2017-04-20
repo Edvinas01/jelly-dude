@@ -4,26 +4,35 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.edd.jelly.util.meters
-import com.google.inject.Inject
-import com.google.inject.Singleton
-import org.jbox2d.collision.shapes.CircleShape
-import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.*
+import com.badlogic.gdx.math.DelaunayTriangulator
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.rendering.SoftRegion
+import com.edd.jelly.behaviour.rendering.SoftRenderable
+import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.tiled.boolean
 import com.edd.jelly.core.tiled.float
 import com.edd.jelly.core.tiled.int
 import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.meters
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.jbox2d.callbacks.QueryCallback
 import org.jbox2d.collision.AABB
+import org.jbox2d.collision.shapes.CircleShape
+import org.jbox2d.common.Vec2
+import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.joints.DistanceJointDef
 import org.jbox2d.dynamics.joints.RevoluteJointDef
 
 @Singleton
-class SoftBodyBuilder @Inject constructor(val world: World) {
+class SoftBodyBuilder @Inject constructor(
+        private val delaunayTriangulator: DelaunayTriangulator,
+        private val resources: ResourceManager,
+        private val world: World
+) {
 
     private companion object {
         const val RADIUS = 0.1f
@@ -241,9 +250,40 @@ class SoftBodyBuilder @Inject constructor(val world: World) {
             }
         }
 
+        // Create mesh.
+        val transform = Transform(
+                position = Vector2(x + width / 2, y + height / 2),
+                size = Vector2(width, height)
+        )
+        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+
+        val textureCoords = FloatArray(bodies.size * 2)
+        val vertices = textureCoords.copyOf()
+
+        val center = Vec2(transform.x, transform.y)
+        bodies.forEachIndexed { i, b ->
+            // @formatter:off
+            textureCoords[i * 2]     = (i % cols).toFloat() / (cols - 1) // u
+            textureCoords[i * 2 + 1] = (i / cols).toFloat() / (rows - 1) // v
+            // @formatter:on
+
+            val pos = b.getLocalPoint(center)
+            vertices[i * 2] = -pos.x
+            vertices[i * 2 + 1] = -pos.y
+        }
+
         return Entity().apply {
+            add(SoftRenderable(
+                    SoftRegion(
+                            textureCoords,
+                            texture,
+                            vertices,
+                            delaunayTriangulator.computeTriangles(vertices, false).toArray()
+                    ),
+                    RADIUS
+            ))
             add(SoftBody(bodies.toList()))
-            add(Transform())
+            add(transform)
         }
     }
 

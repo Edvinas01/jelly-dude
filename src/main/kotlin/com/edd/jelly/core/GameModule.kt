@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.math.DelaunayTriangulator
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.edd.jelly.behaviour.camera.CameraPositionSystem
 import com.edd.jelly.behaviour.level.LevelSystem
@@ -91,6 +92,9 @@ class GameModule(private val game: JellyGame) : Module {
         // This object keeps a state, not sure if it can be a singleton.
         return EarClippingTriangulator()
     }
+
+    @Provides @Singleton
+    fun delaunayTriangulator() = DelaunayTriangulator()
 
     @Provides @Singleton
     fun inputRegistrar(): InputMultiplexer {

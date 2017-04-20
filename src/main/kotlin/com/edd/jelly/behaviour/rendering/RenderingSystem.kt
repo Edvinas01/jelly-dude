@@ -16,6 +16,7 @@ import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.util.meters
+import com.edd.jelly.util.pixels
 import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
@@ -28,9 +29,14 @@ class RenderingSystem @Inject constructor(
     private lateinit var levels: ImmutableArray<Entity>
     private lateinit var simpleRenderableEntities: ImmutableArray<Entity>
     private lateinit var polygonRenderableEntities: ImmutableArray<Entity>
+    private lateinit var softRenderableEntities: ImmutableArray<Entity>
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+
+        levels = engine.getEntitiesFor(Family.all(
+                JellyMap::class.java
+        ).get())
 
         simpleRenderableEntities = engine.getEntitiesFor(Family.all(
                 Renderable::class.java,
@@ -42,8 +48,9 @@ class RenderingSystem @Inject constructor(
                 Transform::class.java
         ).get())
 
-        levels = engine.getEntitiesFor(Family.all(
-                JellyMap::class.java
+        softRenderableEntities = engine.getEntitiesFor(Family.all(
+                SoftRenderable::class.java,
+                Transform::class.java
         ).get())
     }
 
@@ -57,6 +64,7 @@ class RenderingSystem @Inject constructor(
 
         renderBackground()
         renderEntities()
+        renderSoft()
         renderPolygons()
         renderForeground()
     }
@@ -148,6 +156,32 @@ class RenderingSystem @Inject constructor(
                         1f,
                         1f,
                         transform.rotation)
+            }
+        }
+    }
+
+    /**
+     * Render soft polygons.
+     */
+    fun renderSoft() {
+        polygonBatch.draw { b ->
+            for (entity in softRenderableEntities) {
+                val transform = entity.transform
+                val region = SoftRenderable[entity].region
+                val tex = region.region
+
+                b.draw(
+                        region,
+                        transform.x,
+                        transform.y,
+                        0f,
+                        0f,
+                        tex.regionWidth.toFloat(),
+                        tex.regionHeight.toFloat(),
+                        transform.scale.x,
+                        transform.scale.y,
+                        transform.rotation
+                )
             }
         }
     }
