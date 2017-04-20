@@ -11,6 +11,7 @@ import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.core.tiled.boolean
 import com.edd.jelly.core.tiled.float
@@ -79,7 +80,7 @@ class SoftBodyBuilder @Inject constructor(val world: World) {
         val halfHeight = height / 2
 
         if (width <= 0 || height <= 0) {
-            throw GameException("Ellipse width and height must be greater than 0")
+            throw GameException("Ellipse \"${ellipseMapObject.name}\" width and height must be greater than 0")
         }
 
         val bodies = mutableListOf<Body>()
@@ -148,7 +149,10 @@ class SoftBodyBuilder @Inject constructor(val world: World) {
             }
         }
 
-        return Entity()
+        return Entity().apply {
+            add(SoftBody(bodies))
+            add(Transform(Vector2(center.x, center.y)))
+        }
     }
 
     /**
@@ -167,7 +171,7 @@ class SoftBodyBuilder @Inject constructor(val world: World) {
         height = if (height < offset) offset else height - offset
 
         if (width <= 0 || height <= 0) {
-            throw GameException("Rectangle width and height must be greater than 0")
+            throw GameException("Rectangle \"${rect.name}\" width and height must be greater than 0")
         }
 
         val x = rectangle.x.meters + RADIUS
