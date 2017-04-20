@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="93">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="103">
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>
@@ -53,14 +53,14 @@
  </layer>
  <layer name="tiles" width="128" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3Y7WrCMBgF4Dp/bNN18/6vVgMGYkhX+mHFvs8DBwr9xGPSaNcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAe/VdhVg+qhCL/mPK873+Y+rv0X9sW/Z/ftFxDDP+Y9P/+zpU22k+TGu6nwnXqNcAvKfU/+8tx1suE8/V/z6k/k8zztP/9vLv7ylz9X/y+M/953dBndb9yv6X/Ad8Hrj+HhzGDxmV+qnXW3PGay0/W9l/615D9yv39wue46+b/u6J5Bn9l9/L8vNP230jrX7K/Tyqx/2SeWDt/teYk9jOs+Z/1jc2tuaMPf3H1ur/s2uv02V/+Wr0LyLxcgXElkR3AIAAAA==
+   H4sIAAAAAAAAC+3Z7U6DMBgF4M798GNOvf+rdUSb1abVQNkivM+TnF8LlHFoBywlAAAAAAAAAAAAAAAAAAAAAAAAAAAAYK+eq9zD4U7bjGwXxUMVYtF/THm9139M5+/oPzb9x6b/2PS/TYdGTunrnu51xn7qewC2odX/2yXHSz5m7kv/+zD1/7Jgu0j95zWylzlr54i1x8vzP/ff+56t8cr+R94Bnzr7/0/e0/XZt5Xe2rnGe+Spn/p+a8l8reVjK/tvjdUbr/z8PHAc07md+9sTyS36L6/L8vz3rvNWP+Xn/FTP+5F1YO3+/be1Lbda/1nfX3NrydzTf2yt/h/T788jsp88NfoXkXj5BMx8oFYAgAAA
   </data>
  </layer>
  <objectgroup name="entities">
   <object id="58" name="start" x="704" y="1600">
    <ellipse/>
   </object>
-  <object id="61" x="800" y="1504" width="224" height="64">
+  <object id="61" x="768" y="1504" width="256" height="64">
    <properties>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
@@ -75,9 +75,9 @@
     <property name="stiffness" type="float" value="20"/>
    </properties>
   </object>
-  <object id="73" x="544" y="1248" width="32" height="416">
+  <object id="73" x="512" y="1248" width="64" height="416">
    <properties>
-    <property name="density" type="int" value="2"/>
+    <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="50"/>
@@ -89,43 +89,57 @@
     <property name="stiffness" type="float" value="20"/>
    </properties>
   </object>
-  <object id="88" x="2272" y="1600" width="16" height="192">
+  <object id="88" x="2016" y="1440" width="32" height="256">
    <properties>
-    <property name="density" type="int" value="1"/>
+    <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
    </properties>
   </object>
-  <object id="89" x="2592" y="1600" width="16" height="192">
+  <object id="89" x="2880" y="1440" width="32" height="256">
    <properties>
-    <property name="density" type="int" value="1"/>
+    <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
    </properties>
   </object>
-  <object id="90" x="1984" y="1568" width="288" height="32">
-   <properties>
-    <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="91" x="2304" y="1568" width="288" height="32">
+  <object id="91" x="2464" y="1408" width="416" height="32">
    <properties>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
    </properties>
   </object>
-  <object id="92" x="1952" y="1600" width="16" height="192">
+  <object id="92" x="2432" y="1440" width="32" height="288">
    <properties>
-    <property name="density" type="int" value="1"/>
+    <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
     <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
    </properties>
+  </object>
+  <object id="97" x="2048" y="1408" width="384" height="32">
+   <properties>
+    <property name="glued" type="bool" value="true"/>
+    <property name="soft" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+   </properties>
+  </object>
+  <object id="101" x="768" y="1376" width="128" height="128">
+   <properties>
+    <property name="soft" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="8"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="102" x="960" y="1376" width="96" height="128">
+   <properties>
+    <property name="soft" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="8"/>
+   </properties>
+   <ellipse/>
   </object>
  </objectgroup>
  <objectgroup name="collision">
@@ -137,7 +151,6 @@
   <object id="9" x="3456" y="1760" width="32" height="32"/>
   <object id="10" x="3392" y="1824" width="32" height="32"/>
   <object id="11" x="3328" y="1888" width="32" height="32"/>
-  <object id="12" x="544" y="1664" width="32" height="32"/>
   <object id="14" x="640" y="1760" width="32" height="32"/>
   <object id="15" x="608" y="1792" width="32" height="32"/>
   <object id="19" x="672" y="1664" width="64" height="192"/>
@@ -147,11 +160,12 @@
   <object id="50" x="1120" y="1696" width="96" height="160"/>
   <object id="51" x="1216" y="1760" width="32" height="64"/>
   <object id="59" x="1024" y="1504" width="64" height="64"/>
-  <object id="63" x="640" y="1664" width="32" height="64"/>
+  <object id="63" x="512" y="1664" width="160" height="64"/>
   <object id="75" x="1696" y="1760" width="64" height="64"/>
-  <object id="78" x="1952" y="1568" width="32" height="32"/>
-  <object id="79" x="2272" y="1568" width="32" height="32"/>
-  <object id="86" x="2592" y="1568" width="32" height="32"/>
+  <object id="79" x="2432" y="1408" width="32" height="32"/>
+  <object id="86" x="2880" y="1408" width="32" height="32"/>
+  <object id="94" x="2016" y="1408" width="32" height="32"/>
+  <object id="95" x="3008" y="1728" width="288" height="64"/>
  </objectgroup>
  <layer name="parallax_foreground" width="128" height="64">
   <properties>

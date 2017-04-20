@@ -74,7 +74,9 @@ class LevelSystem @Inject constructor(
         map.entitiesLayer.objects.filter {
             it.properties["soft"] as? Boolean ?: false
         }.forEach {
-            engine.addEntity(softBodyBuilder.create(it))
+            softBodyBuilder.create(it)?.let {
+                engine.addEntity(it)
+            }
         }
 
         messaging.send(LevelLoadedEvent(map))
