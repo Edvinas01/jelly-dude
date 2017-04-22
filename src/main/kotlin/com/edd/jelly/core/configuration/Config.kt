@@ -18,7 +18,7 @@ data class Config(
     /**
      * Video configuration.
      */
-    data class Video(val screen: Screen, val fpsLimit: Int) {
+    data class Video(val screen: Screen, val fpsLimit: Int, val vsync: Boolean) {
 
         /**
          * Screen configuration.
