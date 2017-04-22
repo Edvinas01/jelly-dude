@@ -29,7 +29,7 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef
 
 @Singleton
 class SoftBodyBuilder @Inject constructor(
-        private val delaunayTriangulator: DelaunayTriangulator,
+        private val triangulator: DelaunayTriangulator,
         private val resources: ResourceManager,
         private val world: World
 ) {
@@ -99,24 +99,35 @@ class SoftBodyBuilder @Inject constructor(
         val density = ellipseMapObject.int("density", DENSITY)
         val ci = (width * density + height * density).toInt() * 2
 
-        (0 until ci)
-                .map {
-                    org.jbox2d.common.MathUtils.map(
-                            it.toFloat(),
-                            0f,
-                            ci.toFloat(),
-                            0f,
-                            2 * org.jbox2d.common.MathUtils.PI
-                    )
-                }
-                .forEach {
-                    bodies += world.createBody(circleDef.apply {
-                        position.x = center.x + halfWidth * MathUtils.sin(it)
-                        position.y = center.y + halfHeight * MathUtils.cos(it)
-                    }).apply {
-                        createFixture(circleFixture)
-                    }
-                }
+        // Outer circle count + center.
+        val textureCoords = FloatArray((ci + 1) * 2)
+
+        for (i in 0 until ci) {
+            val angle = org.jbox2d.common.MathUtils.map(
+                    i.toFloat(),
+                    0f,
+                    ci.toFloat(),
+                    0f,
+                    2 * org.jbox2d.common.MathUtils.PI
+            )
+
+            val sin = MathUtils.cos(angle)
+            val cos = MathUtils.sin(angle)
+
+            bodies += world.createBody(circleDef.apply {
+                position.x = center.x + halfWidth * sin
+                position.y = center.y + halfHeight * cos
+            }).apply {
+                createFixture(circleFixture)
+            }
+
+            textureCoords[i * 2] = 0.5f + sin * 0.5f
+            textureCoords[i * 2 + 1] = 0.5f + cos * 0.5f
+        }
+
+        // Central body.
+        textureCoords[textureCoords.lastIndex - 1] = 0.5f
+        textureCoords[textureCoords.lastIndex] = 0.5f
 
         // The central circle.
         val centerBody = world.createBody(circleDef.apply {
@@ -158,9 +169,27 @@ class SoftBodyBuilder @Inject constructor(
             }
         }
 
+        val transform = Transform(Vector2(center.x, center.y))
+        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+        val vertices = textureCoords.copyOf()
+
+        bodies.forEachIndexed { i, b ->
+            val pos = b.getLocalPoint(center)
+            vertices[i * 2] = pos.x
+            vertices[i * 2 + 1] = pos.y
+        }
+
         return Entity().apply {
+            add(SoftRenderable(
+                    SoftRegion(
+                            textureCoords,
+                            texture,
+                            vertices,
+                            triangulator.computeTriangles(vertices, false).toArray()
+                    )
+            ))
             add(SoftBody(bodies))
-            add(Transform(Vector2(center.x, center.y)))
+            add(transform)
         }
     }
 
@@ -262,10 +291,11 @@ class SoftBodyBuilder @Inject constructor(
 
         val center = Vec2(transform.x, transform.y)
         bodies.forEachIndexed { i, b ->
-            // @formatter:off
-            textureCoords[i * 2]     = (i % cols).toFloat() / (cols - 1) // u
-            textureCoords[i * 2 + 1] = (i / cols).toFloat() / (rows - 1) // v
-            // @formatter:on
+            textureCoords[i * 2] =
+                    (i % cols).toFloat() / (cols - 1) // u
+
+            textureCoords[i * 2 + 1] =
+                    (i / cols).toFloat() / (rows - 1) // v
 
             val pos = b.getLocalPoint(center)
             vertices[i * 2] = -pos.x
@@ -278,7 +308,7 @@ class SoftBodyBuilder @Inject constructor(
                             textureCoords,
                             texture,
                             vertices,
-                            delaunayTriangulator.computeTriangles(vertices, false).toArray()
+                            triangulator.computeTriangles(vertices, false).toArray()
                     ),
                     RADIUS
             ))
