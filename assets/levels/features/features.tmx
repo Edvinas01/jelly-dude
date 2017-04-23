@@ -36,9 +36,8 @@
   <object id="1" name="start" x="128" y="928">
    <ellipse/>
   </object>
-  <object id="8" x="320" y="832" width="96" height="128">
+  <object id="8" x="320" y="832" width="64" height="128">
    <properties>
-    <property name="density" type="int" value="5"/>
     <property name="soft" type="bool" value="true"/>
    </properties>
   </object>

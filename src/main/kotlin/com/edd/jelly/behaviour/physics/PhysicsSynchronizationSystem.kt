@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
-import com.badlogic.gdx.math.collision.BoundingBox
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.body.SoftBody
@@ -13,8 +12,6 @@ import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.util.degrees
 import com.edd.jelly.util.toVec2
 import com.google.inject.Inject
-import org.jbox2d.collision.AABB
-import org.lwjgl.util.Rectangle
 
 
 class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
@@ -83,7 +80,7 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
 
             bodies.forEachIndexed { i, b ->
                 val pos = b.getLocalPoint(center).negateLocal()
-                vertices[i * 2]     = pos.x
+                vertices[i * 2] = pos.x
                 vertices[i * 2 + 1] = pos.y
             }
         }
