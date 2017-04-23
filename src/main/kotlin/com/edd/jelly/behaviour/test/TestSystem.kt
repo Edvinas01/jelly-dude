@@ -3,6 +3,7 @@ package com.edd.jelly.behaviour.test
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
@@ -17,6 +18,7 @@ import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
+import com.edd.jelly.util.pixels
 import com.google.inject.Inject
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
@@ -49,6 +51,7 @@ class TestSystem @Inject constructor(
         JELLY,
     }
 
+    private val mouse = Vector3()
     private var mode = Mode.BOX
 
     init {
@@ -57,6 +60,13 @@ class TestSystem @Inject constructor(
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+    }
+
+    override fun update(deltaTime: Float) {
+        camera.unproject(mouse.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
+
+        Gdx.graphics.setTitle(String.format("meters (%.3f, %.3f) | pixels (%.0f, %.0f) | fps %d",
+                mouse.x, mouse.y, mouse.x.pixels, mouse.y.pixels, Gdx.graphics.framesPerSecond))
     }
 
     private inner class TestInputAdapter : InputAdapter() {

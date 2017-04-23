@@ -3,6 +3,7 @@ package com.edd.jelly.behaviour.physics
 import com.badlogic.ashley.core.*
 import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.pause.PausingSystem
+import com.edd.jelly.behaviour.physics.body.SoftBody
 import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
@@ -25,6 +26,15 @@ class PhysicsSystem @Inject constructor(
         super.addedToEngine(engine)
 
         world.setContactListener(messagingContactListener)
+
+        // Listen for soft body physics objects.
+        engine.addEntityListener(Family.all(SoftBody::class.java).get(), object : EntityListenerAdapter() {
+            override fun entityRemoved(entity: Entity) {
+                SoftBody[entity].bodies.forEach {
+                    world.destroyBody(it)
+                }
+            }
+        })
 
         // Listen for destroyed physics objects.
         engine.addEntityListener(Family.all(Physics::class.java).get(), object : EntityListenerAdapter() {

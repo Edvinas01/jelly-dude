@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" nextobjectid="25">
+ <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="../../textures/test_tileset.png" width="128" height="128"/>
+ </tileset>
+ <layer name="background" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="fitY" type="bool" value="true"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedY" type="float" value="0.3"/>
+   <property name="texture" value="test_background"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="tiles" width="64" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1DEKwDAMA8DQLf//cKcsJVNqIgx3oF0C4zEAAAAAAAD4mo1T4Wkc+8+tG0pvSO1Pd7+5f/cz0t0rUvFD0xv+5AUMHgSq
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="3" x="0" y="992" width="2048" height="32"/>
+  <object id="4" x="-224" y="0" width="224" height="1024"/>
+  <object id="5" x="2048" y="0" width="224" height="1024"/>
+  <object id="6" x="-224" y="-224" width="2496" height="224"/>
+  <object id="16" x="480" y="896" width="64" height="96"/>
+  <object id="19" x="544" y="800" width="1504" height="192"/>
+  <object id="24" x="320" y="960" width="96" height="32"/>
+ </objectgroup>
+ <objectgroup name="entities">
+  <object id="1" name="start" x="128" y="928">
+   <ellipse/>
+  </object>
+  <object id="8" x="320" y="832" width="64" height="128">
+   <properties>
+    <property name="soft" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

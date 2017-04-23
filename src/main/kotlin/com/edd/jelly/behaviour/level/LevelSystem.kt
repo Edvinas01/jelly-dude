@@ -6,16 +6,17 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.edd.jelly.behaviour.physics.Physics
+import com.edd.jelly.behaviour.physics.body.SoftBodyBuilder
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.EntityListenerAdapter
-import com.edd.jelly.util.meters
 import com.google.inject.Inject
 import org.jbox2d.dynamics.World
 
 class LevelSystem @Inject constructor(
+        private val softBodyBuilder: SoftBodyBuilder,
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging,
         private val world: World
@@ -69,6 +70,14 @@ class LevelSystem @Inject constructor(
         engine.addEntity(Entity().apply {
             add(map)
         })
+
+        map.entitiesLayer.objects.filter {
+            it.properties["soft"] as? Boolean ?: false
+        }.forEach {
+            softBodyBuilder.create(it)?.let {
+                engine.addEntity(it)
+            }
+        }
 
         messaging.send(LevelLoadedEvent(map))
     }

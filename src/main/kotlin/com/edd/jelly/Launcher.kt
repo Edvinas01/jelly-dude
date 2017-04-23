@@ -24,6 +24,7 @@ class Launcher : ApplicationAdapter() {
                 width = screen.width
                 height = screen.height
                 fullscreen = screen.fullscreen
+                vSyncEnabled = video.vsync
 
                 // Cannot resize for now.
                 resizable = false

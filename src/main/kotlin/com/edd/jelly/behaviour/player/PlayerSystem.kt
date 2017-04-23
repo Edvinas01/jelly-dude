@@ -52,7 +52,7 @@ class PlayerSystem @Inject constructor(
         /**
          * The force which is applied to the player when its moving.
          */
-        val MOVE_FORCE = 0.05f * DENSITY
+        val MOVE_FORCE = 3f * DENSITY
         val MAX_VELOCITY = 7f
 
         /**
@@ -67,18 +67,21 @@ class PlayerSystem @Inject constructor(
         val MIN_CONTACT_RATIO = 5
 
         /**
-         * How much does the player have to travel in order for a health tick to occur,
+         * How much does the player have to travel in order for a health tick to occur.
          */
         val HEALTH_TICK_DISTANCE = 30
+        val MOVEMENT_TICK_MULTIPLIER = 20
 
         // Deflation stuff.
-        val DEFLATION_SPEED_MULTIPLIER = 1 / 2f
+        val DEFLATION_SPEED_MULTIPLIER = 0.5f
         val DEFLATION_JOINT_LENGTH = 0.04f
         val DEFLATION_AMOUNT = 0.7f
         val DEFLATION_SPEED = 5
     }
 
     private val movementHook = scriptManager.hook(MovementFunction::class.java)
+    private val healthHook = scriptManager.hook(HealthFunction::class.java)
+
     private val playerInputs = PlayerInputAdapter(messaging)
 
     override fun addedToEngine(engine: Engine) {
@@ -100,7 +103,7 @@ class PlayerSystem @Inject constructor(
             val player = Player.mapper[entity]
 
             processMovement(player, deltaTime)
-            processHealth(player, entity)
+            processHealth(player, entity, deltaTime)
             processStickiness(player)
             processDeflation(player, deltaTime)
         }
@@ -124,7 +127,7 @@ class PlayerSystem @Inject constructor(
             canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO)
 
             // Calculated move force for this player.
-            val moveForce = speedMultiplier * MOVE_FORCE
+            val moveForce = speedMultiplier * MOVE_FORCE * deltaTime
 
             for (body in joint.bodies) {
 
@@ -157,18 +160,26 @@ class PlayerSystem @Inject constructor(
     /**
      * Process player health drain.
      */
-    private fun processHealth(player: Player, entity: Entity) {
+    private fun processHealth(player: Player, entity: Entity, deltaTime: Float) {
         with(player) {
             if (contacts.isEmpty()) {
                 return
             }
 
             if (movedWithoutTick > HEALTH_TICK_DISTANCE) {
-                movedWithoutTick = 0f
-                joint.inflate(SIZE_LOSS)
-                health--
+
+                var doTick = true
+                healthHook.run {
+                    doTick = it.beforeHealthTick(player, movedWithoutTick)
+                }
+
+                if (doTick) {
+                    movedWithoutTick = 0f
+                    joint.inflate(SIZE_LOSS)
+                    health--
+                }
             }
-            movedWithoutTick += Math.abs(velocity.x) + Math.abs(velocity.y)
+            movedWithoutTick += (Math.abs(velocity.x) + Math.abs(velocity.y)) * deltaTime * MOVEMENT_TICK_MULTIPLIER
 
             if (health <= 0) {
                 engine.removeEntity(entity)
@@ -243,9 +254,11 @@ class PlayerSystem @Inject constructor(
                 if (Math.abs(deflation) > 0) {
 
                     // How much should we deflate this tick.
-                    val dt = deflation.take(-sign
+                    val dt = deflation.take(
+                            -sign
                             * DEFLATION_SPEED
-                            * Math.round(deltaTime * 100) / 100)
+
+                    ) * deltaTime * DEFLATION_SPEED
 
                     joint.targetVolume -= dt
                     deflation += dt

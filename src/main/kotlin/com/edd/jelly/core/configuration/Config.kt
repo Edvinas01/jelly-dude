@@ -10,6 +10,7 @@ data class Config(
      */
     data class Game(var language: String,
                     val scripting: Boolean,
+                    val debugLevel: String?,
                     val debug: Boolean,
                     val gravity: Float,
                     val particleRadius: Float)
@@ -17,7 +18,7 @@ data class Config(
     /**
      * Video configuration.
      */
-    data class Video(val screen: Screen, val fpsLimit: Int) {
+    data class Video(val screen: Screen, val fpsLimit: Int, val vsync: Boolean) {
 
         /**
          * Screen configuration.
