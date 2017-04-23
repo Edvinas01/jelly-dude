@@ -233,24 +233,17 @@ class SoftBodyBuilder @Inject constructor(
                 Vector2(width, height)
         )
 
-        val pivots = mutableListOf<Body>()
         val center = transform.position.toVec2()
 
         // Create a rectangle out of the bodies.
         for (row in 0 until rows) {
             for (col in 0 until cols) {
-                val body = world.createBody(circleDef.apply {
+                bodies += world.createBody(circleDef.apply {
                     position = Vec2(x + col * stepX, y + row * stepY)
 
                 }).apply {
                     createFixture(circleFixture)
                 }
-
-                // Bottom left or top left or top right pivot.
-                if (col == 0 && row == 0 || col == 0 && row == rows - 1 || col == cols - 1 && row == rows - 1) {
-                    pivots += body
-                }
-                bodies += body
             }
         }
 
@@ -323,7 +316,7 @@ class SoftBodyBuilder @Inject constructor(
                             triangulator.computeTriangles(vertices, false).toArray()
                     )
             ))
-            add(SoftBody(bodies, pivots))
+            add(SoftBody(bodies))
             add(transform)
         }
     }
