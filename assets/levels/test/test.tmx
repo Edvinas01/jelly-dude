@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="108">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="111">
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>
@@ -63,81 +63,81 @@
   <object id="61" x="768" y="1504" width="256" height="64">
    <properties>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="100"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="66" x="1248" y="1760" width="448" height="64">
    <properties>
     <property name="damping" type="float" value="1"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="20"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="73" x="512" y="1248" width="64" height="416">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="50"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="74" x="1088" y="1248" width="128" height="128">
    <properties>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="20"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="88" x="2016" y="1440" width="32" height="256">
    <properties>
     <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="89" x="2880" y="1440" width="32" height="256">
    <properties>
     <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="91" x="2464" y="1408" width="416" height="32">
    <properties>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="92" x="2432" y="1440" width="32" height="288">
    <properties>
     <property name="density" type="int" value="2"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="97" x="2048" y="1408" width="384" height="32">
    <properties>
     <property name="glued" type="bool" value="true"/>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="10"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
   <object id="101" x="1280" y="1600" width="128" height="128">
    <properties>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="8"/>
+    <property name="type" value="soft"/>
    </properties>
    <ellipse/>
   </object>
   <object id="102" x="960" y="1376" width="96" height="128">
    <properties>
-    <property name="soft" type="bool" value="true"/>
     <property name="stiffness" type="float" value="8"/>
+    <property name="type" value="soft"/>
    </properties>
    <ellipse/>
   </object>
@@ -160,12 +160,12 @@
   <object id="59" x="1024" y="1504" width="64" height="64"/>
   <object id="63" x="512" y="1664" width="160" height="64"/>
   <object id="75" x="1696" y="1760" width="64" height="64"/>
-  <object id="79" x="2432" y="1408" width="32" height="32"/>
-  <object id="86" x="2880" y="1408" width="32" height="32"/>
-  <object id="94" x="2016" y="1408" width="32" height="32"/>
   <object id="95" x="3008" y="1728" width="288" height="64"/>
   <object id="105" x="288" y="1824" width="64" height="128"/>
   <object id="106" x="352" y="1888" width="64" height="64"/>
+  <object id="108" x="2432" y="1408" width="32" height="32"/>
+  <object id="109" x="2880" y="1408" width="32" height="32"/>
+  <object id="110" x="2016" y="1408" width="32" height="32"/>
  </objectgroup>
  <layer name="parallax_foreground" width="128" height="64">
   <properties>

@@ -38,7 +38,7 @@
   </object>
   <object id="8" x="320" y="832" width="64" height="128">
    <properties>
-    <property name="soft" type="bool" value="true"/>
+    <property name="type" value="soft"/>
    </properties>
   </object>
  </objectgroup>

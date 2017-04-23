@@ -1,21 +1,21 @@
-package com.edd.jelly.behaviour.level
+package com.edd.jelly.behaviour.physics.body
 
+import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
+import com.google.inject.Inject
+import com.google.inject.Singleton
 import org.jbox2d.collision.shapes.ChainShape
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.collision.shapes.Shape
 import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.Body
 import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.World
@@ -23,64 +23,34 @@ import org.jbox2d.dynamics.World
 /**
  * Builds bodies for tiled map.
  */
-class MapBodyBuilder private constructor(private val world: World) {
+@Singleton
+class MapBodyBuilder @Inject constructor(private val world: World) {
 
-    private val objects = mutableListOf<MapObject>()
     private val bodyType = BodyType.STATIC
     private val density = 1f
 
-    companion object {
-        fun usingWorld(world: World): MapBodyBuilder {
-            return MapBodyBuilder(world)
-        }
-    }
+    fun create(obj: MapObject): Entity? {
+        val pair = createPair(obj) ?: return null
 
-    /**
-     * Set tiled map objects which are to be used when building bodies by using a specific layer.
-     */
-    fun tiledMapLayer(tiledMap: TiledMap, layer: String): MapBodyBuilder {
-        return objects(tiledMap.layers[layer]?.objects ?:
-                throw GameException("$layer layer does not exist on tiled map"))
-    }
-
-    /**
-     * Set tiled map objects which are to be used when building bodies.
-     */
-    fun objects(objects: MapObjects): MapBodyBuilder {
-        this.objects.clear()
-        objects.forEach {
-            this.objects.add(it)
-        }
-        return this
-    }
-
-    /**
-     * Build bodies using the provided data for the builder.
-     */
-    fun buildBodies(): List<Body> {
-        return objects.map {
-            world.createBody(BodyDef().apply {
+        return Entity().apply {
+            add(Physics(world.createBody(BodyDef().apply {
                 type = bodyType
             }).apply {
-                create(it).apply {
-                    setTransform(first, 0f)
-                    createFixture(second, density)
-                }
-            }
+                setTransform(pair.first, 0f)
+                createFixture(pair.second, density)
+            }))
         }
     }
 
     /**
      * Create a pair of shape location and the shape by using map object data.
      */
-    private fun create(mapObject: MapObject): Pair<Vec2, Shape> = when (mapObject) {
+    private fun createPair(mapObject: MapObject): Pair<Vec2, Shape>? = when (mapObject) {
         is RectangleMapObject -> rectangle(mapObject)
         is EllipseMapObject -> ellipse(mapObject)
         is PolygonMapObject -> polygon(mapObject)
         is PolylineMapObject -> chain(mapObject)
-        else -> {
-            throw GameException("Unsupported map object type: ${mapObject.javaClass.simpleName}")
-        }
+        else -> null
     }
 
     /**
