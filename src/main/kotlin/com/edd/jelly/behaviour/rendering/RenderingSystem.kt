@@ -16,7 +16,6 @@ import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.util.meters
-import com.edd.jelly.util.pixels
 import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
@@ -170,17 +169,14 @@ class RenderingSystem @Inject constructor(
                 val region = SoftRenderable[entity].region
                 val tex = region.region
 
+                // Soft bodies do not have rotation and do not support
+                // resizing / scaling.
                 b.draw(
                         region,
                         transform.x,
                         transform.y,
-                        0f,
-                        0f,
                         tex.regionWidth.toFloat(),
-                        tex.regionHeight.toFloat(),
-                        transform.scale.x,
-                        transform.scale.y,
-                        transform.rotation
+                        tex.regionHeight.toFloat()
                 )
             }
         }

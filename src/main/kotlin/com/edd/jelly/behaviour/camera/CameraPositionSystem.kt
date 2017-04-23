@@ -68,7 +68,7 @@ class CameraPositionSystem @Inject constructor(
 
             // If we have a player, follow the camera to it.
             val transform = player.transform
-            moveCamera(deltaTime, transform.x, transform.y)
+//            moveCamera(deltaTime, transform.x, transform.y)
         } else {
 
             // Else move to a random focus point.

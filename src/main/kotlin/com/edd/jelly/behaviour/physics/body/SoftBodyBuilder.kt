@@ -17,6 +17,7 @@ import com.edd.jelly.core.tiled.float
 import com.edd.jelly.core.tiled.int
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
+import com.edd.jelly.util.toVec2
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.jbox2d.callbacks.QueryCallback
@@ -226,11 +227,20 @@ class SoftBodyBuilder @Inject constructor(
 
         val bodies = mutableListOf<Body>()
 
+        // Center of the rectangle.
+        val transform = Transform(
+                Vector2(x + width / 2, y + height / 2),
+                Vector2(width, height)
+        )
+
+        val center = transform.position.toVec2()
+
         // Create a rectangle out of the bodies.
         for (row in 0 until rows) {
             for (col in 0 until cols) {
                 bodies += world.createBody(circleDef.apply {
                     position = Vec2(x + col * stepX, y + row * stepY)
+
                 }).apply {
                     createFixture(circleFixture)
                 }
@@ -280,16 +290,11 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         // Create mesh.
-        val transform = Transform(
-                position = Vector2(x + width / 2, y + height / 2),
-                size = Vector2(width, height)
-        )
         val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
 
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()
 
-        val center = Vec2(transform.x, transform.y)
         bodies.forEachIndexed { i, b ->
             textureCoords[i * 2] =
                     (i % cols).toFloat() / (cols - 1) // u
@@ -304,13 +309,12 @@ class SoftBodyBuilder @Inject constructor(
 
         return Entity().apply {
             add(SoftRenderable(
-                    SoftRegion(
+                    region = SoftRegion(
                             textureCoords,
                             texture,
                             vertices,
                             triangulator.computeTriangles(vertices, false).toArray()
-                    ),
-                    RADIUS
+                    )
             ))
             add(SoftBody(bodies.toList()))
             add(transform)

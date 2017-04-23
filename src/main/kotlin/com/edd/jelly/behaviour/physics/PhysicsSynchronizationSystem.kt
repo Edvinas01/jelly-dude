@@ -5,13 +5,17 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
-import com.edd.jelly.behaviour.components.*
+import com.badlogic.gdx.math.collision.BoundingBox
+import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.body.SoftBody
 import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.util.degrees
 import com.edd.jelly.util.toVec2
 import com.google.inject.Inject
-import org.jbox2d.common.Vec2
+import org.jbox2d.collision.AABB
+import org.lwjgl.util.Rectangle
+
 
 class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
 
@@ -38,9 +42,6 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
     }
 
     override fun update(deltaTime: Float) {
-
-        // Order of these methods is important!
-        syncSoftBodies()
         syncSoftRenderables()
 
         // Sync physics entities.
@@ -54,14 +55,16 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
     }
 
     /**
-     * Synchronizes soft-bodies.
+     * Sync soft renderable entities.
      */
-    private fun syncSoftBodies() {
+    private fun syncSoftRenderables() {
+
+        // Sync transform.
         softBodyEntities.forEach {
             val transform = it.transform
             val bodies = SoftBody[it].bodies
 
-            val (pos) = transform
+            val pos = transform.position
 
             // Calculate transform center.
             pos.setZero()
@@ -69,27 +72,19 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
                 pos.add(it.position.x, it.position.y)
             }
             pos.set(pos.x / bodies.size, pos.y / bodies.size)
-
-
         }
-    }
 
-    /**
-     * Sync soft renderable entities.
-     */
-    private fun syncSoftRenderables() {
         softRenderables.forEach {
             val transform = it.transform
-            val (region, offset) = SoftRenderable[it]
-            val vertices = region.vertices
+            val vertices = SoftRenderable[it].region.vertices
             val bodies = SoftBody[it].bodies
 
             val center = transform.position.toVec2()
-            bodies.forEachIndexed { i, b ->
-                val pos = b.getLocalPoint(center)
 
-                vertices[i * 2] = -pos.x
-                vertices[i * 2 + 1] = -pos.y
+            bodies.forEachIndexed { i, b ->
+                val pos = b.getLocalPoint(center).negateLocal()
+                vertices[i * 2]     = pos.x
+                vertices[i * 2 + 1] = pos.y
             }
         }
     }
