@@ -16,6 +16,9 @@ import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
+import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.core.configuration.Configurations
+import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.pixels
@@ -35,10 +38,12 @@ import org.jbox2d.particle.ParticleGroupDef
 import org.jbox2d.particle.ParticleType
 
 class TestSystem @Inject constructor(
-        inputMultiplexer: InputMultiplexer,
         private val resources: ResourceManager,
         private val camera: OrthographicCamera,
-        private val world: World
+        private val messaging: Messaging,
+        private val world: World,
+        inputMultiplexer: InputMultiplexer,
+        configurations: Configurations
 ) : EntitySystem() {
 
     /**
@@ -56,10 +61,15 @@ class TestSystem @Inject constructor(
 
     init {
         inputMultiplexer.addProcessor(TestInputAdapter())
+        setProcessing(configurations.config.game.debug)
     }
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
+
+        messaging.listen<ConfigChangedEvent> { (c) ->
+            setProcessing(c.game.debug)
+        }
     }
 
     override fun update(deltaTime: Float) {

@@ -13,13 +13,21 @@ fun <T : TiledMap> T.mustLayer(name: String): MapLayer {
             ?: throw GameException("Layer \"$name\" does not exist")
 }
 
+
+/**
+ * Get string value from map object properties.
+ */
+fun <T : MapObject> T.string(name: String): String? {
+    return this.properties.get(name)?.let {
+        it as? String
+    }
+}
+
 /**
  * Get string value from map object properties.
  */
 fun <T : MapObject> T.string(name: String, default: String = ""): String {
-    return this.properties.get(name)?.let {
-        it as? String ?: default
-    } ?: default
+    return this.string(name) ?: default
 }
 
 /**
