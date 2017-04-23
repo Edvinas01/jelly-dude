@@ -36,17 +36,12 @@
   <object id="1" name="start" x="128" y="928">
    <ellipse/>
   </object>
-  <object id="8" x="608" y="640" width="64" height="128">
+  <object id="8" x="224" y="736" width="64" height="128">
    <properties>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="25" x="704" y="704" width="96" height="64">
-   <properties>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="26" x="330.667" y="896" width="117.333" height="86.6667">
+  <object id="26" x="331" y="890" width="136.333" height="86.6667">
    <properties>
     <property name="type" value="liquid"/>
    </properties>
