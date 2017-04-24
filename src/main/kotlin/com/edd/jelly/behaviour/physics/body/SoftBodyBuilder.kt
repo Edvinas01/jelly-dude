@@ -27,6 +27,7 @@ import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.joints.DistanceJointDef
 import org.jbox2d.dynamics.joints.RevoluteJointDef
+import org.lwjgl.opengl.RenderTexture
 
 @Singleton
 class SoftBodyBuilder @Inject constructor(

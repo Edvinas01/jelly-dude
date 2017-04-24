@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.core.particles.ParticleRenderer
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.util.meters
@@ -22,6 +23,7 @@ class RenderingSystem @Inject constructor(
         private val tiledMapRenderer: JellyMapRenderer,
         private val polygonBatch: PolygonSpriteBatch,
         private val spriteBatch: SpriteBatch,
+        private val particles: ParticleRenderer,
         private val camera: OrthographicCamera
 ) : EntitySystem() {
 
@@ -62,6 +64,7 @@ class RenderingSystem @Inject constructor(
         spriteBatch.setColor(1f, 1f, 1f, 1f)
 
         renderBackground()
+        particles.render(camera)
         renderEntities()
         renderSoft()
         renderPolygons()
@@ -94,7 +97,7 @@ class RenderingSystem @Inject constructor(
         spriteBatch.draw {
             for (entity in simpleRenderableEntities) {
                 val transform = entity.transform
-                val region = Renderable.mapper[entity].textureRegion
+                val region = Renderable[entity].textureRegion
 
                 val width =
                         if (transform.width > 0) transform.width

@@ -51,11 +51,6 @@
    H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
   </data>
  </layer>
- <layer name="tiles" width="128" height="64">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3Z0WqDMBQG4GxXK5td3/9pd9EJITUtiTZgzvfBgUKJij85iZoSAAAAAAAAAAAAAAAAAAAAAAAAAAAAMKtLUSN8DBqzZ1wUn0URi/xjWvu9/GNa/kv+sck/NvnHJv9zKp/be5/jyz0A57Bs1Jrh0ngs+c+hN8NI+X+n533zZ9B1vOOda55hy9qQ57/nekbev16/abt3rnWrjDviPfI1Pe63jpxz+fG2zlM7X/5f69qRe3b/aM+/Zy+3FL+3qjZuT/azKuf9nj7Qmn+UNTmK3vxHfpvl7tU87+kDvfnrA3Oo5f/qXY6ao74q+SulYtUf/Bg/JACAAAA=
-  </data>
- </layer>
  <objectgroup name="entities">
   <object id="58" name="start" x="704" y="1600">
    <ellipse/>
@@ -142,6 +137,11 @@
    <ellipse/>
   </object>
  </objectgroup>
+ <layer name="tiles" width="128" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Z0WqDMBQG4GxXK5td3/9pd9EJITUtiTZgzvfBgUKJij85iZoSAAAAAAAAAAAAAAAAAAAAAAAAAAAAMKtLUSN8DBqzZ1wUn0URi/xjWvu9/GNa/kv+sck/NvnHJv9zKp/be5/jyz0A57Bs1Jrh0ngs+c+hN8NI+X+n533zZ9B1vOOda55hy9qQ57/nekbev16/abt3rnWrjDviPfI1Pe63jpxz+fG2zlM7X/5f69qRe3b/aM+/Zy+3FL+3qjZuT/azKuf9nj7Qmn+UNTmK3vxHfpvl7tU87+kDvfnrA3Oo5f/qXY6ao74q+SulYtUf/Bg/JACAAAA=
+  </data>
+ </layer>
  <objectgroup name="collision">
   <object id="4" x="0" y="1760" width="96" height="288"/>
   <object id="5" x="96" y="1952" width="4000" height="96"/>
