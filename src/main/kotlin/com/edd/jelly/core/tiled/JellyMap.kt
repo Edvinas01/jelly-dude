@@ -15,6 +15,7 @@ class JellyMap internal constructor(
         val background: Texture?,
         val spawn: Vector2?,
         val focusPoints: List<Vector2>,
+        val colissionsLayer: MapLayer,
         val entitiesLayer: MapLayer
 ) : Component {
     companion object : ComponentResolver<JellyMap>(JellyMap::class.java)

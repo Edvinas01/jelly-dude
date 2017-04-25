@@ -1,6 +1,34 @@
 package com.edd.jelly.core.tiled
 
+import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.edd.jelly.exception.GameException
+
+/**
+ * Get tiled map layer or thrown an exception.
+ */
+fun <T : TiledMap> T.mustLayer(name: String): MapLayer {
+    return this.layers[name]
+            ?: throw GameException("Layer \"$name\" does not exist")
+}
+
+
+/**
+ * Get string value from map object properties.
+ */
+fun <T : MapObject> T.string(name: String): String? {
+    return this.properties.get(name)?.let {
+        it as? String
+    }
+}
+
+/**
+ * Get string value from map object properties.
+ */
+fun <T : MapObject> T.string(name: String, default: String = ""): String {
+    return this.string(name) ?: default
+}
 
 /**
  * Get float value from map object properties.

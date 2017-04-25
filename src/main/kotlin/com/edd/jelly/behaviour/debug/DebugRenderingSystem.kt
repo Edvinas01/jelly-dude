@@ -9,19 +9,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
-import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.behaviour.physics.PhysicsDebugRenderer
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
+import org.jbox2d.common.MathUtils
 import org.jbox2d.dynamics.World
 
 class DebugRenderingSystem @Inject constructor(
         private val spriteBatch: SpriteBatch,
         private val messaging: Messaging,
-        private val renderer: DebugRenderer,
+        private val renderer: PhysicsDebugRenderer,
         private val camera: OrthographicCamera,
         private val world: World,
         resourceManager: ResourceManager,
@@ -48,6 +49,10 @@ class DebugRenderingSystem @Inject constructor(
     override fun update(deltaTime: Float) {
         renderer.render(world, camera.combined)
 
+        renderTransforms()
+    }
+
+    private fun renderTransforms() {
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         transforms.forEach {
@@ -57,8 +62,8 @@ class DebugRenderingSystem @Inject constructor(
                     transformTexture,
                     transform.x,
                     transform.y,
-                    transform.width,
-                    transform.height
+                    MathUtils.max(transformTexture.width.meters, transform.width),
+                    MathUtils.max(transformTexture.height.meters, transform.height)
             )
         }
         spriteBatch.end()

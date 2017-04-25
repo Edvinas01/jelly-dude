@@ -27,6 +27,7 @@ import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.joints.DistanceJointDef
 import org.jbox2d.dynamics.joints.RevoluteJointDef
+import org.lwjgl.opengl.RenderTexture
 
 @Singleton
 class SoftBodyBuilder @Inject constructor(
@@ -77,7 +78,7 @@ class SoftBodyBuilder @Inject constructor(
     /**
      * Create a soft ellipse.
      */
-    fun ellipse(ellipseMapObject: EllipseMapObject): Entity {
+    private fun ellipse(ellipseMapObject: EllipseMapObject): Entity {
         val ellipse = ellipseMapObject.ellipse
 
         val x = ellipse.x.meters
@@ -197,7 +198,7 @@ class SoftBodyBuilder @Inject constructor(
     /**
      * Create a soft rectangle.
      */
-    fun rectangle(rect: RectangleMapObject): Entity {
+    private fun rectangle(rect: RectangleMapObject): Entity {
         val rectangle = rect.rectangle
 
         // Take joined body radius into account when creating bodies.
@@ -316,7 +317,7 @@ class SoftBodyBuilder @Inject constructor(
                             triangulator.computeTriangles(vertices, false).toArray()
                     )
             ))
-            add(SoftBody(bodies.toList()))
+            add(SoftBody(bodies))
             add(transform)
         }
     }

@@ -36,7 +36,6 @@ import jdk.nashorn.api.scripting.NashornScriptEngine
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
-import org.jbox2d.particle.ParticleSystem
 import java.util.*
 import javax.script.ScriptEngineManager
 
@@ -116,18 +115,15 @@ class GameModule(private val game: JellyGame) : Module {
         val game = configurations.config.game
         return World(Vec2(0f, game.gravity)).apply {
             particleRadius = game.particleRadius
+            particleMaxCount = game.maxParticles
         }
     }
 
     @Provides @Singleton
-    fun debugDraw(): DebugRenderer = DebugRenderer(
+    fun debugDraw(): PhysicsDebugRenderer = PhysicsDebugRenderer(
             true, true, false, true, false, true
     )
 
-    @Provides @Singleton
-    fun particleSystem(world: World): ParticleSystem {
-        return ParticleSystem(world)
-    }
 
     @Provides @Singleton
     fun camera(): OrthographicCamera {

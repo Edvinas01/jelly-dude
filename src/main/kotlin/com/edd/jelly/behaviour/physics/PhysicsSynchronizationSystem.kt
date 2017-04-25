@@ -13,7 +13,6 @@ import com.edd.jelly.util.degrees
 import com.edd.jelly.util.toVec2
 import com.google.inject.Inject
 
-
 class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
 
     private lateinit var softRenderables: ImmutableArray<Entity>
@@ -74,11 +73,12 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
         softRenderables.forEach {
             val transform = it.transform
             val vertices = SoftRenderable[it].region.vertices
-            val bodies = SoftBody[it].bodies
+            val softBody = SoftBody[it]
+            val bodies = softBody.bodies
 
             val center = transform.position.toVec2()
-
             bodies.forEachIndexed { i, b ->
+
                 val pos = b.getLocalPoint(center).negateLocal()
                 vertices[i * 2] = pos.x
                 vertices[i * 2 + 1] = pos.y

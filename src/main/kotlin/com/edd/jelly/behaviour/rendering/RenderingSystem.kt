@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.physics.LiquidRenderer
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapRenderer
 import com.edd.jelly.util.meters
@@ -20,6 +21,7 @@ import com.google.inject.Inject
 
 class RenderingSystem @Inject constructor(
         private val tiledMapRenderer: JellyMapRenderer,
+        private val liquidRenderer: LiquidRenderer,
         private val polygonBatch: PolygonSpriteBatch,
         private val spriteBatch: SpriteBatch,
         private val camera: OrthographicCamera
@@ -62,6 +64,7 @@ class RenderingSystem @Inject constructor(
         spriteBatch.setColor(1f, 1f, 1f, 1f)
 
         renderBackground()
+        renderLiquid()
         renderEntities()
         renderSoft()
         renderPolygons()
@@ -71,7 +74,7 @@ class RenderingSystem @Inject constructor(
     /**
      * Render background and base map layers.
      */
-    fun renderBackground() {
+    private fun renderBackground() {
         tiledMapRenderer.setView(camera)
         levels.forEach {
             tiledMapRenderer.drawBackground(JellyMap.mapper[it])
@@ -81,7 +84,7 @@ class RenderingSystem @Inject constructor(
     /**
      * Render foreground layers.
      */
-    fun renderForeground() {
+    private fun renderForeground() {
         levels.forEach {
             tiledMapRenderer.drawForeground(JellyMap.mapper[it])
         }
@@ -90,11 +93,11 @@ class RenderingSystem @Inject constructor(
     /**
      * Render simple entities.
      */
-    fun renderEntities() {
+    private fun renderEntities() {
         spriteBatch.draw {
             for (entity in simpleRenderableEntities) {
                 val transform = entity.transform
-                val region = Renderable.mapper[entity].textureRegion
+                val region = Renderable[entity].textureRegion
 
                 val width =
                         if (transform.width > 0) transform.width
@@ -125,7 +128,7 @@ class RenderingSystem @Inject constructor(
     /**
      * Render polygon entities.
      */
-    fun renderPolygons() {
+    private fun renderPolygons() {
         polygonBatch.draw {
             for (entity in polygonRenderableEntities) {
                 val polygonRenderable = PolygonRenderable.mapper[entity]
@@ -162,7 +165,7 @@ class RenderingSystem @Inject constructor(
     /**
      * Render soft polygons.
      */
-    fun renderSoft() {
+    private fun renderSoft() {
         polygonBatch.draw { b ->
             for (entity in softRenderableEntities) {
                 val transform = entity.transform
@@ -180,6 +183,13 @@ class RenderingSystem @Inject constructor(
                 )
             }
         }
+    }
+
+    /**
+     * Render liquid fun particles.
+     */
+    private fun renderLiquid() {
+        liquidRenderer.render(camera)
     }
 
     /**

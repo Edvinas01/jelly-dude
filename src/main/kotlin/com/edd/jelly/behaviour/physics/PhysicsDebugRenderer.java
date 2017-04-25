@@ -20,9 +20,10 @@ import org.jbox2d.dynamics.contacts.Contact;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointType;
 import org.jbox2d.dynamics.joints.PulleyJoint;
+import org.jbox2d.particle.ParticleColor;
 
-// Thanks https://github.com/AchrafAmil/Box2DDebugRenderer !!!
-public class DebugRenderer implements Disposable {
+// Thanks https://github.com/AchrafAmil/Box2DDebugRenderer
+public class PhysicsDebugRenderer implements Disposable {
 
     /**
      * the immediate mode renderer to output our debug drawings
@@ -44,8 +45,8 @@ public class DebugRenderer implements Disposable {
     private boolean drawVelocities;
     private boolean drawContacts;
 
-    public DebugRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
-                         boolean drawVelocities, boolean drawContacts) {
+    public PhysicsDebugRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
+                                boolean drawVelocities, boolean drawContacts) {
         // next we setup the immediate mode renderer
         renderer = new ShapeRenderer();
 
@@ -67,7 +68,7 @@ public class DebugRenderer implements Disposable {
     public void render(World world, Matrix4 projectionMatrix) {
         renderer.setProjectionMatrix(projectionMatrix);
         renderBodies(world);
-        renderParticles(world);
+//        renderParticles(world);
     }
 
     private final Color SHAPE_NOT_ACTIVE = new Color(0.5f, 0.5f, 0.3f, 1);
@@ -312,12 +313,18 @@ public class DebugRenderer implements Disposable {
 
     private void renderParticles(World world) {
         if (world.getParticleCount() > 0) {
-            renderer.setColor(PARTICLE_COLOR);
+
             renderer.begin(ShapeType.Line);
 
-            world.getParticleColorBuffer();
-            for (Vec2 pos : world.getParticlePositionBuffer()) {
-                renderer.circle(pos.x, pos.y, world.getParticleRadius(), 6);
+            ParticleColor[] colorBuffer = world.getParticleColorBuffer();
+            Vec2[] posBuffer = world.getParticlePositionBuffer();
+
+            for (int i = 0; i < world.getParticleCount(); i++) {
+                ParticleColor color = colorBuffer[i];
+                Vec2 pos = posBuffer[i];
+
+                renderer.setColor(color.r, color.g, color.b, color.a);
+                renderer.circle(pos.x, pos.y, world.getParticleRadius(), 3);
             }
             renderer.end();
         }

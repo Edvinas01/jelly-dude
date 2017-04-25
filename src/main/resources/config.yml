@@ -13,7 +13,8 @@ game:
 
   # Physics.
   gravity: -9.81
-  particleRadius: 0.1
+  particleRadius: 0.05
+  maxParticles: 10000
 
 # Video settings.
 video:

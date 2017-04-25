@@ -43,6 +43,7 @@ class JellyMapLoader @Inject constructor(
         const val LEVEL_FILE_TYPE = "tmx"
 
         const val BACKGROUND_TEXTURE = "background_texture"
+        const val COLLISION_LAYER = "collision"
         const val ENTITY_LAYER = "entities"
         const val SPAWN_NAME = "start"
     }
@@ -53,9 +54,9 @@ class JellyMapLoader @Inject constructor(
     fun loadMap(name: String, internal: Boolean = false): JellyMap {
         val map = getTiledMap(name, internal)
 
-        // Required main layer.
-        val entities: MapLayer = map.layers[ENTITY_LAYER]
-                ?: throw GameException("Layer \"$ENTITY_LAYER\" does not exist")
+        // Required collisions and entities layers.
+        val collisions = map.mustLayer(COLLISION_LAYER)
+        val entities = map.mustLayer(ENTITY_LAYER)
 
         var background = true
         val backgroundLayers = mutableListOf<MapLayer>()
@@ -121,6 +122,7 @@ class JellyMapLoader @Inject constructor(
                 },
                 getSpawn(entities),
                 getFocusPoints(entities),
+                collisions,
                 entities
         )
     }
