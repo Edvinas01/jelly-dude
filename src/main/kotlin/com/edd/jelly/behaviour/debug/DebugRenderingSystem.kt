@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.components.transform
-import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.behaviour.physics.PhysicsDebugRenderer
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
@@ -22,7 +22,7 @@ import org.jbox2d.dynamics.World
 class DebugRenderingSystem @Inject constructor(
         private val spriteBatch: SpriteBatch,
         private val messaging: Messaging,
-        private val renderer: DebugRenderer,
+        private val renderer: PhysicsDebugRenderer,
         private val camera: OrthographicCamera,
         private val world: World,
         resourceManager: ResourceManager,

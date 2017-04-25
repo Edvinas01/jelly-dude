@@ -1,12 +1,12 @@
 package com.edd.jelly.util
 
-import com.edd.jelly.behaviour.physics.DebugRenderer
+import com.edd.jelly.behaviour.physics.PhysicsDebugRenderer
 import org.apache.logging.log4j.LogManager
 
 class UncaughtExceptionLogger : Thread.UncaughtExceptionHandler {
 
     companion object {
-        private val LOG = LogManager.getLogger(DebugRenderer::class.java)
+        private val LOG = LogManager.getLogger(PhysicsDebugRenderer::class.java)
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {

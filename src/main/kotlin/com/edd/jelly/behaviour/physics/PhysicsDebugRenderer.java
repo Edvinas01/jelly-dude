@@ -22,8 +22,8 @@ import org.jbox2d.dynamics.joints.JointType;
 import org.jbox2d.dynamics.joints.PulleyJoint;
 import org.jbox2d.particle.ParticleColor;
 
-// Thanks https://github.com/AchrafAmil/Box2DDebugRenderer !!!
-public class DebugRenderer implements Disposable {
+// Thanks https://github.com/AchrafAmil/Box2DDebugRenderer
+public class PhysicsDebugRenderer implements Disposable {
 
     /**
      * the immediate mode renderer to output our debug drawings
@@ -45,8 +45,8 @@ public class DebugRenderer implements Disposable {
     private boolean drawVelocities;
     private boolean drawContacts;
 
-    public DebugRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
-                         boolean drawVelocities, boolean drawContacts) {
+    public PhysicsDebugRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
+                                boolean drawVelocities, boolean drawContacts) {
         // next we setup the immediate mode renderer
         renderer = new ShapeRenderer();
 

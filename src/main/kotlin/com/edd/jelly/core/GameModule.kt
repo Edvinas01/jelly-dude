@@ -120,7 +120,7 @@ class GameModule(private val game: JellyGame) : Module {
     }
 
     @Provides @Singleton
-    fun debugDraw(): DebugRenderer = DebugRenderer(
+    fun debugDraw(): PhysicsDebugRenderer = PhysicsDebugRenderer(
             true, true, false, true, false, true
     )
 
