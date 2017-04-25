@@ -1,15 +1,12 @@
 package com.edd.jelly.core.particles;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
 import com.edd.jelly.exception.GameException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import static com.badlogic.gdx.graphics.VertexAttributes.Usage.ColorUnpacked;
@@ -27,10 +24,13 @@ public class ParticleRenderer {
     private final World world;
     private final Mesh mesh;
 
+    private final Blober blober;
+
     private float[] positions;
 
     @Inject
-    public ParticleRenderer(World world) {
+    public ParticleRenderer(World world, Blober blober) {
+        this.blober = blober;
         this.shader = createShader();
         this.diffuse = createTexture();
         this.world = world;
@@ -50,11 +50,13 @@ public class ParticleRenderer {
     }
 
     public void render(OrthographicCamera camera) {
+        blober.render(camera.combined);
+
 
         Droplet.camera = camera;
         Droplet.world = world;
 
-        Droplet.Companion.render();
+//        Droplet.Companion.render();
 
 //        // Re-initialize particle position array if needed.
 //        Vec2[] particles = world.getParticlePositionBuffer();
