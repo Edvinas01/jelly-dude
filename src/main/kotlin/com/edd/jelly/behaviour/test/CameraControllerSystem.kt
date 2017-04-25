@@ -1,5 +1,6 @@
 package com.edd.jelly.behaviour.test
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
@@ -8,17 +9,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.core.configuration.Configurations
+import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject
 
 /**
  * Smoothly moves the camera around.
  */
 class CameraControllerSystem @Inject constructor(
-        multiplexer: InputMultiplexer,
-        private val camera: OrthographicCamera
+        private val camera: OrthographicCamera,
+        private val messaging: Messaging,
+        configurations: Configurations,
+        multiplexer: InputMultiplexer
 ) : EntitySystem() {
 
-    private var enabled = false
     private var right = false
     private var left = false
     private var up = false
@@ -37,6 +42,12 @@ class CameraControllerSystem @Inject constructor(
     }
 
     init {
+        setProcessing(configurations.config.game.debug)
+
+        messaging.listen<ConfigChangedEvent> { (config) ->
+            setProcessing(config.game.debug)
+        }
+
         multiplexer.addProcessor(object : InputAdapter() {
             override fun scrolled(amount: Int): Boolean {
                 return false
@@ -57,7 +68,6 @@ class CameraControllerSystem @Inject constructor(
 
             override fun keyUp(keycode: Int): Boolean {
                 when (keycode) {
-                    Input.Keys.GRAVE -> enabled = !enabled
                     Input.Keys.RIGHT -> right = false
                     Input.Keys.LEFT -> left = false
                     Input.Keys.UP -> up = false
@@ -72,10 +82,6 @@ class CameraControllerSystem @Inject constructor(
     }
 
     override fun update(deltaTime: Float) {
-        if (!enabled) {
-            return
-        }
-
         val slowDown = deltaTime * SLOW_DOWN_SPEED
 
         moveVector.lerp(Vector2.Zero, slowDown)

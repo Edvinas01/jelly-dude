@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" nextobjectid="28">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="32" tileheight="32" nextobjectid="32">
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>
- <layer name="background" width="64" height="32">
+ <layer name="background" width="64" height="32" visible="0">
   <properties>
    <property name="clampBottom" type="bool" value="true"/>
    <property name="clampTop" type="bool" value="true"/>
@@ -39,10 +39,20 @@
     <property name="type" value="liquid"/>
    </properties>
   </object>
+  <object id="29" x="832" y="704" width="128" height="64">
+   <properties>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="30" x="992" y="704" width="160" height="64">
+   <properties>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
  </objectgroup>
- <layer name="tiles" width="64" height="32">
+ <layer name="tiles" width="64" height="32" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1DEKACAMBDBx8/8fdnIRxMFKKSRwkx16UGwNAAAAAACA3SicCL1w9D+73cl6y+7wq/9tLnt3/d8T8Ydmd3jJBF/iBLY=
+   eJzt1DEKACEMBEC1u/9/2MpSPIgSAjOwjVpkIdgaAAAAAABATP95VslXODeMwtF/77Qn6y67w6v+p3fZs+sfz40/NLtDJBNu7gS4
   </data>
  </layer>
  <objectgroup name="collision">
@@ -53,5 +63,7 @@
   <object id="16" x="480" y="896" width="64" height="96"/>
   <object id="19" x="544" y="800" width="1504" height="192"/>
   <object id="24" x="224" y="896" width="96" height="96"/>
+  <object id="28" x="896" y="768" width="32" height="32"/>
+  <object id="31" x="1056" y="768" width="32" height="32"/>
  </objectgroup>
 </map>
