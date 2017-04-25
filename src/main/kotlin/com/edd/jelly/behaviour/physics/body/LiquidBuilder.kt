@@ -1,12 +1,15 @@
 package com.edd.jelly.behaviour.physics.body
 
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.components.Transform
 import com.edd.jelly.behaviour.physics.Particles
+import com.edd.jelly.core.tiled.float
+import com.edd.jelly.core.tiled.string
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 import com.google.inject.Singleton
@@ -21,6 +24,11 @@ import org.jbox2d.particle.ParticleType
 class LiquidBuilder @Inject constructor(
         private val world: World
 ) {
+
+    private companion object {
+        val COLOR_ALPHA = 0.1f
+        val COLOR_ALPHA_BYTE = COLOR_ALPHA.toByte()
+    }
 
     /**
      * Create liquid.
@@ -53,7 +61,7 @@ class LiquidBuilder @Inject constructor(
 
         val group = world.createParticleGroup(ParticleGroupDef().apply {
             position.set(transform.x + hw, transform.y + hh)
-            color = ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random()))
+            color = obj.particleColor()
             flags = ParticleType.b2_waterParticle
             shape = PolygonShape().apply {
                 setAsBox(hw, hh)
@@ -63,6 +71,21 @@ class LiquidBuilder @Inject constructor(
         return Entity().apply {
             add(Particles(group))
             add(transform)
+        }
+    }
+
+    /**
+     * Get particle color from map object.
+     */
+    private fun MapObject.particleColor(): ParticleColor {
+        return string("color")?.let { hex ->
+            val color = Color.valueOf(hex)
+            ParticleColor(Color3f(color.r, color.g, color.b)).apply {
+                a = (255 * this@particleColor.float("colorAlpha", COLOR_ALPHA)).toByte()
+            }
+
+        } ?: ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random())).apply {
+            a = COLOR_ALPHA_BYTE
         }
     }
 }

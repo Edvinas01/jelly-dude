@@ -68,7 +68,7 @@ public class PhysicsDebugRenderer implements Disposable {
     public void render(World world, Matrix4 projectionMatrix) {
         renderer.setProjectionMatrix(projectionMatrix);
         renderBodies(world);
-        renderParticles(world);
+//        renderParticles(world);
     }
 
     private final Color SHAPE_NOT_ACTIVE = new Color(0.5f, 0.5f, 0.3f, 1);

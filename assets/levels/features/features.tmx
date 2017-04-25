@@ -18,19 +18,9 @@
    eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
   </data>
  </layer>
- <objectgroup name="collision">
-  <object id="3" x="0" y="992" width="2048" height="32"/>
-  <object id="4" x="-224" y="0" width="224" height="1024"/>
-  <object id="5" x="2048" y="0" width="224" height="1024"/>
-  <object id="6" x="-224" y="-224" width="2496" height="224"/>
-  <object id="16" x="480" y="896" width="64" height="96"/>
-  <object id="19" x="544" y="800" width="1504" height="192"/>
-  <object id="24" x="224" y="896" width="96" height="96"/>
-  <object id="27" x="85" y="928" width="11" height="67"/>
- </objectgroup>
  <layer name="background_tiles" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJztzwENAAAIw7Dj3zQGUMDbZAKWAAAAAAAAAG3mqIn/7v+vFkowABA=
+   eJztz7ENAAAIwzD4/2k+gJ3aUrcuqQIAAAAAAAC+6GXX7wP92f3pBog0ACU=
   </data>
  </layer>
  <objectgroup name="entities">
@@ -44,6 +34,8 @@
   </object>
   <object id="26" x="333" y="901" width="115" height="65.6667">
    <properties>
+    <property name="color" value="#66EAFF"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
     <property name="type" value="liquid"/>
    </properties>
   </object>
@@ -53,4 +45,13 @@
    eJzt1DEKACAMBDBx8/8fdnIRxMFKKSRwkx16UGwNAAAAAACA3SicCL1w9D+73cl6y+7wq/9tLnt3/d8T8Ydmd3jJBF/iBLY=
   </data>
  </layer>
+ <objectgroup name="collision">
+  <object id="3" x="0" y="992" width="2048" height="32"/>
+  <object id="4" x="-224" y="0" width="224" height="1024"/>
+  <object id="5" x="2048" y="0" width="224" height="1024"/>
+  <object id="6" x="-224" y="-224" width="2496" height="224"/>
+  <object id="16" x="480" y="896" width="64" height="96"/>
+  <object id="19" x="544" y="800" width="1504" height="192"/>
+  <object id="24" x="224" y="896" width="96" height="96"/>
+ </objectgroup>
 </map>

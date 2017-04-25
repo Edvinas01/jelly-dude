@@ -1,4 +1,6 @@
 uniform sampler2D tex;
+
+varying vec4 col;
 varying vec2 t;
 
 const float depthColorShift = 0.8;
@@ -14,7 +16,9 @@ void main() {
 
     if(c.b > 0.7) {
         float depth = 0;
-        vec4 outColor = vec4(0.01, 0.13, c.b, 0.01);
+
+        // vec4 outColor = vec4(0.1, 0.13, c.b, 0.01);
+        vec4 outColor = vec4(col.r, col.g, col.b, col.a);
 
         for (int i = 0; i < samples; i++) {
             depth += texture2D(tex, t + (step * i * lightPosition)).b / samples;

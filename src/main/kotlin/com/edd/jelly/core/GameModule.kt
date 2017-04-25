@@ -115,7 +115,7 @@ class GameModule(private val game: JellyGame) : Module {
         val game = configurations.config.game
         return World(Vec2(0f, game.gravity)).apply {
             particleRadius = game.particleRadius
-            particleMaxCount = 1000
+            particleMaxCount = game.maxParticles
         }
     }
 

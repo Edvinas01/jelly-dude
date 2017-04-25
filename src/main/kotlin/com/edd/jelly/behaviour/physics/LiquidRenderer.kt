@@ -10,6 +10,7 @@ import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
+import org.jbox2d.particle.ParticleColor
 
 // Awesome https://github.com/pabloogc/LiveWater
 @Singleton
@@ -20,24 +21,20 @@ class LiquidRenderer @Inject constructor(
     private companion object {
         const val VERTEX_PER_DROPLET = 3
         const val INDEX_PER_DROPLET = 3
-        const val TRIANGLE_SCALE = 2.5f
+        const val TRIANGLE_SCALE = 1.5f
         const val POTENTIAL_MAP_SIZE = 128
 
         val INDEX_OFFSET = shortArrayOf(0, 1, 2)
 
         val ATTRIBUTES = VertexAttributes(
-                VertexAttribute(VertexAttributes.Usage.Position, 3, "center"),
-                VertexAttribute(VertexAttributes.Usage.Position, 3, "position")
+                VertexAttribute(VertexAttributes.Usage.Position, 2, "center"),
+                VertexAttribute(VertexAttributes.Usage.Position, 2, "position"),
+                VertexAttribute(VertexAttributes.Usage.ColorUnpacked, 4, "color")
         )
     }
 
-    init {
-        println(ATTRIBUTES.vertexSize)
-        println(ATTRIBUTES.vertexSize * world.particleMaxCount)
-    }
-
-    // Is 6 - component count, vertices(3) + indices(3).
-    private val vertexBuffer = FloatArray(VERTEX_PER_DROPLET * 6 * world.particleMaxCount)
+    // Is 4 - component count = center(2) + position(2) + color(8).
+    private val vertexBuffer = FloatArray(VERTEX_PER_DROPLET * 8 * world.particleMaxCount)
 
     private val indexBuffer = ShortArray(VERTEX_PER_DROPLET * world.particleMaxCount, { i ->
         ((i / INDEX_PER_DROPLET) * VERTEX_PER_DROPLET + INDEX_OFFSET[i % INDEX_PER_DROPLET]).toShort()
@@ -85,22 +82,19 @@ class LiquidRenderer @Inject constructor(
      * Update mesh vertices.
      */
     private fun updateVertices(): Int {
-        val buffer = world.particlePositionBuffer
+        val positionBuffer = world.particlePositionBuffer
+        val colorBuffer = world.particleColorBuffer
+
         var idx = 0
 
         for (i in 0..world.particleCount - 1) {
-            val pos = buffer[i]
+            val pos = positionBuffer[i]
+            val color = colorBuffer[i]
 
-            val scl = TRIANGLE_SCALE
-
-            // Top center.
-            idx = writeVertex(idx, pos.x + 0.0f * scl, pos.y + 0.622008459f * scl, pos)
-
-            // Bottom left.
-            idx = writeVertex(idx, pos.x - 0.5f * scl, pos.y - 0.311004243f * scl, pos)
-
-            // Bottom right.
-            idx = writeVertex(idx, pos.x + 0.5f * scl, pos.y - 0.311004243f * scl, pos)
+            // In order: top center, bottom left, bottom right.
+            idx = writeVertex(idx, pos.x + 0.0f * TRIANGLE_SCALE, pos.y + 0.622008459f * TRIANGLE_SCALE, pos, color)
+            idx = writeVertex(idx, pos.x - 0.5f * TRIANGLE_SCALE, pos.y - 0.311004243f * TRIANGLE_SCALE, pos, color)
+            idx = writeVertex(idx, pos.x + 0.5f * TRIANGLE_SCALE, pos.y - 0.311004243f * TRIANGLE_SCALE, pos, color)
         }
         particleMesh.updateVertices(0, vertexBuffer, 0, idx)
 
@@ -120,6 +114,7 @@ class LiquidRenderer @Inject constructor(
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
 
         potentialShader.begin()
+        potentialShader.setUniformMatrix("mvp", projection)
         potentialShader.setUniformMatrix("mvp", projection)
         potentialShader.setUniformf("radius", world.particleRadius)
 
@@ -162,18 +157,22 @@ class LiquidRenderer @Inject constructor(
      *
      * @return pointer to the next vertex.
      */
-    private fun writeVertex(pointer: Int, x: Float, y: Float, pos: Vec2): Int {
+    private fun writeVertex(pointer: Int, x: Float, y: Float, position: Vec2, color: ParticleColor): Int {
         var idx = pointer
 
         // Center.
-        vertexBuffer[idx++] = pos.x
-        vertexBuffer[idx++] = pos.y
-        vertexBuffer[idx++] = 0f
+        vertexBuffer[idx++] = position.x
+        vertexBuffer[idx++] = position.y
 
         // Position.
         vertexBuffer[idx++] = x
         vertexBuffer[idx++] = y
-        vertexBuffer[idx++] = 0f
+
+        // Color.
+        vertexBuffer[idx++] = color.r.toFloatColor()
+        vertexBuffer[idx++] = color.g.toFloatColor()
+        vertexBuffer[idx++] = color.b.toFloatColor()
+        vertexBuffer[idx++] = color.a.toFloatColor()
 
         return idx
     }
@@ -200,5 +199,12 @@ class LiquidRenderer @Inject constructor(
         return ATTRIBUTES.map {
             this.getAttributeLocation(it.alias)
         }.toIntArray()
+    }
+
+    /**
+     * Convert signed byte value to float color value.
+     */
+    private fun Byte.toFloatColor(): Float {
+        return (this.toInt() and 0xff) / 255f
     }
 }

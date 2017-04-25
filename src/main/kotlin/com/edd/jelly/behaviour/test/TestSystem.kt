@@ -34,16 +34,18 @@ import org.jbox2d.dynamics.World
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
 import org.jbox2d.particle.ParticleColor
+import org.jbox2d.particle.ParticleGroup
 import org.jbox2d.particle.ParticleGroupDef
 import org.jbox2d.particle.ParticleType
+import java.lang.NullPointerException
 
 class TestSystem @Inject constructor(
+        private val configurations: Configurations,
         private val resources: ResourceManager,
         private val camera: OrthographicCamera,
         private val messaging: Messaging,
         private val world: World,
-        inputMultiplexer: InputMultiplexer,
-        configurations: Configurations
+        inputMultiplexer: InputMultiplexer
 ) : EntitySystem() {
 
     /**
@@ -82,13 +84,19 @@ class TestSystem @Inject constructor(
     private inner class TestInputAdapter : InputAdapter() {
         override fun keyUp(keycode: Int): Boolean {
 
-
-            // Handle mode changing.
             when (keycode) {
+
+                // Handle mode changing.
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX
                 Input.Keys.NUM_4 -> mode = Mode.JELLY
+
+                // Handle debug toggling.
+                Input.Keys.GRAVE -> {
+                    configurations.config.game.debug = !configurations.config.game.debug
+                    configurations.save()
+                }
 
                 else -> {
                     return false
@@ -189,29 +197,39 @@ class TestSystem @Inject constructor(
                         Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
                 ))
 
-                val group = world.createParticleGroup(ParticleGroupDef().apply {
-                    val particleTypes = listOf(
-                            ParticleType.b2_waterParticle,
-                            ParticleType.b2_springParticle,
-                            ParticleType.b2_elasticParticle,
-                            ParticleType.b2_viscousParticle,
-                            ParticleType.b2_powderParticle,
-                            ParticleType.b2_tensileParticle,
-                            ParticleType.b2_colorMixingParticle
-                    )
+                try {
+                    val group: ParticleGroup? = world.createParticleGroup(ParticleGroupDef().apply {
+                        val particleTypes = listOf(
+                                ParticleType.b2_waterParticle,
+                                ParticleType.b2_springParticle,
+                                ParticleType.b2_elasticParticle,
+                                ParticleType.b2_viscousParticle,
+                                ParticleType.b2_powderParticle,
+                                ParticleType.b2_tensileParticle,
+                                ParticleType.b2_colorMixingParticle
+                        )
 
-                    flags = particleTypes[MathUtils.random(particleTypes.size - 1)]
-                    shape = PolygonShape().apply {
-                        setAsBox(transform.width, transform.height)
-                    }
-                    position.apply {
-                        x = transform.position.x
-                        y = transform.position.y
-                    }
-                    color = ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random()))
-                })
+                        flags = particleTypes[MathUtils.random(particleTypes.size - 1)]
+                        shape = PolygonShape().apply {
+                            setAsBox(transform.width, transform.height)
+                        }
+                        position.apply {
+                            x = transform.position.x
+                            y = transform.position.y
+                        }
+                        color = ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random()))
+                        color.a = 5
+                    })
 
-                add(Particles(group))
+                    if (group != null) {
+                        add(Particles(group))
+                    }
+
+                } catch (e: NullPointerException) {
+                    // liquid fun seems to throw this somewhere deep in its code, this is a test system
+                    // so im not gonna bother.
+                    e.printStackTrace()
+                }
             })
         }
     }
