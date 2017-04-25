@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>
- <layer name="background" width="64" height="32" visible="0">
+ <layer name="background" width="64" height="32">
   <properties>
    <property name="clampBottom" type="bool" value="true"/>
    <property name="clampTop" type="bool" value="true"/>
@@ -50,7 +50,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="tiles" width="64" height="32" visible="0">
+ <layer name="tiles" width="64" height="32">
   <data encoding="base64" compression="zlib">
    eJzt1DEKACEMBEC1u/9/2MpSPIgSAjOwjVpkIdgaAAAAAABATP95VslXODeMwtF/77Qn6y67w6v+p3fZs+sfz40/NLtDJBNu7gS4
   </data>

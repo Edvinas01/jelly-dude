@@ -13,13 +13,14 @@ import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.exception.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.stream.Collectors
 
 @Singleton
 class JellyMapLoader @Inject constructor(
@@ -27,6 +28,7 @@ class JellyMapLoader @Inject constructor(
 
         @InternalMapLoader
         private val internalTmxMapLoader: TmxMapLoader,
+        private val objectMapper: ObjectMapper,
         private val tmxMapLoader: TmxMapLoader,
         private val camera: OrthographicCamera
 ) {
@@ -39,6 +41,7 @@ class JellyMapLoader @Inject constructor(
     }
 
     private companion object {
+        const val LEVEL_INFO_FILE = "levels.yml"
         const val LEVEL_DIRECTORY = "levels/"
         const val LEVEL_FILE_TYPE = "tmx"
 
@@ -46,6 +49,8 @@ class JellyMapLoader @Inject constructor(
         const val COLLISION_LAYER = "collision"
         const val ENTITY_LAYER = "entities"
         const val SPAWN_NAME = "start"
+
+        val LOG: Logger = LogManager.getLogger(JellyMapLoader::class.java)
     }
 
     /**
@@ -202,15 +207,17 @@ class JellyMapLoader @Inject constructor(
     /**
      * Load all level metadata (files are loaded NOT from classpath).
      */
-    private fun loadMeta(): List<JellyMapMetadata> {
-        return Files
-                .walk(Paths.get("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY"))
-                .skip(1)
-                .map(Path::toFile)
-                .filter(File::isDirectory)
-                .map {
-                    JellyMapMetadata(it.name)
-                }
-                .collect(Collectors.toList())
+    private fun loadMeta(): Map<String, JellyMapMetadata> {
+        val file = File("${Configurations.ASSETS_FOLDER}$LEVEL_DIRECTORY$LEVEL_INFO_FILE")
+        if (!file.exists()) {
+            LOG.warn("No {} file is found under {} directory", LEVEL_INFO_FILE, LEVEL_DIRECTORY)
+            return emptyMap()
+        }
+        return objectMapper.readValue<Map<String, RawJellyMapMetadata>>(
+                file,
+                object : TypeReference<Map<String, RawJellyMapMetadata>>() {}
+        ).map { (k, v) ->
+            k to JellyMapMetadata(k, v.description, v.author, v.name, resourceManager.mainAtlas["the_borker"]!!)
+        }.toMap()
     }
 }

@@ -3,7 +3,6 @@ package com.edd.jelly.core.configuration
 import com.edd.jelly.core.JellyGame
 import com.edd.jelly.core.events.Messaging
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -26,7 +25,7 @@ class Configurations {
     val mapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(KotlinModule())
 
-        enable(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES)
+//        enable(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES)
         enable(JsonParser.Feature.ALLOW_YAML_COMMENTS)
     }
 

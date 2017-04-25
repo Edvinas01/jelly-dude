@@ -147,7 +147,7 @@ class TestSystem @Inject constructor(
 
                 body.createFixture(PolygonShape().apply {
                     setAsBox(transform.width / 2, transform.height / 2)
-                }, 1f)
+                }, 0.1f)
                 body.setTransform(transform.position.let { v ->
                     Vec2(v.x, v.y)
                 }, 0f)
