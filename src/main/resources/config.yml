@@ -6,7 +6,7 @@ game:
   scripting: true
 
   # If specified, this level will be loaded instead of normal game.
-  debugLevel: main
+  debugLevel:
 
   # Enable debug mode.
   debug: false
