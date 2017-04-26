@@ -9,7 +9,7 @@ game:
   debugLevel: main
 
   # Enable debug mode.
-  debug: true
+  debug: false
 
   # Physics.
   gravity: -9.81
