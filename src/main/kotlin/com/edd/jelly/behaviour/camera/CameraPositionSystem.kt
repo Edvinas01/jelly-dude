@@ -6,12 +6,15 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.TimeUtils
 import com.edd.jelly.behaviour.components.transform
 import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.behaviour.player.Player
+import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject
 import java.util.*
@@ -20,7 +23,8 @@ import java.util.concurrent.TimeUnit
 class CameraPositionSystem @Inject constructor(
         private val messaging: Messaging,
         private val camera: OrthographicCamera,
-        private val random: Random
+        private val random: Random,
+        configurations: Configurations
 ) : EntitySystem() {
 
     private companion object {
@@ -53,6 +57,11 @@ class CameraPositionSystem @Inject constructor(
      */
     private var movedPoint = 0L
 
+    private var worldWidth = 0
+    private var worldHeight = 0
+
+    private var followPlayer = !configurations.config.game.debug
+
     init {
         initListeners()
     }
@@ -66,9 +75,12 @@ class CameraPositionSystem @Inject constructor(
         if (player != null) {
 
 
-            // If we have a player, follow the camera to it.
-            val transform = player.transform
-            moveCamera(deltaTime, transform.x, transform.y)
+            // If we have a player and debug is off, follow the camera to it.
+            if (followPlayer) {
+                val transform = player.transform
+                moveCamera(deltaTime, transform.x, transform.y)
+            }
+
         } else {
 
             // Else move to a random focus point.
@@ -76,6 +88,14 @@ class CameraPositionSystem @Inject constructor(
                 moveCamera(deltaTime, x, y)
             }
         }
+
+        // Keep camera in world bounds.
+        val hw = camera.viewportWidth / 2
+        val hh = camera.viewportHeight / 2
+
+        camera.position.x = MathUtils.clamp(camera.position.x, hw, worldWidth - hw)
+        camera.position.y = MathUtils.clamp(camera.position.y, hh, worldHeight - hh) // Not clamping max height worldHeight
+
         camera.update()
     }
 
@@ -102,11 +122,18 @@ class CameraPositionSystem @Inject constructor(
 
     private fun initListeners() {
         messaging.listen<LevelLoadedEvent> { (map) ->
+            worldWidth = map.width
+            worldHeight = map.height
+
             focusPoints = map.focusPoints
             if (focusPoints.isNotEmpty()) {
                 focusPoint = focusPoints[0]
                 camera.position.set(focusPoint.x, focusPoint.y, 0f)
             }
+        }
+
+        messaging.listen<ConfigChangedEvent> { (config) ->
+            followPlayer = !config.game.debug
         }
     }
 }

@@ -9,13 +9,15 @@ import com.edd.jelly.behaviour.components.ComponentResolver
 
 class JellyMap internal constructor(
         val name: String,
+        val width: Int,
+        val height: Int,
         val tiledMap: TiledMap,
         val backgroundLayers: Collection<MapLayer>,
         val foregroundLayers: Collection<MapLayer>,
         val background: Texture?,
         val spawn: Vector2?,
         val focusPoints: List<Vector2>,
-        val colissionsLayer: MapLayer,
+        val collisionsLayer: MapLayer,
         val entitiesLayer: MapLayer
 ) : Component {
     companion object : ComponentResolver<JellyMap>(JellyMap::class.java)

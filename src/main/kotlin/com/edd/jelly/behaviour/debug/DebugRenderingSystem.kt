@@ -14,6 +14,7 @@ import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
 import org.jbox2d.common.MathUtils
@@ -29,7 +30,7 @@ class DebugRenderingSystem @Inject constructor(
         configurations: Configurations
 ) : EntitySystem() {
 
-    private val transformTexture = resourceManager.getTexture("xy_axis")
+    private val transformTexture = resourceManager.mainAtlas["xy_axis"]!!
     private val game = configurations.config.game
 
     private lateinit var transforms: ImmutableArray<Entity>
@@ -62,8 +63,8 @@ class DebugRenderingSystem @Inject constructor(
                     transformTexture,
                     transform.x,
                     transform.y,
-                    MathUtils.max(transformTexture.width.meters, transform.width),
-                    MathUtils.max(transformTexture.height.meters, transform.height)
+                    MathUtils.max(transformTexture.regionWidth.meters, transform.width),
+                    MathUtils.max(transformTexture.regionHeight.meters, transform.height)
             )
         }
         spriteBatch.end()

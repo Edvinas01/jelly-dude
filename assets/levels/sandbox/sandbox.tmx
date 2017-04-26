@@ -13,7 +13,7 @@
    <property name="scaleY" type="float" value="2"/>
    <property name="speedX" type="float" value="0.09999999999999998"/>
    <property name="speedY" type="float" value="0.3"/>
-   <property name="texture" value="test_background"/>
+   <property name="texture" value="neon_background"/>
    <property name="type" value="PARALLAX"/>
   </properties>
   <data encoding="base64" compression="gzip">
@@ -167,16 +167,4 @@
   <object id="109" x="2880" y="1408" width="32" height="32"/>
   <object id="110" x="2016" y="1408" width="32" height="32"/>
  </objectgroup>
- <layer name="parallax_foreground" width="128" height="64">
-  <properties>
-   <property name="clampBottom" type="bool" value="true"/>
-   <property name="speedX" type="float" value="0.2"/>
-   <property name="speedY" type="float" value="0.5"/>
-   <property name="texture" value="test_something"/>
-   <property name="type" value="PARALLAX"/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABim/B8BAIAAAA==
-  </data>
- </layer>
 </map>

@@ -1,40 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="64">
- <properties>
-  <property name="exclude" type="bool" value="false"/>
- </properties>
- <tileset firstgid="1" name="neon_tileset" tilewidth="16" tileheight="16" tilecount="64" columns="8">
-  <image source="../../textures/neon_tileset.png" width="128" height="128"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="64" tileheight="64" nextobjectid="86">
+ <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="3" tilecount="45" columns="15">
+  <image source="../../../../../assets/textures/jelly_tiles.png" width="1024" height="256"/>
  </tileset>
- <layer name="foreground_tiles" width="64" height="64">
+ <tileset firstgid="46" name="Objects" tilewidth="64" tileheight="64" tilecount="128" columns="32">
+  <image source="../../../../../assets/textures/jelly_stuff.png" width="2048" height="256"/>
+ </tileset>
+ <layer name="background" width="32" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="scaleX" type="float" value="2"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.3"/>
+   <property name="texture" value="jelly_background"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2EEKgzAQBVDvYl3p0vufrZsGNB1IodCi/71NYJiFhJj5ZJoAAAAAAAAAAAAA7uHx7w/4obmobR/2VbWrWYva/lqXQV9VI88ybiHE8SwkzZFKNUeS7OMWiHOH3PgNufHsODOdjbN+P9IyRb8fqZmi/SMyBYyl3ZNNmxf9PZkyV9u86N/wZK53T6qtBV8=
-  </data>
- </layer>
- <layer name="tiles" width="64" height="64">
-  <data encoding="base64" compression="zlib">
-   eJztmEEKwzAMBEPf0B77/2+WHgxB2MaOV5Jl7YAOgQQ0mw0huS5CCCGEEOLFV0wmas6RMpD3bnb32vnR/HvHI9dH7n/k7iKQ9yyb/5+o3SWEEEJ2J/u7lf55ye6+u7/WjhHcC+hdI7kXVnc+5Tty5p9O5H8/o9TyON2ZEEIIIYSQ7HzEePICzAh3X/nd45nHGzA9Ws69scwC4d/qwqx3LwstEP6tLiD87zlogPYvPUC6a3YB7V8G7a7VBS1/+Y7YtQta/lZ9WM3Byl+rB6vPg5W/dg5PM7D218zhSQZe/jIHVB6zGXj79/KwyMDbV6Mbp/ivdGM0A2+nlSwQGXh7IPqwkoG3g0UXehl4727RhQz+MofR+QG9jFo3
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
   </data>
  </layer>
  <objectgroup name="entities">
-  <object id="61" name="interesting_01" x="480" y="352">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="scaleX" type="float" value="2"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.3"/>
+   <property name="texture" value="jelly_background"/>
+   <property name="type" value="PARALLAX"/>
+  </properties>
+  <object id="61" name="interesting_01" x="976" y="670">
    <properties>
     <property name="focusPoint" type="bool" value="true"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="62" name="interesting_02" x="240" y="592">
+  <object id="75" name="interesting_03" x="1298" y="1418">
    <properties>
     <property name="focusPoint" type="bool" value="true"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="63" name="interesting_03" x="704" y="688">
+  <object id="76" name="interesting_02" x="618" y="1564">
    <properties>
     <property name="focusPoint" type="bool" value="true"/>
    </properties>
    <ellipse/>
+  </object>
+  <object id="77" x="724" y="1792" width="472" height="54">
+   <properties>
+    <property name="color" value="#66EAFF"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
+    <property name="type" value="liquid"/>
+   </properties>
+  </object>
+  <object id="78" x="841.455" y="839.667" width="298.667" height="46">
+   <properties>
+    <property name="color" value="#e238d7"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
+    <property name="type" value="liquid"/>
+   </properties>
+  </object>
+  <object id="79" x="1508.24" y="1546.7" width="532" height="294.485">
+   <properties>
+    <property name="color" value="#41f4f4"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
+    <property name="type" value="liquid"/>
+   </properties>
   </object>
  </objectgroup>
- <objectgroup name="collision"/>
+ <layer name="objects_01" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1lkOgjAURuGuSXFgG4gDCWwCHHAbDiAvrNXzShNIE3uF6D3J99b0f2tqjKZpv9AMcwRYjLAfYYMYW4/3LrHCGuHAuRwFjjh53N9hjwOSgXMt7njg6XH/jAtKXD3e61qFGi80I+xrmjbtXN9oqVzfaKmm9Ea3H9zz7T+EvSf1h+jL3pP6Q/Rl791M9w+RIhPct/e0/+oNU0wgYw==
+  </data>
+ </layer>
+ <layer name="tiles_01" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1SEOACAQA8EDgiBB8P/Xch+grgjYSVZXNgIAACglq6Jm3p/ZEC3zPgDgXaePc32b+tMb9c/bqzAB/A==
+  </data>
+ </layer>
+ <layer name="objects_02" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1MkJgDAQRmGrcgG1DNc+XBpxuWirPg8BQW8a5/J/8CCQwwwEEgQiIvJGfjlvZlv401BLqfUiIiJy4/7oU2a5yIdCiiimxGB+QSVVVP84171lRz0NNHqetT/cTTTTQqun+WLnAFliC0E=
+  </data>
+ </layer>
+ <layer name="tiles_02" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlTkKACAMwLxBcPD/r7WDjupUxJJApoqhU50DAICf8WKYxgf9JOZpUfh/7bfbTbvfxCr2y/z0BgDAKtZvEH361voD8icBHg==
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="64" x="0" y="1856" width="2048" height="192"/>
+  <object id="65" x="256" y="1792" width="448" height="64"/>
+  <object id="66" x="1216" y="1536" width="256" height="320"/>
+  <object id="67" x="704" y="896" width="576" height="128"/>
+  <object id="68" x="-128" y="0" width="128" height="2048"/>
+  <object id="69" x="2048" y="0" width="128" height="2048"/>
+  <object id="70" x="-128" y="-128" width="2304" height="128"/>
+  <object id="71" x="1152" y="704" width="256" height="256"/>
+  <object id="72" x="640" y="832" width="192" height="128"/>
+ </objectgroup>
 </map>

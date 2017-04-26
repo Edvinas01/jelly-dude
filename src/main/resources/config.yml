@@ -3,10 +3,10 @@ game:
   language: english
 
   # Enable all script functions.
-  scripting: false
+  scripting: true
 
   # If specified, this level will be loaded instead of normal game.
-  debugLevel: features
+  debugLevel: main
 
   # Enable debug mode.
   debug: true
@@ -14,13 +14,13 @@ game:
   # Physics.
   gravity: -9.81
   particleRadius: 0.05
-  maxParticles: 10000
+  maxParticles: 5000
 
 # Video settings.
 video:
   screen:
     fullscreen: false
-    width: 800
-    height: 600
+    width: 1280
+    height: 720
   fpsLimit: 60
   vsync: true

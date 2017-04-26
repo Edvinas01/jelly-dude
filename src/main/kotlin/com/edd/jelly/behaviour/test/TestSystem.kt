@@ -54,8 +54,7 @@ class TestSystem @Inject constructor(
     private enum class Mode {
         BOX,
         CIRCLE,
-        PARTICLE_BOX,
-        JELLY,
+        PARTICLE_BOX
     }
 
     private val mouse = Vector3()
@@ -90,7 +89,6 @@ class TestSystem @Inject constructor(
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX
-                Input.Keys.NUM_4 -> mode = Mode.JELLY
 
                 // Handle debug toggling.
                 Input.Keys.GRAVE -> {
@@ -120,7 +118,6 @@ class TestSystem @Inject constructor(
                 Mode.BOX -> spawnBox(pos)
                 Mode.CIRCLE -> spawnCircle(pos)
                 Mode.PARTICLE_BOX -> spawnParticleBox(pos)
-                Mode.JELLY -> spawnCoolJelly(pos)
             }
 
             println("Clicked at: $pos")
@@ -132,7 +129,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnBox(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["the_borker"]?.let {
+                resources.mainAtlas["crate"]?.let {
                     add(Renderable(it))
                 }
 
@@ -161,7 +158,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnCircle(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["the_round_borker"]?.let {
+                resources.mainAtlas["round_crate"]?.let {
                     add(Renderable(it))
                 }
 
@@ -191,11 +188,14 @@ class TestSystem @Inject constructor(
          */
         fun spawnParticleBox(pos: Vector2) {
 
+            val w = 0.1f + MathUtils.random(1f)
+            val h = 0.1f + MathUtils.random(1f)
+
             engine.addEntity(Entity().apply {
-                add(Transform(
-                        Vector2(pos.x, pos.y),
-                        Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
-                ))
+//                add(Transform(
+//                        Vector2(pos.x, pos.y),
+//                        Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
+//                ))
 
                 try {
                     val group: ParticleGroup? = world.createParticleGroup(ParticleGroupDef().apply {
@@ -211,11 +211,11 @@ class TestSystem @Inject constructor(
 
                         flags = particleTypes[MathUtils.random(particleTypes.size - 1)]
                         shape = PolygonShape().apply {
-                            setAsBox(transform.width, transform.height)
+                            setAsBox(w, h)
                         }
                         position.apply {
-                            x = transform.position.x
-                            y = transform.position.y
+                            x = pos.x
+                            y = pos.y
                         }
                         color = ParticleColor(Color3f(MathUtils.random(), MathUtils.random(), MathUtils.random()))
                         color.a = 5

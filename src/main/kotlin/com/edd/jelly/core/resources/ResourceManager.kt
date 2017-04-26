@@ -1,6 +1,7 @@
 package com.edd.jelly.core.resources
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import java.io.File
 
 @Singleton
 class ResourceManager @Inject constructor(
@@ -26,7 +28,6 @@ class ResourceManager @Inject constructor(
         const private val PNG_FILE_TYPE = "png"
 
         const private val ATLAS_FILE_TYPE = "atlas"
-        const private val MAIN_ATLAS_NAME = "main"
     }
 
     private val languageMap = loadLanguages(objectMapper)
@@ -49,7 +50,7 @@ class ResourceManager @Inject constructor(
     init {
         initListeners()
 
-        mainAtlas = getAtlas(MAIN_ATLAS_NAME)
+        mainAtlas = getAtlas("jelly_stuff")
         skin = Skin(Gdx.files.internal("ui/uiskin.json"))
     }
 
@@ -67,7 +68,7 @@ class ResourceManager @Inject constructor(
             } else {
                 "$name.$ATLAS_FILE_TYPE"
             }
-            TextureAtlas("$TEXTURE_DIRECTORY/$fullPath")
+            TextureAtlas(FileHandle(File("${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$fullPath")))
         })
     }
 
@@ -77,15 +78,28 @@ class ResourceManager @Inject constructor(
      * @param name texture name.
      * @return texture.
      */
-    fun getTexture(name: String): Texture {
+    @Deprecated("Use getTex() instead")
+    fun getTexture(name: String, external: Boolean = false): Texture {
         return textures.getOrPut(name, defaultValue = {
             val fullPath = if (name.endsWith(PNG_FILE_TYPE)) {
                 name
             } else {
                 "$name.$PNG_FILE_TYPE"
             }
-            Texture("$TEXTURE_DIRECTORY/$fullPath")
+
+            if (external) {
+                Texture(FileHandle(File("${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$fullPath")))
+            } else {
+                Texture("$TEXTURE_DIRECTORY/$fullPath")
+            }
         })
+    }
+
+    /**
+     * Get external texture by name.
+     */
+    fun getTex(name: String): Texture {
+        return getTexture(name, true)
     }
 
     /**

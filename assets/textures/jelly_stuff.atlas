@@ -1,0 +1,132 @@
+
+jelly_stuff.png
+size: 2048,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+arrow_sign
+  rotate: false
+  xy: 896, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+bush
+  rotate: false
+  xy: 768, 128
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+bush
+  rotate: false
+  xy: 768, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 2
+bush
+  rotate: false
+  xy: 960, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+bush
+  rotate: false
+  xy: 1024, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 4
+crate
+  rotate: false
+  xy: 1024, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+dev_grid
+  rotate: false
+  xy: 1152, 160
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+level_icon
+  rotate: false
+  xy: 0, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+rocks
+  rotate: false
+  xy: 1088, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+round_crate
+  rotate: false
+  xy: 1024, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+shroom
+  rotate: false
+  xy: 1024, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+shroom
+  rotate: false
+  xy: 1088, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+sign
+  rotate: false
+  xy: 1152, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+slime
+  rotate: false
+  xy: 896, 128
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+stump
+  rotate: false
+  xy: 896, 64
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: 1
+tree
+  rotate: false
+  xy: 256, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 1
+tree
+  rotate: false
+  xy: 512, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 2
+xy_axis
+  rotate: false
+  xy: 1088, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

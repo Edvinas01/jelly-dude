@@ -86,7 +86,7 @@ class JellyMapLoader @Inject constructor(
                     LayerType.valueOf(it)
                 } ?: LayerType.DEFAULT) {
                     LayerType.PARALLAX -> {
-                        val texture = resourceManager.getTexture(layer.getString("texture") ?:
+                        val texture = resourceManager.getTex(layer.getString("texture") ?:
                                 throw GameException("Please specify parallax \"texture\" name"))
 
                         add(ParallaxLayer(
@@ -118,17 +118,20 @@ class JellyMapLoader @Inject constructor(
             }
         }
         return JellyMap(
-                name,
-                map,
-                backgroundLayers,
-                foregroundLayers,
-                map.properties.get(BACKGROUND_TEXTURE)?.let {
+                // +1 for width since it seems that it doesn't cover the most right tile.
+                width = ((map.int("width") + 1) * map.int("tilewidth")).meters.toInt(),
+                height = ((map.int("height")) * map.int("tileheight")).meters.toInt(),
+                name = name,
+                tiledMap = map,
+                backgroundLayers = backgroundLayers,
+                foregroundLayers = foregroundLayers,
+                background = map.properties.get(BACKGROUND_TEXTURE)?.let {
                     resourceManager.getTexture(it as String)
                 },
-                getSpawn(entities),
-                getFocusPoints(entities),
-                collisions,
-                entities
+                spawn = getSpawn(entities),
+                focusPoints = getFocusPoints(entities),
+                collisionsLayer = collisions,
+                entitiesLayer = entities
         )
     }
 
@@ -217,7 +220,7 @@ class JellyMapLoader @Inject constructor(
                 file,
                 object : TypeReference<Map<String, RawJellyMapMetadata>>() {}
         ).map { (k, v) ->
-            k to JellyMapMetadata(k, v.description, v.author, v.name, resourceManager.mainAtlas["the_borker"]!!)
+            k to JellyMapMetadata(k, v.description, v.author, v.name, resourceManager.mainAtlas["level_icon"]!!)
         }.toMap()
     }
 }

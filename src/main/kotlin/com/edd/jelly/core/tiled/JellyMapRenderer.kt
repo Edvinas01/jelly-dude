@@ -85,9 +85,8 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
                 py = y
             }
 
-            val tx = y - size.y / 2 // Don't really know how to name this one.
-            if (clampTop && tx > py) {
-                py = tx
+            if (clampTop) {
+                py = Math.max(py, y - size.y / 2)
             }
 
             // Camera left.

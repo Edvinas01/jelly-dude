@@ -1,12 +1,12 @@
-features:
-  description: Level for testing game features
+main:
+  description: Main level to showcase game features
   author: Edd
-  name: Features
-test:
-  description: Generic test level
+  name: Main
+liquid:
+  description: Testing liquid
   author: Edd
-  name: Test 1
-test2:
-  description: Blank level
-  author: Cool Guy
-  name: Test 2
+  name: Liquid tests
+sandbox:
+  description: Testing various raw features
+  author: Edd
+  name: Sandbox

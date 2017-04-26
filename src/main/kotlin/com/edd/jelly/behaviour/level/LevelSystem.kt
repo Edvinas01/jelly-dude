@@ -55,7 +55,7 @@ class LevelSystem @Inject constructor(
         val map = jellyMapLoader.loadMap(name, internal)
 
         // Create static collisions and entities.
-        (bodyEntityFactory.create(map.colissionsLayer) + bodyEntityFactory.create(map.entitiesLayer)).forEach {
+        (bodyEntityFactory.create(map.collisionsLayer) + bodyEntityFactory.create(map.entitiesLayer)).forEach {
             engine.addEntity(it)
         }
 
