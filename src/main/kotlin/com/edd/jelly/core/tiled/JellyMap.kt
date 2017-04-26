@@ -9,8 +9,8 @@ import com.edd.jelly.behaviour.components.ComponentResolver
 
 class JellyMap internal constructor(
         val name: String,
-        val width: Int,
-        val height: Int,
+        val width: Float,
+        val height: Float,
         val tiledMap: TiledMap,
         val backgroundLayers: Collection<MapLayer>,
         val foregroundLayers: Collection<MapLayer>,

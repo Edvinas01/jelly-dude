@@ -117,10 +117,10 @@ class JellyMapLoader @Inject constructor(
                 }
             }
         }
+
         return JellyMap(
-                // +1 for width since it seems that it doesn't cover the most right tile.
-                width = ((map.int("width") + 1) * map.int("tilewidth")).meters.toInt(),
-                height = ((map.int("height")) * map.int("tileheight")).meters.toInt(),
+                width = (map.int("width") * map.int("tilewidth")).meters,
+                height = (map.int("height") * map.int("tileheight")).meters,
                 name = name,
                 tiledMap = map,
                 backgroundLayers = backgroundLayers,

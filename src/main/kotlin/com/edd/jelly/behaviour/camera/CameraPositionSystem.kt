@@ -57,8 +57,8 @@ class CameraPositionSystem @Inject constructor(
      */
     private var movedPoint = 0L
 
-    private var worldWidth = 0
-    private var worldHeight = 0
+    private var worldWidth = 0f
+    private var worldHeight = 0f
 
     private var followPlayer = !configurations.config.game.debug
 
@@ -94,7 +94,7 @@ class CameraPositionSystem @Inject constructor(
         val hh = camera.viewportHeight / 2
 
         camera.position.x = MathUtils.clamp(camera.position.x, hw, worldWidth - hw)
-        camera.position.y = MathUtils.clamp(camera.position.y, hh, worldHeight - hh) // Not clamping max height worldHeight
+        camera.position.y = MathUtils.clamp(camera.position.y, hh, worldHeight - hh)
 
         camera.update()
     }
