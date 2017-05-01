@@ -10,3 +10,11 @@ sandbox:
   description: Testing various raw features
   author: Edd
   name: Sandbox
+modify:
+  description: Base level for creating new levels
+  author: Edd
+  name: Modify
+wide:
+  description: None
+  author: Edd
+  name: Wide Runway

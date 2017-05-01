@@ -162,7 +162,7 @@ class GameModule(private val game: JellyGame) : Module {
                      manager: ScriptManager): FileAlterationMonitor {
 
         return FileAlterationMonitor(2000).apply {
-            if (configurations.config.game.debug) {
+            if (configurations.config.game.scripting) {
                 addObserver(manager.createObserver())
             }
         }
