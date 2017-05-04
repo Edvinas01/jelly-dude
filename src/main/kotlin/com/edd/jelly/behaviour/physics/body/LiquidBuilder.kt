@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.core.tiled.float
 import com.edd.jelly.core.tiled.string

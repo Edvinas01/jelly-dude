@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.behaviour.components.ComponentResolver
+import com.edd.jelly.util.ComponentResolver
 
 class JellyMap internal constructor(
         val name: String,

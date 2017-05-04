@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.behaviour.components.Transform
+import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.behaviour.pause.PausingSystem
 import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent

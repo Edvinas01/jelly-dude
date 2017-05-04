@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.position.Transform
+import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.util.pixels
 import com.google.inject.Inject

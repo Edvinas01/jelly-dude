@@ -2,7 +2,7 @@ package com.edd.jelly.behaviour.player
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.gdx.math.Vector2
-import com.edd.jelly.behaviour.components.ComponentResolver
+import com.edd.jelly.util.ComponentResolver
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.ConstantVolumeJoint
 import org.jbox2d.dynamics.joints.RevoluteJoint

@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.position.Transform
+import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.LiquidRenderer
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapRenderer

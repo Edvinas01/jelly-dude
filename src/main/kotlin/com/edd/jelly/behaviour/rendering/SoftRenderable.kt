@@ -1,7 +1,7 @@
 package com.edd.jelly.behaviour.rendering
 
 import com.badlogic.ashley.core.Component
-import com.edd.jelly.behaviour.components.ComponentResolver
+import com.edd.jelly.util.ComponentResolver
 
 data class SoftRenderable(
         val region: SoftRegion,

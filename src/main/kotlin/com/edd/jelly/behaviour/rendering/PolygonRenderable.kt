@@ -2,7 +2,7 @@ package com.edd.jelly.behaviour.rendering
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
-import com.edd.jelly.behaviour.components.ComponentResolver
+import com.edd.jelly.util.ComponentResolver
 
 data class PolygonRenderable(
         val polygonRegion: PolygonRegion

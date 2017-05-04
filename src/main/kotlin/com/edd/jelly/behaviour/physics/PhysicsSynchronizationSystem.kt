@@ -5,8 +5,8 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
-import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.position.Transform
+import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.body.SoftBody
 import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.util.degrees

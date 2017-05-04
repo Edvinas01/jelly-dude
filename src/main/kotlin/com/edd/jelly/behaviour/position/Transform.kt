@@ -1,8 +1,9 @@
-package com.edd.jelly.behaviour.components
+package com.edd.jelly.behaviour.position
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.util.ComponentResolver
 
 data class Transform(val position: Vector2 = Vector2(0f, 0f),
                      val size: Vector2 = Vector2(0f, 0f),

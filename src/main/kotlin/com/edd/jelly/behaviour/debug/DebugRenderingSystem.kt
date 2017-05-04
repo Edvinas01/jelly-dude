@@ -7,8 +7,8 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.edd.jelly.behaviour.components.Transform
-import com.edd.jelly.behaviour.components.transform
+import com.edd.jelly.behaviour.position.Transform
+import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.PhysicsDebugRenderer
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
