@@ -15,7 +15,7 @@ import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.tiled.boolean
 import com.edd.jelly.core.tiled.float
 import com.edd.jelly.core.tiled.int
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.util.toVec2
 import com.google.inject.Inject

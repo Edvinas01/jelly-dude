@@ -12,7 +12,7 @@ import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
 import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Messaging
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.GameException
 import com.edd.jelly.util.pixels
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get

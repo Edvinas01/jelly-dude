@@ -1,5 +1,6 @@
-package com.edd.jelly.exception
+package com.edd.jelly.util
 
+import com.edd.jelly.util.GameException
 import spock.lang.Ignore
 import spock.lang.Specification
 

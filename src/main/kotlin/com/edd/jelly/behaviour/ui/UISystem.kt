@@ -10,7 +10,7 @@ import com.edd.jelly.core.JellyGame
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.GameException
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Singleton

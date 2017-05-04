@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.GameException
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.jbox2d.common.Vec2

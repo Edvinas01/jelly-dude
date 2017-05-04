@@ -1,4 +1,4 @@
-package com.edd.jelly.exception
+package com.edd.jelly.util
 
 class GameException : RuntimeException {
 

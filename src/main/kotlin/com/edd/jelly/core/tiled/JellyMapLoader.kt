@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.core.InternalMapLoader
 import com.edd.jelly.core.configuration.Configurations
-import com.edd.jelly.exception.GameException
+import com.edd.jelly.util.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
