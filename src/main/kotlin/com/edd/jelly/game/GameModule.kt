@@ -1,4 +1,4 @@
-package com.edd.jelly.core.game
+package com.edd.jelly.game
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem

@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
 import com.edd.jelly.behaviour.ui.screen.windows.LevelsWindow
 import com.edd.jelly.behaviour.ui.screen.windows.MenuWindow
 import com.edd.jelly.behaviour.ui.screen.windows.OptionsWindow
-import com.edd.jelly.core.game.GuiCamera
+import com.edd.jelly.game.GuiCamera
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language

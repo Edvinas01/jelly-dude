@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.edd.jelly.behaviour.ui.screen.GameScreen
 import com.edd.jelly.behaviour.ui.screen.MainMenuScreen
 import com.edd.jelly.behaviour.ui.screen.StagedScreen
-import com.edd.jelly.core.game.JellyGame
+import com.edd.jelly.game.JellyGame
 import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
