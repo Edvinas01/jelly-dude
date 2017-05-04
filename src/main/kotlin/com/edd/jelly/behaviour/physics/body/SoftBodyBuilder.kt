@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.DelaunayTriangulator
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.position.Transform
-import com.edd.jelly.behaviour.rendering.SoftRegion
+import com.edd.jelly.util.SoftRegion
 import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get

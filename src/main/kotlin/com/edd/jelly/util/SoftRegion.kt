@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour.rendering
+package com.edd.jelly.util
 
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.graphics.g2d.TextureRegion
