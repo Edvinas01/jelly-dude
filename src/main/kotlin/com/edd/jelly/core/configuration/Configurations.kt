@@ -1,6 +1,6 @@
 package com.edd.jelly.core.configuration
 
-import com.edd.jelly.core.JellyGame
+import com.edd.jelly.core.game.JellyGame
 import com.edd.jelly.core.events.Messaging
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
