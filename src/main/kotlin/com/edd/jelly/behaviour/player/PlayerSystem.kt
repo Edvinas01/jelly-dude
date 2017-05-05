@@ -193,6 +193,8 @@ class PlayerSystem @Inject constructor(
     private fun processStickiness(player: Player) {
         with(player) {
             if (sticky) {
+
+                @Suppress("LoopToCallChain")
                 for (contact in contacts) {
                     if (stickyJoints.containsKey(contact)
 

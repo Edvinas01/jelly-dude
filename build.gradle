@@ -68,13 +68,15 @@ task dist(type: Jar) {
 }
 
 task detekt(type: JavaExec) {
-    main = 'io.gitlab.arturbosch.detekt.cli.Main'
     classpath = configurations.detekt
-    def input = "$project.projectDir.absolutePath"
-    def config = "$project.projectDir/.detekt.yml"
-    def filters = '.*test.*'
-    def rulesets = ""
-    def params = [ '-p', input, '-c', config, '-f', filters]
+    main = 'io.gitlab.arturbosch.detekt.cli.Main'
+
+    def params = [
+            '-p', "$project.projectDir.absolutePath",
+            '-c', "$project.projectDir/.detekt.yml",
+            '-f', '.*test.*'
+    ]
+
     args(params)
 }
 

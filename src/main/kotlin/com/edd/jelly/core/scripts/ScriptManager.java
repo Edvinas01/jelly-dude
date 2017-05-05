@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 @Singleton
 public final class ScriptManager {
 
-    private static final Logger LOG = LogManager.getLogger(ScriptManager.class);
+    static final Logger LOG = LogManager.getLogger(ScriptManager.class);
 
     private static final String MAIN_FUNCTION_NAME = "main";
     private static final String SCRIPT_DIRECTORY = Configurations.ASSETS_FOLDER + "scripts/";
@@ -66,7 +66,7 @@ public final class ScriptManager {
         Hook<T> hooks = (Hook<T>) this.hooks.get(hookType);
 
         if (hooks == null) {
-            hooks = new Hook<>(hookType, LOG);
+            hooks = new Hook<>(hookType);
 
             LOG.debug("Registering hook of type: {}", hookType.getSimpleName());
             this.hooks.put(hookType, hooks);

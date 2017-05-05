@@ -1,6 +1,5 @@
 package com.edd.jelly.behaviour.test
 
-import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
@@ -19,9 +18,9 @@ import com.google.inject.Inject
  */
 class CameraControllerSystem @Inject constructor(
         private val camera: OrthographicCamera,
-        private val messaging: Messaging,
         configurations: Configurations,
-        multiplexer: InputMultiplexer
+        multiplexer: InputMultiplexer,
+        messaging: Messaging
 ) : EntitySystem() {
 
     private var right = false

@@ -99,10 +99,8 @@ class MapBodyBuilder @Inject constructor(private val world: World) {
      * Get vector array from provided float array, where x and y values are laid out next to each other.
      */
     private fun getVectorArray(vertices: FloatArray): Array<Vec2> {
-        val vectors = mutableListOf<Vec2>()
-        for (i in 0..vertices.size / 2 - 1) {
-            vectors.add(Vec2(vertices[i * 2].meters, vertices[i * 2 + 1].meters))
-        }
-        return vectors.toTypedArray()
+        return (0..vertices.size / 2 - 1).map {
+            Vec2(vertices[it * 2].meters, vertices[it * 2 + 1].meters)
+        }.toTypedArray()
     }
 }

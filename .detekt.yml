@@ -2,7 +2,7 @@ autoCorrect: false
 
 build:
   warningThreshold: 10
-  failThreshold: 30
+  failThreshold: 15
 
 potential-bugs:
   active: true
@@ -81,7 +81,7 @@ formatting:
 style:
   active: true
   WildcardImport:
-    active: true
+    active: false
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'

@@ -1,7 +1,6 @@
 package com.edd.jelly.core.scripts;
 
 import jdk.nashorn.api.scripting.NashornException;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,13 +15,11 @@ public final class Hook<T> {
     private final List<T> functions = new ArrayList<>();
 
     private final Class<T> hookType;
-    private final Logger logger;
 
     private boolean flagged = false;
 
-    Hook(Class<T> hookType, Logger logger) {
+    Hook(Class<T> hookType) {
         this.hookType = hookType;
-        this.logger = logger;
     }
 
     /**
@@ -53,7 +50,7 @@ public final class Hook<T> {
         try {
             functions.forEach(consumer);
         } catch (NashornException e) {
-            logger.error("Could not execute hook function for hook of type: {}",
+            ScriptManager.LOG.error("Could not execute hook function for hook of type: {}",
                     hookType.getSimpleName(), e);
 
             flagged = true;

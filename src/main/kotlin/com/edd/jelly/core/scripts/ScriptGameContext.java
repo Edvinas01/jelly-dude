@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Singleton
+@SuppressWarnings("unused")
 public final class ScriptGameContext {
 
     private final Map<String, Object> stored = new HashMap<>();

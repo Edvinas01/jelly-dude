@@ -28,7 +28,7 @@ public class PhysicsDebugRenderer implements Disposable {
     /**
      * the immediate mode renderer to output our debug drawings
      **/
-    private ShapeRenderer renderer;
+    private final ShapeRenderer renderer;
 
     /**
      * vertices for polygon rendering
@@ -38,12 +38,12 @@ public class PhysicsDebugRenderer implements Disposable {
     private final static Vec2 lower = new Vec2();
     private final static Vec2 upper = new Vec2();
 
-    private boolean drawBodies;
-    private boolean drawJoints;
-    private boolean drawAABBs;
-    private boolean drawInactiveBodies;
-    private boolean drawVelocities;
-    private boolean drawContacts;
+    private final boolean drawBodies;
+    private final boolean drawJoints;
+    private final boolean drawAABBs;
+    private final boolean drawInactiveBodies;
+    private final boolean drawVelocities;
+    private final boolean drawContacts;
 
     public PhysicsDebugRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
                                 boolean drawVelocities, boolean drawContacts) {
@@ -79,7 +79,6 @@ public class PhysicsDebugRenderer implements Disposable {
     private final Color JOINT_COLOR = new Color(0.5f, 0.8f, 0.8f, 1);
     private final Color AABB_COLOR = new Color(1.0f, 0, 1.0f, 1f);
     private final Color VELOCITY_COLOR = new Color(1.0f, 0, 0f, 1f);
-    private final Color PARTICLE_COLOR = new Color(0, 0.75f, 1f, 1f);
 
     private void renderBodies(World world) {
         renderer.begin(ShapeType.Line);
@@ -179,8 +178,8 @@ public class PhysicsDebugRenderer implements Disposable {
         }
     }
 
+    private final static Vec2 axis = new Vec2();
     private static Vec2 t = new Vec2();
-    private static Vec2 axis = new Vec2();
 
     private void drawShape(Fixture fixture, Transform transform, Color color) {
         if (fixture.getType() == org.jbox2d.collision.shapes.ShapeType.CIRCLE) {
