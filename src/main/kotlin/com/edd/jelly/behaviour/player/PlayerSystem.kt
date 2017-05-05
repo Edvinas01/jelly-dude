@@ -36,7 +36,7 @@ class PlayerSystem @Inject constructor(
         scriptManager: ScriptManager
 ) : EntitySystem(), PausingSystem {
 
-    companion object {
+    private companion object {
 
         // Player body constants.
         val PLAYER_TEXTURE_NAME = "slime"

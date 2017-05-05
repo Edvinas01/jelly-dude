@@ -22,6 +22,7 @@ import com.edd.jelly.behaviour.physics.contacts.MessagingContactListener
 import com.edd.jelly.behaviour.player.PlayerSynchronizationSystem
 import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
+import com.edd.jelly.behaviour.sound.SoundSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
 import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.behaviour.ui.UISystem
@@ -56,6 +57,7 @@ class GameModule(private val game: JellyGame) : Module {
     fun systems(): Systems {
         return Systems(listOf(
                 PauseSystem::class.java,
+                SoundSystem::class.java,
                 LevelSystem::class.java,
 
                 // Physics simulation.
@@ -67,7 +69,6 @@ class GameModule(private val game: JellyGame) : Module {
 
                 // Synchronization systems.
                 PhysicsSynchronizationSystem::class.java,
-                ParticleGroupSynchronizationSystem::class.java,
 
                 // Player.
                 PlayerSystem::class.java,

@@ -1,6 +1,9 @@
 package com.edd.jelly.core.resources
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
+import com.badlogic.gdx.backends.lwjgl.audio.Ogg
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -100,6 +103,14 @@ class ResourceManager @Inject constructor(
      */
     fun getTex(name: String): Texture {
         return getTexture(name, true)
+    }
+
+    fun getSound(name: String): Sound {
+        return Gdx.audio.newSound(Gdx.files.external("sounds/$name"))
+    }
+
+    fun getMusic(name: String): Music {
+        return Gdx.audio.newMusic(Gdx.files.external("sounds/$name"))
     }
 
     /**

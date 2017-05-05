@@ -105,8 +105,4 @@ class MainMenuScreen @Inject constructor(
         optionsWindow.updateLanguage(lang)
         menuWindow.updateLanguage(lang)
     }
-
-    override fun resize(width: Int, height: Int) {
-        super.resize(width, height)
-    }
 }

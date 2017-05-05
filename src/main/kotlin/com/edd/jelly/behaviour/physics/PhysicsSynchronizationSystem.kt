@@ -18,6 +18,7 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
     private lateinit var softRenderables: ImmutableArray<Entity>
     private lateinit var softBodyEntities: ImmutableArray<Entity>
     private lateinit var physicsEntities: ImmutableArray<Entity>
+    private lateinit var particleEntities: ImmutableArray<Entity>
 
     override fun addedToEngine(engine: Engine) {
         softRenderables = engine.getEntitiesFor(Family.all(
@@ -35,10 +36,16 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
                 Transform::class.java,
                 Physics::class.java
         ).get())
+
+        particleEntities = engine.getEntitiesFor(Family.all(
+                Particles::class.java,
+                Physics::class.java
+        ).get())
     }
 
     override fun update(deltaTime: Float) {
         syncSoftRenderables()
+        syncParticles()
 
         // Sync physics entities.
         physicsEntities.forEach {
@@ -83,6 +90,19 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
                 vertices[i * 2] = pos.x
                 vertices[i * 2 + 1] = pos.y
             }
+        }
+    }
+
+    /**
+     * Synchronize particles.
+     */
+    private fun syncParticles() {
+        particleEntities.forEach {
+            val transform = it.transform
+            val group = Particles.mapper[it].particleGroup
+
+            transform.position.set(group.position.x, group.position.y)
+            transform.rotation = group.angle.degrees
         }
     }
 }

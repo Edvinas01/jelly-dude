@@ -26,18 +26,20 @@ import org.jbox2d.dynamics.World
 @Singleton
 class MapBodyBuilder @Inject constructor(private val world: World) {
 
-    private val bodyType = BodyType.STATIC
-    private val density = 1f
+    private companion object {
+        const val DENSITY = 1f
+        val BODY_TYPE = BodyType.STATIC
+    }
 
     fun create(obj: MapObject): Entity? {
         val pair = createPair(obj) ?: return null
 
         return Entity().apply {
             add(Physics(world.createBody(BodyDef().apply {
-                type = bodyType
+                type = BODY_TYPE
             }).apply {
                 setTransform(pair.first, 0f)
-                createFixture(pair.second, density)
+                createFixture(pair.second, DENSITY)
             }))
         }
     }

@@ -26,7 +26,7 @@ public final class Hook<T> {
     }
 
     /**
-     * Add adittional hook functions to the hook.
+     * Add additional hook functions to the hook.
      */
     void addFunctions(Collection<T> functions) {
         this.functions.addAll(functions);
