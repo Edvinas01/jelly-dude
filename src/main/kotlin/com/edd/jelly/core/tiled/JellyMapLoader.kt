@@ -67,7 +67,6 @@ class JellyMapLoader @Inject constructor(
         val backgroundLayers = mutableListOf<MapLayer>()
         val foregroundLayers = mutableListOf<MapLayer>()
 
-
         for (layer in map.layers) {
             background = background && ENTITY_LAYER != layer.name
 

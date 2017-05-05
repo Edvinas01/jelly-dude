@@ -125,7 +125,6 @@ class GameModule(private val game: JellyGame) : Module {
             true, true, false, true, false, true
     )
 
-
     @Provides @Singleton
     fun camera(): OrthographicCamera {
         return OrthographicCamera().apply {

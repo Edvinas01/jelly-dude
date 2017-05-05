@@ -2,7 +2,6 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.edd.jelly.util.GameException
 

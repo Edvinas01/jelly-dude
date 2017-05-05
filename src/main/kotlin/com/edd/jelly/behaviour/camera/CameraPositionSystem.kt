@@ -17,7 +17,7 @@ import com.edd.jelly.core.configuration.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject
-import java.util.*
+import java.util.Random
 import java.util.concurrent.TimeUnit
 
 class CameraPositionSystem @Inject constructor(
@@ -73,7 +73,6 @@ class CameraPositionSystem @Inject constructor(
     override fun update(deltaTime: Float) {
         val player = players.firstOrNull()
         if (player != null) {
-
 
             // If we have a player and debug is off, follow the camera to it.
             if (followPlayer) {

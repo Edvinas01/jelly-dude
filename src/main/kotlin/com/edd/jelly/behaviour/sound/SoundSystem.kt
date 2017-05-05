@@ -9,7 +9,7 @@ import com.google.inject.Inject
 class SoundSystem @Inject constructor(
         private val resourceManager: ResourceManager,
         private val messaging: Messaging
-): EntitySystem() {
+) : EntitySystem() {
 
     override fun addedToEngine(engine: Engine?) {
         messaging.listen<PlaySoundEvent> {
