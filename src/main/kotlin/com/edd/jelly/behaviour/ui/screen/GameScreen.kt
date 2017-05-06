@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
-import com.edd.jelly.behaviour.pause.PauseEvent
+import com.edd.jelly.behaviour.common.event.PauseEvent
 import com.edd.jelly.behaviour.ui.screen.windows.PauseWindow
 import com.edd.jelly.behaviour.ui.screen.windows.ScoreWindow
 import com.edd.jelly.game.GuiCamera

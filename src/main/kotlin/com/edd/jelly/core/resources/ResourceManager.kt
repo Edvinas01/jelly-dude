@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.fasterxml.jackson.core.type.TypeReference

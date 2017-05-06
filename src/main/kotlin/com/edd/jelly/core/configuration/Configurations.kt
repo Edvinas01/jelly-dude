@@ -2,6 +2,7 @@ package com.edd.jelly.core.configuration
 
 import com.edd.jelly.game.JellyGame
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory

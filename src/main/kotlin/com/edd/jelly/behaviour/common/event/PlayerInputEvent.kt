@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour.player
+package com.edd.jelly.behaviour.common.event
 
 import com.badlogic.ashley.core.Entity
 import com.edd.jelly.core.events.Event

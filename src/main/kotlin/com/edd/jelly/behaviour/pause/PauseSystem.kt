@@ -1,9 +1,10 @@
 package com.edd.jelly.behaviour.pause
 
 import com.badlogic.ashley.core.EntitySystem
-import com.edd.jelly.behaviour.level.LoadNewLevelEvent
-import com.edd.jelly.behaviour.level.RestartLevelEvent
+import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
+import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.behaviour.common.event.PauseEvent
 import com.google.inject.Inject
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger

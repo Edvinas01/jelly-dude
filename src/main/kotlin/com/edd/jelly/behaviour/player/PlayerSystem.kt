@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.position.Transform
-import com.edd.jelly.behaviour.level.LevelLoadedEvent
+import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
 import com.edd.jelly.behaviour.pause.PausingSystem
-import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
-import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
+import com.edd.jelly.behaviour.common.event.BeginContactEvent
+import com.edd.jelly.behaviour.common.event.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.GameException
@@ -17,6 +17,9 @@ import com.edd.jelly.util.pixels
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.scripts.ScriptManager
+import com.edd.jelly.behaviour.common.event.PlayerInputEvent
+import com.edd.jelly.behaviour.common.hook.HealthFunction
+import com.edd.jelly.behaviour.common.hook.MovementFunction
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold

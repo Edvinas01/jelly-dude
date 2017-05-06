@@ -1,6 +1,8 @@
 package com.edd.jelly.behaviour.physics.contacts
 
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.behaviour.common.event.BeginContactEvent
+import com.edd.jelly.behaviour.common.event.EndContactEvent
 import org.jbox2d.callbacks.ContactImpulse
 import org.jbox2d.callbacks.ContactListener
 import org.jbox2d.collision.Manifold

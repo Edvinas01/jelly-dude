@@ -1,4 +1,6 @@
-package com.edd.jelly.behaviour.player
+package com.edd.jelly.behaviour.common.hook
+
+import com.edd.jelly.behaviour.player.Player
 
 interface MovementFunction {
 

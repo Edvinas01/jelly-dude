@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.TimeUtils
 import com.edd.jelly.behaviour.position.transform
-import com.edd.jelly.behaviour.level.LevelLoadedEvent
+import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
 import com.edd.jelly.behaviour.player.Player
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject

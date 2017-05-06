@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.PhysicsDebugRenderer
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputAdapter
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.behaviour.common.event.PlayerInputEvent
 
 class PlayerInputAdapter(
         val messaging: Messaging

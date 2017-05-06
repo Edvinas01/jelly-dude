@@ -2,7 +2,6 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.maps.MapLayer
-import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -81,32 +80,32 @@ class JellyMapLoader @Inject constructor(
 
             (if (background) backgroundLayers else foregroundLayers).apply {
 
-                when (layer.getString("type")?.let {
-                    LayerType.valueOf(it)
+                when (layer.string("type")?.let {
+                    LayerType.valueOf(it.toUpperCase())
                 } ?: LayerType.DEFAULT) {
                     LayerType.PARALLAX -> {
-                        val texture = resourceManager.getTex(layer.getString("texture") ?:
+                        val texture = resourceManager.getTex(layer.string("texture") ?:
                                 throw GameException("Please specify parallax \"texture\" name"))
 
                         add(ParallaxLayer(
                                 Vector2(
-                                        layer.getFloat("offsetX").meters,
-                                        layer.getFloat("offsetY").meters
+                                        layer.float("offsetX").meters,
+                                        layer.float("offsetY").meters
                                 ),
                                 Vector2(
-                                        layer.getFloat("speedX", 1f),
-                                        layer.getFloat("speedY", 1f)
+                                        layer.float("speedX", 1f),
+                                        layer.float("speedY", 1f)
                                 ),
-                                layer.getBoolean("clampTop", false),
-                                layer.getBoolean("clampBottom", false),
+                                layer.boolean("clampTop", false),
+                                layer.boolean("clampBottom", false),
                                 texture,
                                 Vector2(
-                                        (if (layer.getBoolean("fitX"))
+                                        (if (layer.boolean("fitX"))
                                             camera.viewportWidth
-                                        else texture.width.meters) * layer.getFloat("scaleX", 1f),
-                                        (if (layer.getBoolean("fitY"))
+                                        else texture.width.meters) * layer.float("scaleX", 1f),
+                                        (if (layer.boolean("fitY"))
                                             camera.viewportHeight
-                                        else texture.height.meters) * layer.getFloat("scaleY", 1f)
+                                        else texture.height.meters) * layer.float("scaleY", 1f)
                                 )
                         ))
                     }
@@ -139,7 +138,7 @@ class JellyMapLoader @Inject constructor(
      */
     private fun getFocusPoints(entities: MapLayer): List<Vector2> {
         return entities.objects.filter {
-            it.getBoolean("focusPoint") && it is EllipseMapObject
+            it.boolean("focusPoint") && it is EllipseMapObject
         }.map {
             with((it as EllipseMapObject).ellipse) {
                 Vector2(x.meters, y.meters)
@@ -168,42 +167,6 @@ class JellyMapLoader @Inject constructor(
             return internalTmxMapLoader.load(actualName)
         }
         return tmxMapLoader.load("${Configurations.ASSETS_FOLDER}$actualName")
-    }
-
-    /**
-     * Get string value from map layer properties.
-     */
-    private fun <T : MapLayer> T.getString(name: String): String? {
-        return this.properties.get(name)?.let {
-            it as String
-        }
-    }
-
-    /**
-     * Get float value from map layer properties.
-     */
-    private fun <T : MapLayer> T.getFloat(name: String, default: Float = 0f): Float {
-        return this.properties.get(name)?.let {
-            it as? Float ?: default
-        } ?: default
-    }
-
-    /**
-     * Get boolean value from map layer properties.
-     */
-    private fun <T : MapLayer> T.getBoolean(name: String, default: Boolean = false): Boolean {
-        return this.properties.get(name)?.let {
-            it is Boolean && it
-        } ?: default
-    }
-
-    /**
-     * Get boolean value from map object properties.
-     */
-    private fun <T : MapObject> T.getBoolean(name: String, default: Boolean = false): Boolean {
-        return this.properties.get(name)?.let {
-            it is Boolean && it
-        } ?: default
     }
 
     /**

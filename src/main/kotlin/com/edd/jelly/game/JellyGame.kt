@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.edd.jelly.behaviour.level.LoadNewLevelEvent
-import com.edd.jelly.behaviour.ui.LoadGameScreenEvent
+import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
+import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
 import com.edd.jelly.core.configuration.ConfigurationChangeEventListener
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.configuration.Configurations.Companion.MENU_LEVEL_NAME

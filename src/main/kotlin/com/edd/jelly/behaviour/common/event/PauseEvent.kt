@@ -1,4 +1,4 @@
-package com.edd.jelly.behaviour.pause
+package com.edd.jelly.behaviour.common.event
 
 import com.edd.jelly.core.events.Event
 

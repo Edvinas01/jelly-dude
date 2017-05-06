@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.google.inject.Inject

@@ -12,7 +12,7 @@
    <property name="scaleY" type="float" value="2"/>
    <property name="speedY" type="float" value="0.3"/>
    <property name="texture" value="neon_background"/>
-   <property name="type" value="PARALLAX"/>
+   <property name="type" value="parallax"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUjIJRMApGwUgDAAgAAAE=

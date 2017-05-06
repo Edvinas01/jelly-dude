@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
+import com.edd.jelly.behaviour.common.event.PlayMusicEvent
+import com.edd.jelly.behaviour.common.event.PlaySoundEvent
 import com.google.inject.Inject
 
 class SoundSystem @Inject constructor(
