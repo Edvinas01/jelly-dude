@@ -1,6 +1,8 @@
 package com.edd.jelly.core.scripts;
 
 import jdk.nashorn.api.scripting.NashornException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +13,8 @@ import java.util.function.Consumer;
  * Wrapper class for executing hooks.
  */
 public final class Hook<T> {
+
+    private static final Logger LOG = LogManager.getLogger(Hook.class);
 
     private final List<T> functions = new ArrayList<>();
 
@@ -26,7 +30,10 @@ public final class Hook<T> {
      * Add additional hook functions to the hook.
      */
     void addFunctions(Collection<T> functions) {
-        this.functions.addAll(functions);
+        functions.forEach(f -> {
+            LOG.debug("Adding function: {}", f.getClass().getSimpleName());
+            this.functions.add(f);
+        });
     }
 
     /**
@@ -50,7 +57,7 @@ public final class Hook<T> {
         try {
             functions.forEach(consumer);
         } catch (NashornException e) {
-            ScriptManager.LOG.error("Could not execute hook function for hook of type: {}",
+            LOG.error("Could not execute hook function for hook of type: {}",
                     hookType.getSimpleName(), e);
 
             flagged = true;

@@ -18,8 +18,7 @@ import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.behaviour.common.event.PlayerInputEvent
-import com.edd.jelly.behaviour.common.hook.HealthFunction
-import com.edd.jelly.behaviour.common.hook.MovementFunction
+import com.edd.jelly.behaviour.common.hook.*
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold
@@ -82,8 +81,10 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_SPEED = 5
     }
 
-    private val movementHook = scriptManager.hook(MovementFunction::class.java)
-    private val healthHook = scriptManager.hook(HealthFunction::class.java)
+    private val beforeMoveHook = scriptManager.hook(BeforeMove::class.java)
+    private val afterMoveHook = scriptManager.hook(AfterMove::class.java)
+    private val moveForceHook = scriptManager.hook(MoveForce::class.java)
+    private val healthHook = scriptManager.hook(BeforeHealthTick::class.java)
 
     private val playerInputs = PlayerInputAdapter(messaging)
 
@@ -117,8 +118,8 @@ class PlayerSystem @Inject constructor(
      */
     private fun processMovement(player: Player, deltaTime: Float) {
         with(player) {
-            movementHook.run {
-                it.beforeProcessMove(this)
+            beforeMoveHook.run {
+                it.beforeMove(this)
             }
 
             // If player has no contacts or joints at the moment, it means he is in the air.
@@ -130,7 +131,11 @@ class PlayerSystem @Inject constructor(
             canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO)
 
             // Calculated move force for this player.
-            val moveForce = speedMultiplier * MOVE_FORCE * deltaTime
+            var moveForce = speedMultiplier * MOVE_FORCE * deltaTime
+
+            moveForceHook.run {
+                moveForce = it.moveForce(moveForce)
+            }
 
             for (body in joint.bodies) {
 
@@ -154,8 +159,8 @@ class PlayerSystem @Inject constructor(
                 }
             }
 
-            movementHook.run {
-                it.afterProcessMove(this)
+            afterMoveHook.run {
+                it.afterMove(this)
             }
         }
     }

@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 @Singleton
 public final class ScriptManager {
 
-    static final Logger LOG = LogManager.getLogger(ScriptManager.class);
+    private static final Logger LOG = LogManager.getLogger(ScriptManager.class);
 
     private static final String MAIN_FUNCTION_NAME = "main";
     private static final String SCRIPT_DIRECTORY = Configurations.ASSETS_FOLDER + "scripts/";
