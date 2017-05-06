@@ -171,7 +171,7 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         val transform = Transform(Vector2(center.x, center.y))
-        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
         val vertices = textureCoords.copyOf()
 
         bodies.forEachIndexed { i, b ->
@@ -290,7 +290,7 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         // Create mesh.
-        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
 
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()

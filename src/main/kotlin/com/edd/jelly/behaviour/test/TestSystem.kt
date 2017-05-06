@@ -144,7 +144,7 @@ class TestSystem @Inject constructor(
                 Mode.PARTICLE_BOX -> spawnParticleBox(pos)
             }
 
-            LOG.debug("Clicked at: ", pos)
+            LOG.debug("Clicked at: {}", pos)
             return true
         }
 
@@ -153,7 +153,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnBox(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["crate"]?.let {
+                resources.atlas["crate"]?.let {
                     add(Renderable(it))
                 }
 
@@ -182,7 +182,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnCircle(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["round_crate"]?.let {
+                resources.atlas["round_crate"]?.let {
                     add(Renderable(it))
                 }
 

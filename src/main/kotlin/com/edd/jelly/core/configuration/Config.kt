@@ -2,14 +2,15 @@ package com.edd.jelly.core.configuration
 
 data class Config(
         val game: Game,
-        val video: Video
+        val video: Video,
+        val input: Input
 ) {
 
     /**
      * General game configuration settings.
      */
     data class Game(var language: String,
-                    val scripting: Boolean,
+                    var scripting: Boolean,
                     val debugLevel: String?,
                     val gravity: Float,
                     val particleRadius: Float,
@@ -27,4 +28,17 @@ data class Config(
          */
         data class Screen(var fullscreen: Boolean, val width: Int, val height: Int)
     }
+
+    /**
+     * Input settings.
+     */
+    data class Input(
+            var up: String,
+            var down: String,
+            var left: String,
+            var right: String,
+            var shrink: String,
+            var stick: String,
+            var reset: String
+    )
 }

@@ -1,6 +1,7 @@
 package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -40,9 +41,10 @@ class JellyMapLoader @Inject constructor(
     }
 
     private companion object {
-        const val LEVEL_INFO_FILE = "levels.yml"
         const val LEVEL_DIRECTORY = "levels/"
         const val LEVEL_FILE_TYPE = "tmx"
+        const val LEVEL_INFO_FILE = "info.yml"
+        const val LEVEL_ICON_NAME = "level_icon"
 
         const val BACKGROUND_TEXTURE = "background_texture"
         const val COLLISION_LAYER = "collision"
@@ -84,7 +86,7 @@ class JellyMapLoader @Inject constructor(
                     LayerType.valueOf(it.toUpperCase())
                 } ?: LayerType.DEFAULT) {
                     LayerType.PARALLAX -> {
-                        val texture = resourceManager.getTex(layer.string("texture") ?:
+                        val texture = resourceManager.getTexture(layer.string("texture") ?:
                                 throw GameException("Please specify parallax \"texture\" name"))
 
                         add(ParallaxLayer(
@@ -182,7 +184,15 @@ class JellyMapLoader @Inject constructor(
                 file,
                 object : TypeReference<Map<String, RawJellyMapMetadata>>() {}
         ).map { (k, v) ->
-            k to JellyMapMetadata(k, v.description, v.author, v.name, resourceManager.mainAtlas["level_icon"]!!)
+            k to JellyMapMetadata(
+                    k,
+                    v.description ?: "",
+                    v.author ?: "",
+                    v.name ?: k.capitalize(),
+                    v.texture?.let {
+                        resourceManager.getRegion(it, true)
+                    } ?: resourceManager.atlas[LEVEL_ICON_NAME]!!
+            )
         }.toMap()
     }
 }

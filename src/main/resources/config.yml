@@ -24,3 +24,13 @@ video:
     height: 600
   fpsLimit: 60
   vsync: true
+
+# Input settings.
+input:
+  up: W
+  down: S
+  left: A
+  right: D
+  shrink: E
+  stick: Space
+  reset: R

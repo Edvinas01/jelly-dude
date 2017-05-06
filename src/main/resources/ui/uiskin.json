@@ -199,7 +199,11 @@
     title: {
       font: large-font,
       fontColor: jelly
-    }
+    },
+    large: {
+      font: large-font,
+      fontColor: default
+    },
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
     default: {

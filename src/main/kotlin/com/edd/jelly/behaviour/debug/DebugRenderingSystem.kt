@@ -30,7 +30,7 @@ class DebugRenderingSystem @Inject constructor(
         configurations: Configurations
 ) : EntitySystem() {
 
-    private val transformTexture = resourceManager.mainAtlas["xy_axis"]!!
+    private val transformTexture = resourceManager.atlas["xy_axis"]!!
     private val game = configurations.config.game
 
     private lateinit var transforms: ImmutableArray<Entity>

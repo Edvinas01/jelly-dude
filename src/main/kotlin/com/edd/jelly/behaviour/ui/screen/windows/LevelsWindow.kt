@@ -3,6 +3,7 @@ package com.edd.jelly.behaviour.ui.screen.windows
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Scaling
 import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
 import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
 import com.edd.jelly.behaviour.ui.screen.LanguageAware
@@ -26,9 +27,12 @@ class LevelsWindow constructor(
 
         val elementPad = Value.percentWidth(0.01f, levelContainer)
         val elementWidth = Value.percentWidth(0.23f, levelContainer)
+        val maxImgHeight = Value.percentWidth(1f, this)
+
+        val cols = 4
 
         for ((index, meta) in jellyMapLoader.metadata.values.withIndex()) {
-            if (index > 0 && index % 4 == 0) {
+            if (index > 0 && index % cols == 0) {
                 levelContainer.row()
             }
 
@@ -40,12 +44,15 @@ class LevelsWindow constructor(
             levelDetails
                     .add(Image(meta.texture).apply {
                         addListener(tooltip)
+                        setScaling(Scaling.fit)
                     })
-                    .fill()
+                    .maxHeight(maxImgHeight)
+                    .prefHeight(maxImgHeight)
+                    .grow()
                     .row()
 
             // Launch level button.
-            val playCell = levelDetails.add(TextButton(meta.name, skin).apply {
+            levelDetails.add(TextButton(meta.name, skin).apply {
                 label.setWrap(true)
                 label.setEllipsis(true)
 
@@ -57,10 +64,7 @@ class LevelsWindow constructor(
                 })
 
                 addListener(tooltip)
-            })
-
-            playCell.expand()
-                    .fill()
+            }).growX()
 
             levelContainer
                     .add(levelDetails)
@@ -68,7 +72,6 @@ class LevelsWindow constructor(
                     .padLeft(elementPad)
                     .padRight(elementPad)
                     .width(elementWidth)
-                    .expand()
         }
 
         // Scroll for levels.

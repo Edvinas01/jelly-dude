@@ -5,11 +5,9 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.behaviour.common.event.*
 import com.edd.jelly.behaviour.position.Transform
-import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
 import com.edd.jelly.behaviour.pause.PausingSystem
-import com.edd.jelly.behaviour.common.event.BeginContactEvent
-import com.edd.jelly.behaviour.common.event.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.GameException
@@ -17,8 +15,8 @@ import com.edd.jelly.util.pixels
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.scripts.ScriptManager
-import com.edd.jelly.behaviour.common.event.PlayerInputEvent
 import com.edd.jelly.behaviour.common.hook.*
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold
@@ -35,6 +33,7 @@ class PlayerSystem @Inject constructor(
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
         private val world: World,
+        configurations: Configurations,
         scriptManager: ScriptManager
 ) : EntitySystem(), PausingSystem {
 
@@ -86,7 +85,9 @@ class PlayerSystem @Inject constructor(
     private val moveForceHook = scriptManager.hook(MoveForce::class.java)
     private val healthHook = scriptManager.hook(BeforeHealthTick::class.java)
 
-    private val playerInputs = PlayerInputAdapter(messaging)
+    private val playerInputs = PlayerInputAdapter(messaging).apply {
+        adaptInputs(configurations.config.input)
+    }
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
@@ -283,7 +284,7 @@ class PlayerSystem @Inject constructor(
      * Create polygon region from provided transform position, size and body vertices.
      */
     private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
-        val playerTexture = resourceManager.mainAtlas[PLAYER_TEXTURE_NAME]!!
+        val playerTexture = resourceManager.atlas[PLAYER_TEXTURE_NAME]!!
 
         val xRatio = playerTexture.regionWidth / transform.width.pixels
         val yRatio = playerTexture.regionHeight / transform.height.pixels
@@ -483,6 +484,10 @@ class PlayerSystem @Inject constructor(
             map.spawn?.let {
                 spawnPlayer(it.x, it.y)
             }
+        }
+
+        messaging.listen<ConfigChangedEvent> {
+            playerInputs.adaptInputs(it.config.input)
         }
     }
 

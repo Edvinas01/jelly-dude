@@ -1,20 +1,20 @@
 main:
   description: Main level to showcase game features
+  texture: levels/main/main.png
   author: Edd
   name: Main
 liquid:
   description: Testing liquid
+  texture: levels/liquid/liquid.png
   author: Edd
   name: Liquid tests
 sandbox:
   description: Testing various raw features
+  texture: levels/sandbox/sandbox.png
   author: Edd
   name: Sandbox
-modify:
-  description: Base level for creating new levels
+sandboxz:
+  description: Testing various raw features
+  texture: levels/sandbox/sandboxz.png
   author: Edd
-  name: Modify
-wide:
-  description: None
-  author: Edd
-  name: Wide Runway
+  name: Sandbox
