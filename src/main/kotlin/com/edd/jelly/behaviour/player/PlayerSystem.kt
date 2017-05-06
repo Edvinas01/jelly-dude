@@ -84,6 +84,7 @@ class PlayerSystem @Inject constructor(
     private val afterMoveHook = scriptManager.hook(AfterMove::class.java)
     private val moveForceHook = scriptManager.hook(MoveForce::class.java)
     private val healthHook = scriptManager.hook(BeforeHealthTick::class.java)
+    private val stickHook = scriptManager.hook(BeforeStick::class.java)
 
     private val playerInputs = PlayerInputAdapter(messaging).apply {
         adaptInputs(configurations.config.input)
@@ -202,6 +203,15 @@ class PlayerSystem @Inject constructor(
     private fun processStickiness(player: Player) {
         with(player) {
             if (sticky) {
+
+                var actuallySticky = true
+                stickHook.run {
+                    actuallySticky = it.beforeStick(player)
+                }
+
+                if (!actuallySticky) {
+                    return
+                }
 
                 @Suppress("LoopToCallChain")
                 for (contact in contacts) {
