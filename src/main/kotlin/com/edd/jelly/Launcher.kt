@@ -3,7 +3,7 @@ package com.edd.jelly
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import com.edd.jelly.core.JellyGame
+import com.edd.jelly.game.JellyGame
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.util.UncaughtExceptionLogger
 

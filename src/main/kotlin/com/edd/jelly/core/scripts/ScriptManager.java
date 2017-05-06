@@ -66,7 +66,7 @@ public final class ScriptManager {
         Hook<T> hooks = (Hook<T>) this.hooks.get(hookType);
 
         if (hooks == null) {
-            hooks = new Hook<>(hookType, LOG);
+            hooks = new Hook<>(hookType);
 
             LOG.debug("Registering hook of type: {}", hookType.getSimpleName());
             this.hooks.put(hookType, hooks);

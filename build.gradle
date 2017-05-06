@@ -3,6 +3,7 @@ buildscript {
         kotlinVersion = '1.1.1'
         ashleyVersion = '1.7.3'
         groovyVersion = '2.4.7'
+        detektVersion = '1.0.0.M9'
         guiceVersion = '4.1.0'
         spockVersion = '1.1-groovy-2.4-rc-3'
         gdxVersion = '1.9.6'
@@ -25,6 +26,7 @@ repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url 'http://dl.bintray.com/arturbosch/code-analysis' }
 }
 
 apply plugin: 'kotlin'
@@ -44,6 +46,10 @@ sourceSets {
     main.java.srcDirs = ['src/main/kotlin']
 }
 
+configurations {
+    detekt
+}
+
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
@@ -59,6 +65,19 @@ task dist(type: Jar) {
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
+}
+
+task detekt(type: JavaExec) {
+    classpath = configurations.detekt
+    main = 'io.gitlab.arturbosch.detekt.cli.Main'
+
+    def params = [
+            '-p', "$project.projectDir.absolutePath",
+            '-c', "$project.projectDir/.detekt.yml",
+            '-f', '.*test.*'
+    ]
+
+    args(params)
 }
 
 dist.dependsOn classes
@@ -104,8 +123,12 @@ dependencies {
     compile files('libs/jbox2d/jbox2d-library-2.3.1-SNAPSHOT-sources.jar')
 
     // Testing.
-    testCompile "org.spockframework:spock-core:$spockVersion"
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    testCompile "org.spockframework:spock-core:$spockVersion"
+
+    // Static code analysis.
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion"
+    detekt "io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion"
 }
 
 task wrapper(type: Wrapper) {

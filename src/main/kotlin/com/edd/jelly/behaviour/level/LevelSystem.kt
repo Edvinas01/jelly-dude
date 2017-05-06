@@ -9,6 +9,9 @@ import com.edd.jelly.behaviour.physics.body.BodyEntityFactory
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
+import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
+import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
+import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.util.GameException
 import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject

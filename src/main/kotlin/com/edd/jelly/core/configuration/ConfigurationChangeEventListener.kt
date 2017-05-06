@@ -2,6 +2,7 @@ package com.edd.jelly.core.configuration
 
 import com.badlogic.gdx.Gdx
 import com.edd.jelly.core.events.Listener
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.google.inject.Inject
 
 class ConfigurationChangeEventListener @Inject constructor() : Listener<ConfigChangedEvent> {

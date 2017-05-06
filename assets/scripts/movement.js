@@ -6,10 +6,10 @@ function main() {
 	}
 	
     return {
-        beforeProcessMove: function (player) {
+        beforeMove: function (player) {
 			// fly(player);
         },
-        afterProcessMove: function (player) {
+        afterMove: function (player) {
         }
     }
 }

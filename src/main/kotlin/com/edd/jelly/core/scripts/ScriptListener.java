@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-public final class ScriptListener extends FileAlterationListenerAdaptor {
+final class ScriptListener extends FileAlterationListenerAdaptor {
 
     private static final Logger LOG = LogManager.getLogger(ScriptListener.class);
     private final ScriptManager manager;

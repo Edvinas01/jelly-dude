@@ -2,7 +2,6 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.edd.jelly.util.GameException
 
@@ -61,6 +60,34 @@ fun <T : MapObject> T.int(name: String, default: Int = 0): Int {
  * Get boolean value from map object properties.
  */
 fun <T : MapObject> T.boolean(name: String, default: Boolean = false): Boolean {
+    return this.properties.get(name)?.let {
+        it is Boolean && it
+    } ?: default
+}
+
+
+/**
+ * Get string value from map layer properties.
+ */
+fun <T : MapLayer> T.string(name: String): String? {
+    return this.properties.get(name)?.let {
+        it as String
+    }
+}
+
+/**
+ * Get float value from map layer properties.
+ */
+fun <T : MapLayer> T.float(name: String, default: Float = 0f): Float {
+    return this.properties.get(name)?.let {
+        it as? Float ?: default
+    } ?: default
+}
+
+/**
+ * Get boolean value from map layer properties.
+ */
+fun <T : MapLayer> T.boolean(name: String, default: Boolean = false): Boolean {
     return this.properties.get(name)?.let {
         it is Boolean && it
     } ?: default

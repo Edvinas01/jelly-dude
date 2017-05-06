@@ -7,9 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
-import com.edd.jelly.behaviour.pause.PauseEvent
+import com.edd.jelly.behaviour.common.event.PauseEvent
 import com.edd.jelly.behaviour.ui.screen.windows.PauseWindow
-import com.edd.jelly.core.GuiCamera
+import com.edd.jelly.behaviour.ui.screen.windows.ScoreWindow
+import com.edd.jelly.game.GuiCamera
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language
 import com.edd.jelly.core.resources.ResourceManager
@@ -24,6 +25,7 @@ class GameScreen @Inject constructor(
 ) : StagedScreen(camera, batch) {
 
     private val pauseWindow = PauseWindow(messaging, resources.skin)
+    private val scoreWindow = ScoreWindow(resources.skin)
 
     init {
         val mainTable = Table().apply {

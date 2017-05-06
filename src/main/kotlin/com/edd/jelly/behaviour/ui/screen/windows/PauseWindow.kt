@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.edd.jelly.behaviour.level.LoadNewLevelEvent
-import com.edd.jelly.behaviour.level.RestartLevelEvent
+import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
+import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.behaviour.ui.screen.LanguageAware
-import com.edd.jelly.behaviour.ui.LoadGameScreenEvent
-import com.edd.jelly.behaviour.ui.LoadMainMenuScreenEvent
+import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
+import com.edd.jelly.behaviour.common.event.LoadMainMenuScreenEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language

@@ -9,11 +9,26 @@ english:
 
     levelsWindowTitle: Levels
 
+    # Options window.
     optionsWindowTitle: Options
+
+    optionsUpLabel: Up
+    optionsDownLabel: Down
+    optionsLeftLabel: Left
+    optionsRightLabel: Right
+    optionsResetLabel: Reset
+    optionsStickLabel: Stick
+    optionsShrinkLabel: Shrink
+
     optionsLanguageLabel: Language
+
     optionsFullscreenLabel: Fullscreen
+    optionsScriptingLabel: Scripting
+    optionsDebugLabel: Debug
+
     saveButton: Save
 
+    # Pause window.
     pauseWindowTitle: Paused
     pauseRestartButton: Restart
     pauseMenuButton: Main menu
@@ -22,7 +37,7 @@ english:
 lithuanian:
   name: Lietuvių
   messages:
-    gameTitle: Želinis Bičas
+    gameTitle: Želinis Vyrukas
 
     menuWindowTitle: Meniu
     menuPlayButton: Žaisti
@@ -30,12 +45,27 @@ lithuanian:
 
     levelsWindowTitle: Lygiai
 
+    # Options window.
     optionsWindowTitle: Nustatymai
+
+    optionsUpLabel: Aukštyn
+    optionsDownLabel: Žemyn
+    optionsLeftLabel: Kairėn
+    optionsRightLabel: Dešinėn
+    optionsResetLabel: Iš naujo
+    optionsStickLabel: Lipti
+    optionsShrinkLabel: Mažėti
+
     optionsLanguageLabel: Kalba
+
     optionsFullscreenLabel: Per visą ekraną
+    optionsScriptingLabel: Įskiepiai
+    optionsDebugLabel: Testuoti
+
     saveButton: Išsaugoti
 
+    # Pause window.
     pauseWindowTitle: Pauzė
-    pauseRestartButton: Iš naujo
+    pauseRestartButton: Perkrauti lygį
     pauseMenuButton: Pagrindinis meniu
     exitButton: Išeiti

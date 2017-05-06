@@ -17,14 +17,13 @@ object Units {
 }
 
 private val ONE_RADIAN = (180 / Math.PI).toFloat()
-private val ONE_DEGREE = (1 / ONE_RADIAN).toFloat()
+private val ONE_DEGREE = (1 / ONE_RADIAN)
 
 /**
  * Get number value as meters.
  */
 val Number.meters: Float
     get() = toFloat() * Units.MPP
-
 
 /**
  * Get number value as pixels.

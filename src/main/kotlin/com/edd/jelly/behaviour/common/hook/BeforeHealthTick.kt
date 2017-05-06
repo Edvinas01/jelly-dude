@@ -1,6 +1,8 @@
-package com.edd.jelly.behaviour.player
+package com.edd.jelly.behaviour.common.hook
 
-interface HealthFunction {
+import com.edd.jelly.behaviour.player.Player
+
+interface BeforeHealthTick {
 
     /**
      * Called before processing player health tick.

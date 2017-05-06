@@ -1,18 +1,23 @@
 package com.edd.jelly.core.resources
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import org.apache.logging.log4j.LogManager
 import java.io.File
 
 @Singleton
@@ -22,12 +27,13 @@ class ResourceManager @Inject constructor(
         objectMapper: ObjectMapper
 ) {
 
-    companion object {
-        const private val MESSAGES_FILE = "messages.yml"
-        const private val TEXTURE_DIRECTORY = "textures"
-        const private val PNG_FILE_TYPE = "png"
+    private companion object {
+        const val MESSAGES_FILE = "messages.yml"
+        const val TEXTURE_DIRECTORY = "textures"
+        const val PNG_FILE_TYPE = "png"
+        const val ATLAS_FILE_TYPE = "atlas"
 
-        const private val ATLAS_FILE_TYPE = "atlas"
+        val LOG = LogManager.getLogger(ResourceManager::class.java)
     }
 
     private val languageMap = loadLanguages(objectMapper)
@@ -39,18 +45,30 @@ class ResourceManager @Inject constructor(
 
     private val textures = mutableMapOf<String, Texture>()
     private val atlases = mutableMapOf<String, TextureAtlas>()
+    private val regions = mutableMapOf<String, TextureRegion>()
 
+    /**
+     * Blank texture which can be used as a placeholder.
+     */
+    val blank = Texture(Pixmap(1, 1, Pixmap.Format.RGBA8888).apply {
+        setColor(Color.PURPLE)
+        drawPixel(0, 0)
+    })
+
+    /**
+     * Main game UI skin.
+     */
     val skin: Skin
 
     /**
      * Main texture atlas.
      */
-    val mainAtlas: TextureAtlas
+    val atlas: TextureAtlas
 
     init {
         initListeners()
 
-        mainAtlas = getAtlas("jelly_stuff")
+        atlas = getAtlas("jelly_stuff")
         skin = Skin(Gdx.files.internal("ui/uiskin.json"))
     }
 
@@ -73,33 +91,44 @@ class ResourceManager @Inject constructor(
     }
 
     /**
-     * Get texture by name. Calls to this method are cached.
-     *
-     * @param name texture name.
-     * @return texture.
+     * Get a cached texture by its name.
      */
-    @Deprecated("Use getTex() instead")
-    fun getTexture(name: String, external: Boolean = false): Texture {
-        return textures.getOrPut(name, defaultValue = {
-            val fullPath = if (name.endsWith(PNG_FILE_TYPE)) {
-                name
-            } else {
-                "$name.$PNG_FILE_TYPE"
-            }
-
-            if (external) {
-                Texture(FileHandle(File("${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$fullPath")))
-            } else {
-                Texture("$TEXTURE_DIRECTORY/$fullPath")
-            }
+    fun getTexture(name: String, fullName: Boolean = false) = getTexturePath(name, fullName).let {
+        textures.getOrPut(it, defaultValue = {
+            loadTexture(it)
         })
     }
 
     /**
-     * Get external texture by name.
+     * Get a cached texture region by its name.
      */
-    fun getTex(name: String): Texture {
-        return getTexture(name, true)
+    fun getRegion(name: String, fullName: Boolean = false) = getTexturePath(name, fullName).let {
+        regions.getOrPut(it, defaultValue = {
+            TextureRegion(loadTexture(it))
+        })
+    }
+
+    fun getSound(name: String): Sound {
+        return Gdx.audio.newSound(Gdx.files.external("sounds/$name"))
+    }
+
+    fun getMusic(name: String): Music {
+        return Gdx.audio.newMusic(Gdx.files.external("sounds/$name"))
+    }
+
+    /**
+     * Load a texture by specifying a full path.
+     */
+    private fun loadTexture(path: String) = File(path).let {
+        if (it.isDirectory || !it.exists()) {
+
+            LOG.warn("Texture: {}, does not exist", path)
+            blank
+        } else {
+
+            LOG.debug("Loading texture: {}", path)
+            Texture(FileHandle(it))
+        }
     }
 
     /**
@@ -125,6 +154,20 @@ class ResourceManager @Inject constructor(
                 Language(messages, LanguageHandle(it.key, name))
             }
         }.toMap()
+    }
+
+    /**
+     * Get a full, formatted texture path.
+     */
+    private fun getTexturePath(name: String, fullName: Boolean) = if (fullName) {
+        "${Configurations.ASSETS_FOLDER}$name"
+    } else {
+        val typedPath = if (name.endsWith(PNG_FILE_TYPE)) {
+            name
+        } else {
+            "$name.$PNG_FILE_TYPE"
+        }
+        "${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$typedPath"
     }
 
     private data class MessageBundle(val name: String, val messages: Map<String, String>)

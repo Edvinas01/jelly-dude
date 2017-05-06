@@ -26,18 +26,20 @@ import org.jbox2d.dynamics.World
 @Singleton
 class MapBodyBuilder @Inject constructor(private val world: World) {
 
-    private val bodyType = BodyType.STATIC
-    private val density = 1f
+    private companion object {
+        const val DENSITY = 1f
+        val BODY_TYPE = BodyType.STATIC
+    }
 
     fun create(obj: MapObject): Entity? {
         val pair = createPair(obj) ?: return null
 
         return Entity().apply {
             add(Physics(world.createBody(BodyDef().apply {
-                type = bodyType
+                type = BODY_TYPE
             }).apply {
                 setTransform(pair.first, 0f)
-                createFixture(pair.second, density)
+                createFixture(pair.second, DENSITY)
             }))
         }
     }
@@ -97,10 +99,8 @@ class MapBodyBuilder @Inject constructor(private val world: World) {
      * Get vector array from provided float array, where x and y values are laid out next to each other.
      */
     private fun getVectorArray(vertices: FloatArray): Array<Vec2> {
-        val vectors = mutableListOf<Vec2>()
-        for (i in 0..vertices.size / 2 - 1) {
-            vectors.add(Vec2(vertices[i * 2].meters, vertices[i * 2 + 1].meters))
-        }
-        return vectors.toTypedArray()
+        return (0..vertices.size / 2 - 1).map {
+            Vec2(vertices[it * 2].meters, vertices[it * 2 + 1].meters)
+        }.toTypedArray()
     }
 }

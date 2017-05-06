@@ -16,13 +16,14 @@ import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
-import com.edd.jelly.core.configuration.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.pixels
 import com.google.inject.Inject
+import org.apache.logging.log4j.LogManager
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Color3f
@@ -48,6 +49,10 @@ class TestSystem @Inject constructor(
         inputMultiplexer: InputMultiplexer
 ) : EntitySystem() {
 
+    private companion object {
+        val LOG = LogManager.getLogger(TestSystem::class.java)
+    }
+
     /**
      * Test system mode.
      */
@@ -57,20 +62,26 @@ class TestSystem @Inject constructor(
         PARTICLE_BOX
     }
 
+    private val adapter = TestInputAdapter()
     private val mouse = Vector3()
     private var mode = Mode.BOX
 
     init {
-        inputMultiplexer.addProcessor(TestInputAdapter())
-        setProcessing(configurations.config.game.debug)
+        inputMultiplexer.addProcessor(adapter)
+        enable(configurations.config.game.debug)
     }
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
 
         messaging.listen<ConfigChangedEvent> { (c) ->
-            setProcessing(c.game.debug)
+            enable(c.game.debug)
         }
+    }
+
+    private fun enable(enable: Boolean) {
+        setProcessing(enable)
+        adapter.enabled = enable
     }
 
     override fun update(deltaTime: Float) {
@@ -81,7 +92,22 @@ class TestSystem @Inject constructor(
     }
 
     private inner class TestInputAdapter : InputAdapter() {
+
+        var enabled = true
+
         override fun keyUp(keycode: Int): Boolean {
+
+            // Handle debug toggling.
+            if (Input.Keys.GRAVE == keycode) {
+                configurations.config.game.debug = !configurations.config.game.debug
+                configurations.save()
+
+                return true
+            }
+
+            if (!enabled) {
+                return false
+            }
 
             when (keycode) {
 
@@ -90,22 +116,20 @@ class TestSystem @Inject constructor(
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX
 
-                // Handle debug toggling.
-                Input.Keys.GRAVE -> {
-                    configurations.config.game.debug = !configurations.config.game.debug
-                    configurations.save()
-                }
-
                 else -> {
                     return false
                 }
             }
 
-            println("Mode: $mode")
+            LOG.debug("Changed mode to: {}", mode)
             return true
         }
 
         override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            if (!enabled) {
+                return false
+            }
+
             if (Input.Buttons.LEFT != button) {
                 return false
             }
@@ -120,7 +144,7 @@ class TestSystem @Inject constructor(
                 Mode.PARTICLE_BOX -> spawnParticleBox(pos)
             }
 
-            println("Clicked at: $pos")
+            LOG.debug("Clicked at: {}", pos)
             return true
         }
 
@@ -129,7 +153,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnBox(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["crate"]?.let {
+                resources.atlas["crate"]?.let {
                     add(Renderable(it))
                 }
 
@@ -158,7 +182,7 @@ class TestSystem @Inject constructor(
          */
         fun spawnCircle(pos: Vector2) {
             engine.addEntity(Entity().apply {
-                resources.mainAtlas["round_crate"]?.let {
+                resources.atlas["round_crate"]?.let {
                     add(Renderable(it))
                 }
 
@@ -228,7 +252,7 @@ class TestSystem @Inject constructor(
                 } catch (e: NullPointerException) {
                     // liquid fun seems to throw this somewhere deep in its code, this is a test system
                     // so im not gonna bother.
-                    e.printStackTrace()
+                    LOG.error("Could not spawn particles", e)
                 }
             })
         }

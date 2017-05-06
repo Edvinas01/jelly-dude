@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.DelaunayTriangulator
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.position.Transform
-import com.edd.jelly.behaviour.rendering.SoftRegion
+import com.edd.jelly.util.SoftRegion
 import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
@@ -27,7 +27,6 @@ import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.joints.DistanceJointDef
 import org.jbox2d.dynamics.joints.RevoluteJointDef
-import org.lwjgl.opengl.RenderTexture
 
 @Singleton
 class SoftBodyBuilder @Inject constructor(
@@ -172,7 +171,7 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         val transform = Transform(Vector2(center.x, center.y))
-        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
         val vertices = textureCoords.copyOf()
 
         bodies.forEachIndexed { i, b ->
@@ -291,7 +290,7 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         // Create mesh.
-        val texture = resources.mainAtlas["dev_grid"]!! // TODO only test texture, remove
+        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
 
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()

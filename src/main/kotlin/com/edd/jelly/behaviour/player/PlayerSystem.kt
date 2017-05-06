@@ -5,11 +5,9 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
+import com.edd.jelly.behaviour.common.event.*
 import com.edd.jelly.behaviour.position.Transform
-import com.edd.jelly.behaviour.level.LevelLoadedEvent
 import com.edd.jelly.behaviour.pause.PausingSystem
-import com.edd.jelly.behaviour.physics.contacts.BeginContactEvent
-import com.edd.jelly.behaviour.physics.contacts.EndContactEvent
 import com.edd.jelly.behaviour.rendering.PolygonRenderable
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.GameException
@@ -17,6 +15,8 @@ import com.edd.jelly.util.pixels
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.scripts.ScriptManager
+import com.edd.jelly.behaviour.common.hook.*
+import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.util.take
 import com.google.inject.Inject
 import org.jbox2d.collision.WorldManifold
@@ -33,10 +33,11 @@ class PlayerSystem @Inject constructor(
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
         private val world: World,
+        configurations: Configurations,
         scriptManager: ScriptManager
 ) : EntitySystem(), PausingSystem {
 
-    companion object {
+    private companion object {
 
         // Player body constants.
         val PLAYER_TEXTURE_NAME = "slime"
@@ -79,10 +80,14 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_SPEED = 5
     }
 
-    private val movementHook = scriptManager.hook(MovementFunction::class.java)
-    private val healthHook = scriptManager.hook(HealthFunction::class.java)
+    private val beforeMoveHook = scriptManager.hook(BeforeMove::class.java)
+    private val afterMoveHook = scriptManager.hook(AfterMove::class.java)
+    private val moveForceHook = scriptManager.hook(MoveForce::class.java)
+    private val healthHook = scriptManager.hook(BeforeHealthTick::class.java)
 
-    private val playerInputs = PlayerInputAdapter(messaging)
+    private val playerInputs = PlayerInputAdapter(messaging).apply {
+        adaptInputs(configurations.config.input)
+    }
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
@@ -114,8 +119,8 @@ class PlayerSystem @Inject constructor(
      */
     private fun processMovement(player: Player, deltaTime: Float) {
         with(player) {
-            movementHook.run {
-                it.beforeProcessMove(this)
+            beforeMoveHook.run {
+                it.beforeMove(this)
             }
 
             // If player has no contacts or joints at the moment, it means he is in the air.
@@ -127,7 +132,11 @@ class PlayerSystem @Inject constructor(
             canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO)
 
             // Calculated move force for this player.
-            val moveForce = speedMultiplier * MOVE_FORCE * deltaTime
+            var moveForce = speedMultiplier * MOVE_FORCE * deltaTime
+
+            moveForceHook.run {
+                moveForce = it.moveForce(moveForce)
+            }
 
             for (body in joint.bodies) {
 
@@ -151,8 +160,8 @@ class PlayerSystem @Inject constructor(
                 }
             }
 
-            movementHook.run {
-                it.afterProcessMove(this)
+            afterMoveHook.run {
+                it.afterMove(this)
             }
         }
     }
@@ -193,6 +202,8 @@ class PlayerSystem @Inject constructor(
     private fun processStickiness(player: Player) {
         with(player) {
             if (sticky) {
+
+                @Suppress("LoopToCallChain")
                 for (contact in contacts) {
                     if (stickyJoints.containsKey(contact)
 
@@ -273,7 +284,7 @@ class PlayerSystem @Inject constructor(
      * Create polygon region from provided transform position, size and body vertices.
      */
     private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
-        val playerTexture = resourceManager.mainAtlas[PLAYER_TEXTURE_NAME]!!
+        val playerTexture = resourceManager.atlas[PLAYER_TEXTURE_NAME]!!
 
         val xRatio = playerTexture.regionWidth / transform.width.pixels
         val yRatio = playerTexture.regionHeight / transform.height.pixels
@@ -473,6 +484,10 @@ class PlayerSystem @Inject constructor(
             map.spawn?.let {
                 spawnPlayer(it.x, it.y)
             }
+        }
+
+        messaging.listen<ConfigChangedEvent> {
+            playerInputs.adaptInputs(it.config.input)
         }
     }
 
