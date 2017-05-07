@@ -6,8 +6,11 @@
 2d game based on soft body physics.
 
 ## Running
-To build and run the game, you only need to have JDK 8 installed on your machine. After you got that ready, clone this
-repository and navigate to the root project directory.
+First make sure that you have JRE 8 installed. Then grab the latest game release which you can find [here](https://github.com/Edvinas01/jelly-dude/releases/latest) and after downloading, simply run the `.jar` file.
+
+## Building
+To build and run the game, you need to have JDK 8 installed on your machine. After you got that ready, clone this
+repository and navigate to root project directory.
 
 If you're on Linux run the following command
 ```
