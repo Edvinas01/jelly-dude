@@ -93,10 +93,6 @@ dependencies {
     // Kotlin!
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    // Nicer fonts.
-    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-
     // Core LigGDX dependencies.
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"

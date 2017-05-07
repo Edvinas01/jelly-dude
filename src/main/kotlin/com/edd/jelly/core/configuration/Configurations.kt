@@ -58,8 +58,20 @@ class Configurations {
     /**
      * Load config file from classpath resources.
      */
-    private fun load(): Config {
-        return mapper.readValue(ClassLoader.getSystemResourceAsStream(CONFIG_FILE), Config::class.java)
+    private fun load(internal: Boolean = true): Config {
+        if (internal) {
+            return mapper.readValue(ClassLoader.getSystemResourceAsStream(CONFIG_FILE), Config::class.java)
+        }
+
+        return getConfigFile().let { (file, created) ->
+            if (created) {
+                val config = mapper.readValue(ClassLoader.getSystemResourceAsStream(CONFIG_FILE), Config::class.java)
+                save(config)
+                config
+            } else {
+                mapper.readValue(file, Config::class.java)
+            }
+        }
     }
 
     private fun getConfigFile(): Pair<File, Boolean> {
