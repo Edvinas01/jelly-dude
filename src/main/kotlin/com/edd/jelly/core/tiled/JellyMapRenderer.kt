@@ -76,7 +76,7 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
         with(layer) {
 
             // Half viewport height.
-            val hh = - camera.viewportHeight / 2
+            val hh = camera.viewportHeight / 2
 
             // Camera y position with offset.
             val offsetY = offset.y + camera.position.y
@@ -85,7 +85,7 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
             val y = offsetY - hh
 
             // Parallax camera bottom.
-            var py = offsetY * speed.y - hh
+            var py = y * speed.y
 
             // If bottom is clamped, make sure that parallax view
             // doesn't go above the camera viewport.
