@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.TimeUtils
@@ -16,6 +15,7 @@ import com.edd.jelly.behaviour.player.Player
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.util.clamp
 import com.google.inject.Inject
 import java.util.Random
 import java.util.concurrent.TimeUnit
@@ -92,8 +92,11 @@ class CameraPositionSystem @Inject constructor(
         val hw = camera.viewportWidth / 2
         val hh = camera.viewportHeight / 2
 
-        camera.position.x = MathUtils.clamp(camera.position.x, hw, worldWidth - hw)
-        camera.position.y = MathUtils.clamp(camera.position.y, hh, worldHeight - hh)
+        camera.position.x = if (camera.viewportWidth > worldWidth) hw else
+            camera.position.x.clamp(hw, worldWidth - hw)
+
+        camera.position.y = if (camera.viewportHeight > worldHeight) hh else
+            camera.position.y.clamp(hh, worldHeight - hh)
 
         camera.update()
     }

@@ -13,3 +13,8 @@ sandbox:
   texture: levels/sandbox/sandbox.png
   author: Edd
   name: Sandbox
+modify:
+  description: Testing various raw features
+  texture: levels/sandbox/sandbox.png
+  author: Edd
+  name: Sandbox
