@@ -75,6 +75,7 @@ class JellyGame(val configurations: Configurations) : Game() {
     }
 
     override fun dispose() {
+        engine.systems.forEach(engine::removeSystem)
         super.dispose()
     }
 

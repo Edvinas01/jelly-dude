@@ -24,6 +24,7 @@ import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.pixels
 import com.google.inject.Inject
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Color3f
@@ -50,7 +51,7 @@ class TestSystem @Inject constructor(
 ) : EntitySystem() {
 
     private companion object {
-        val LOG = LogManager.getLogger(TestSystem::class.java)
+        val LOG: Logger = LogManager.getLogger(TestSystem::class.java)
     }
 
     /**
@@ -66,6 +67,12 @@ class TestSystem @Inject constructor(
     private val mouse = Vector3()
     private var mode = Mode.BOX
 
+    private var totalFrames = 0L
+    private var totalTicks = 0L
+
+    private var highestFrames = Int.MIN_VALUE
+    private var lowestFrames = Int.MAX_VALUE
+
     init {
         inputMultiplexer.addProcessor(adapter)
         enable(configurations.config.game.debug)
@@ -79,16 +86,38 @@ class TestSystem @Inject constructor(
         }
     }
 
+    override fun removedFromEngine(engine: Engine) {
+        if (totalTicks > 0) {
+            LOG.debug("Average fps: {}, highest fps: {}, lowest fps: {}",
+                    totalFrames / totalTicks, highestFrames, lowestFrames)
+
+        } else {
+            LOG.warn("Got 0 ticks, cannot calculate fps stats")
+        }
+    }
+
     private fun enable(enable: Boolean) {
         setProcessing(enable)
         adapter.enabled = enable
     }
 
     override fun update(deltaTime: Float) {
+        trackStats()
+
         camera.unproject(mouse.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
         Gdx.graphics.setTitle(String.format("meters (%.3f, %.3f) | pixels (%.0f, %.0f) | fps %d",
                 mouse.x, mouse.y, mouse.x.pixels, mouse.y.pixels, Gdx.graphics.framesPerSecond))
+    }
+
+    private fun trackStats() {
+        val frames = Gdx.graphics.framesPerSecond
+
+        highestFrames = Math.max(highestFrames, frames)
+        lowestFrames = Math.min(lowestFrames, frames)
+
+        totalFrames += frames
+        totalTicks++
     }
 
     private inner class TestInputAdapter : InputAdapter() {
