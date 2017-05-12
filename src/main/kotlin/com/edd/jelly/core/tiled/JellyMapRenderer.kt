@@ -75,18 +75,33 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
     private fun drawParallaxLayer(layer: ParallaxLayer) {
         with(layer) {
 
+            // Half viewport height.
+            val hh = camera.viewportHeight / 2
+
+            // Camera y position with offset.
+            val offsetY = offset.y + camera.position.y
+
             // Camera bottom.
-            val y = offset.y + camera.position.y - camera.viewportHeight / 2
+            val y = offsetY - hh
 
             // Parallax camera bottom.
             var py = y * speed.y
 
+            // If bottom is clamped, make sure that parallax view
+            // doesn't go above the camera viewport.
             if (clampBottom && py > y) {
                 py = y
             }
 
+            // If top is clamped, make sure that parallax view
+            // doesn't go below the camera viewport.
             if (clampTop) {
-                py = Math.max(py, y - size.y / 2)
+                val topParallaxY = py + size.y
+                val topY = y + camera.viewportHeight
+
+                if (topY > topParallaxY) {
+                    py += topY - topParallaxY
+                }
             }
 
             // Camera left.

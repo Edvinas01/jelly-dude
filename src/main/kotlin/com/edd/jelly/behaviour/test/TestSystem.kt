@@ -22,18 +22,18 @@ import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.pixels
+import com.edd.jelly.util.toVec2
 import com.google.inject.Inject
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import org.jbox2d.callbacks.QueryCallback
+import org.jbox2d.collision.AABB
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Color3f
 import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.BodyDef
-import org.jbox2d.dynamics.BodyType
-import org.jbox2d.dynamics.FixtureDef
-import org.jbox2d.dynamics.World
-import org.jbox2d.dynamics.joints.ConstantVolumeJoint
-import org.jbox2d.dynamics.joints.ConstantVolumeJointDef
+import org.jbox2d.dynamics.*
+import org.jbox2d.dynamics.joints.*
 import org.jbox2d.particle.ParticleColor
 import org.jbox2d.particle.ParticleGroup
 import org.jbox2d.particle.ParticleGroupDef
@@ -50,7 +50,7 @@ class TestSystem @Inject constructor(
 ) : EntitySystem() {
 
     private companion object {
-        val LOG = LogManager.getLogger(TestSystem::class.java)
+        val LOG: Logger = LogManager.getLogger(TestSystem::class.java)
     }
 
     /**
@@ -66,6 +66,32 @@ class TestSystem @Inject constructor(
     private val mouse = Vector3()
     private var mode = Mode.BOX
 
+    // Stats.
+    private var totalFrames = 0L
+    private var totalTicks = 0L
+
+    private var highestFrames = Int.MIN_VALUE
+    private var lowestFrames = Int.MAX_VALUE
+
+    // Mouse dragging.
+    private val jointDef = MouseJointDef().apply {
+        collideConnected = true
+        maxForce = 100f
+    }
+
+    private var joint: MouseJoint? = null
+    private var tmpGdx = Vector3()
+    private var tmpBox = Vec2()
+
+    private val queryCallback = QueryCallback {
+            jointDef.bodyA = it.body
+            jointDef.bodyB = it.body
+            jointDef.target.set(tmpGdx.x, tmpGdx.y)
+            joint = world.createJoint(jointDef) as MouseJoint
+
+            false
+    }
+
     init {
         inputMultiplexer.addProcessor(adapter)
         enable(configurations.config.game.debug)
@@ -79,16 +105,38 @@ class TestSystem @Inject constructor(
         }
     }
 
+    override fun removedFromEngine(engine: Engine) {
+        if (totalTicks > 0) {
+            LOG.debug("Average fps: {}, highest fps: {}, lowest fps: {}",
+                    totalFrames / totalTicks, highestFrames, lowestFrames)
+
+        } else {
+            LOG.warn("Got 0 ticks, cannot calculate fps stats")
+        }
+    }
+
     private fun enable(enable: Boolean) {
         setProcessing(enable)
         adapter.enabled = enable
     }
 
     override fun update(deltaTime: Float) {
+        trackStats()
+
         camera.unproject(mouse.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
         Gdx.graphics.setTitle(String.format("meters (%.3f, %.3f) | pixels (%.0f, %.0f) | fps %d",
                 mouse.x, mouse.y, mouse.x.pixels, mouse.y.pixels, Gdx.graphics.framesPerSecond))
+    }
+
+    private fun trackStats() {
+        val frames = Gdx.graphics.framesPerSecond
+
+        highestFrames = Math.max(highestFrames, frames)
+        lowestFrames = Math.min(lowestFrames, frames)
+
+        totalFrames += frames
+        totalTicks++
     }
 
     private inner class TestInputAdapter : InputAdapter() {
@@ -125,7 +173,39 @@ class TestSystem @Inject constructor(
             return true
         }
 
+        override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            if (!enabled) {
+                return false
+            }
+
+            if (Input.Buttons.RIGHT == button) {
+                camera.unproject(tmpGdx.set(screenX.toFloat(), screenY.toFloat(), 0f))
+
+                world.queryAABB(queryCallback, AABB(tmpGdx.toVec2(), tmpGdx.toVec2()).apply {
+                    val offset = 0.05f
+
+                    lowerBound.addLocal(-offset, -offset)
+                    upperBound.addLocal(offset, offset)
+                })
+                return true
+            }
+            return false
+        }
+
+        override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) =
+                if (joint != null) {
+                    camera.unproject(tmpGdx.set(screenX.toFloat(), screenY.toFloat(), 0f))
+                    joint!!.target = tmpBox.set(tmpGdx.x, tmpGdx.y)
+                    true
+                } else false
+
         override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            if (Input.Buttons.RIGHT == button && joint != null) {
+                world.destroyJoint(joint)
+                joint = null
+                return true
+            }
+
             if (!enabled) {
                 return false
             }
@@ -151,7 +231,7 @@ class TestSystem @Inject constructor(
         /**
          * Spawn a random sized box.
          */
-        fun spawnBox(pos: Vector2) {
+        private fun spawnBox(pos: Vector2) {
             engine.addEntity(Entity().apply {
                 resources.atlas["crate"]?.let {
                     add(Renderable(it))
@@ -180,7 +260,7 @@ class TestSystem @Inject constructor(
         /**
          * Spawn a random sized circle.
          */
-        fun spawnCircle(pos: Vector2) {
+        private fun spawnCircle(pos: Vector2) {
             engine.addEntity(Entity().apply {
                 resources.atlas["round_crate"]?.let {
                     add(Renderable(it))
@@ -210,7 +290,7 @@ class TestSystem @Inject constructor(
         /**
          * Spawn a random sized particle box.
          */
-        fun spawnParticleBox(pos: Vector2) {
+        private fun spawnParticleBox(pos: Vector2) {
 
             val w = 0.1f + MathUtils.random(1f)
             val h = 0.1f + MathUtils.random(1f)
@@ -258,10 +338,10 @@ class TestSystem @Inject constructor(
         }
     }
 
-    fun spawnCoolJelly(pos: Vector2,
-                       width: Float = MathUtils.random(0.7f),
-                       height: Float = MathUtils.random(0.5f),
-                       bodyCount: Int = MathUtils.random(5, 20)): ConstantVolumeJoint {
+    private fun spawnCoolJelly(pos: Vector2,
+                               width: Float = MathUtils.random(0.7f),
+                               height: Float = MathUtils.random(0.5f),
+                               bodyCount: Int = MathUtils.random(5, 20)): ConstantVolumeJoint {
 
         val transform = Transform(
                 pos,
