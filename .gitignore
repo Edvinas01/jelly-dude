@@ -2,8 +2,15 @@
 !gradle-wrapper.jar
 .gradle/
 
-# IntelliJ
-.idea/
+# IntelliJ stuff.
+.idea/*
+
+# Useful run config files fo IntelliJ
+!.idea/
+!.idea/runConfigurations/
+.idea/runConfigurations/*
+!.idea/runConfigurations/test.xml
+!.idea/runConfigurations/dev.xml
 
 # General
 classes/

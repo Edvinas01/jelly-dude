@@ -7,9 +7,10 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.xenomachina.argparser.ArgParser
 import java.io.File
 
-class Configurations {
+class Configurations(argParser: ArgParser) {
 
     companion object {
         private const val CONFIG_FILE = "config.yml"
@@ -25,13 +26,19 @@ class Configurations {
     // Configurations have to be loaded before Guice, so can't use DI here.
     val mapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(KotlinModule())
-
-//        enable(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES)
         enable(JsonParser.Feature.ALLOW_YAML_COMMENTS)
     }
 
+    // Is dev mode enabled.
+    private val dev by argParser.flagging(
+            "-d",
+            "--dev",
+            help = "developer mode"
+    )
+
     private var messaging: Messaging? = null
-    val config: Config = load()
+
+    val config = load(dev)
 
     /**
      * Setup configuration settings for the game.
@@ -58,7 +65,7 @@ class Configurations {
     /**
      * Load config file from classpath resources.
      */
-    private fun load(internal: Boolean = true): Config {
+    private fun load(internal: Boolean): Config {
         if (internal) {
             return mapper.readValue(ClassLoader.getSystemResourceAsStream(CONFIG_FILE), Config::class.java)
         }

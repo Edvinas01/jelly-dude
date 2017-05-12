@@ -10,10 +10,11 @@ buildscript {
     }
 
     repositories {
-        mavenLocal()
         mavenCentral()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        mavenLocal()
         jcenter()
+
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 
     dependencies {
@@ -22,8 +23,10 @@ buildscript {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
+    jcenter()
+
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     maven { url 'http://dl.bintray.com/arturbosch/code-analysis' }
@@ -112,6 +115,7 @@ dependencies {
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0.pr1'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0.pr1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1'
+    compile 'com.xenomachina:kotlin-argparser:2.0.0'
     compile 'commons-io:commons-io:2.5'
 
     // JBox2d + Liquid fun dependencies.
