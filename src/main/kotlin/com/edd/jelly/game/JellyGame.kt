@@ -26,6 +26,9 @@ class JellyGame(val configurations: Configurations) : Game() {
         private val LOG = LogManager.getLogger(JellyGame::class.java)
     }
 
+    // Game start time.
+    val start = System.currentTimeMillis()
+
     internal val engine = Engine()
 
     internal lateinit var assetManager: AssetManager
@@ -61,6 +64,8 @@ class JellyGame(val configurations: Configurations) : Game() {
             messaging.send(LoadGameScreenEvent)
 
         } ?: messaging.send(LoadNewLevelEvent(MENU_LEVEL_NAME, true))
+
+        LOG.info("Game started after {}ms", System.currentTimeMillis() - start)
     }
 
     override fun render() {
