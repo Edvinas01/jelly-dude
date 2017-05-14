@@ -2,7 +2,7 @@
   <img src="logo.png"/>
 </p>
 
-# Jelly Dude [![Build Status](https://travis-ci.com/Edvinas01/jelly-dude.svg?token=wWKAwTTyMvyVzCixHyY1&branch=master)](https://travis-ci.com/Edvinas01/jelly-dude)
+# Jelly Dude [![Build Status](https://travis-ci.org/Edvinas01/jelly-dude.svg?branch=master)](https://travis-ci.org/Edvinas01/jelly-dude)
 2d game based on soft body physics.
 
 ## Running
