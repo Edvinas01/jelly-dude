@@ -76,7 +76,7 @@ class PlayerSystem @Inject constructor(
         // Deflation stuff.
         val DEFLATION_SPEED_MULTIPLIER = 0.5f
         val DEFLATION_JOINT_LENGTH = 0.04f
-        val DEFLATION_AMOUNT = 0.4f
+        val DEFLATION_AMOUNT = 0.5f
         val DEFLATION_SPEED = 7
     }
 
