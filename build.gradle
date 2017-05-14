@@ -108,36 +108,38 @@ task detekt(type: JavaExec) {
  * Pack game tile-sets so that they could be used in Tiled.
  */
 task packTiles {
-    def output = 'assets/textures/'
+    doLast {
+        def output = 'assets/textures/'
 
-    // For each raw tile-set.
-    (project.ext.rawTiles as List<Map<String, Object>>).each {
-        def settings = new TexturePacker.Settings()
-        def name = it.name as String
+        // For each raw tile-set.
+        (project.ext.rawTiles as List<Map<String, Object>>).each {
+            def settings = new TexturePacker.Settings()
+            def name = it.name as String
 
-        // Default tile-set settings.
-        settings.with {
-            duplicatePadding = true
-            grid = true
+            // Default tile-set settings.
+            settings.with {
+                duplicatePadding = true
+                grid = true
 
-            maxWidth = 1024
-            maxHeight = 1024
+                maxWidth = 1024
+                maxHeight = 1024
 
-            paddingX = 2
-            paddingY = 2
-        }
+                paddingX = 2
+                paddingY = 2
+            }
 
-        // Adjust scale if required.
-        if (it.scale) {
-            settings.scale = [it.scale] as float[]
-        }
+            // Adjust scale if required.
+            if (it.scale) {
+                settings.scale = [it.scale] as float[]
+            }
 
-        def inputDir = "$project.ext.rawAssets$name"
-        if (new File(inputDir).exists()) {
-            TexturePacker.process(settings, inputDir, output, name)
+            def inputDir = "$project.ext.rawAssets$name"
+            if (new File(inputDir).exists()) {
+                TexturePacker.process(settings, inputDir, output, name)
 
-            // Don't need the atlas file for tile-sets.
-            new File("$output${name}.atlas").delete()
+                // Don't need the atlas file for tile-sets.
+                new File("$output${name}.atlas").delete()
+            }
         }
     }
 }
