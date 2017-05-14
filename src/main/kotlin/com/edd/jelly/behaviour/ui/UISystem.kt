@@ -8,6 +8,7 @@ import com.edd.jelly.behaviour.ui.screen.MainMenuScreen
 import com.edd.jelly.behaviour.ui.screen.StagedScreen
 import com.edd.jelly.game.JellyGame
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.ErrorInfoEvent
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
@@ -70,6 +71,14 @@ class UISystem @Inject constructor(
 
         messaging.listen<LoadMainMenuScreenEvent> {
             setRootScreen(injector.getInstance(MainMenuScreen::class.java))
+        }
+
+        // Listen for error events.
+        messaging.listen<ErrorInfoEvent> {
+            val screen = game.screen
+            if (screen != null && screen is MainMenuScreen) {
+                screen.showErrorPopUp(it.message)
+            }
         }
     }
 }

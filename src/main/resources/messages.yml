@@ -34,6 +34,10 @@ english:
     pauseMenuButton: Main menu
     exitButton: Exit
 
+    # Dialog pop-ups.
+    closeButton: Close
+    errorTitle: Error
+
 lithuanian:
   name: Lietuvių
   messages:
@@ -69,3 +73,7 @@ lithuanian:
     pauseRestartButton: Perkrauti lygį
     pauseMenuButton: Pagrindinis meniu
     exitButton: Išeiti
+
+    # Dialog pop-ups.
+    closeButton: Uždaryti
+    errorTitle: Klaida

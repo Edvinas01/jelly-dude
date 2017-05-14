@@ -1,11 +1,10 @@
 package com.edd.jelly.behaviour.ui.screen
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentHeight
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
 import com.edd.jelly.behaviour.ui.screen.windows.LevelsWindow
@@ -20,10 +19,10 @@ import com.edd.jelly.core.tiled.JellyMapLoader
 import com.google.inject.Inject
 
 class MainMenuScreen @Inject constructor(
+        val resources: ResourceManager,
         configurations: Configurations,
         jellyMapLoader: JellyMapLoader,
         messaging: Messaging,
-        resources: ResourceManager,
         @GuiCamera
         camera: OrthographicCamera,
         batch: SpriteBatch
@@ -84,6 +83,19 @@ class MainMenuScreen @Inject constructor(
                 .fill()
 
         this.stage.addActor(mainTable)
+    }
+
+    /**
+     * Show error pop-up window with a text message.
+     */
+    fun showErrorPopUp(message: String) {
+        val lang = resources.language
+        Dialog(lang["errorTitle"], skin, "jelly").apply {
+            key(Input.Keys.ENTER, true)
+
+            text(message)
+            button(lang["closeButton"])
+        }.show(stage)
     }
 
     /**
