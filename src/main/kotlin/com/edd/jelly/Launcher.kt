@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.edd.jelly.game.JellyGame
 import com.edd.jelly.core.configuration.Configurations
-import com.edd.jelly.util.UncaughtExceptionLogger
+import com.edd.jelly.util.UncaughtGameExceptionHandler
 import com.xenomachina.argparser.ArgParser
 
 class Launcher : ApplicationAdapter() {
@@ -14,7 +14,7 @@ class Launcher : ApplicationAdapter() {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionLogger())
+            Thread.setDefaultUncaughtExceptionHandler(UncaughtGameExceptionHandler())
 
             val configurations = Configurations(ArgParser(args))
             LwjglApplication(JellyGame(configurations), LwjglApplicationConfiguration().apply {
