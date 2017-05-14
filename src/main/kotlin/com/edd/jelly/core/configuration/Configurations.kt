@@ -15,6 +15,9 @@ class Configurations(argParser: ArgParser) {
     companion object {
         private const val CONFIG_FILE = "config.yml"
 
+        const val GIT_HUB_URL = "https://github.com/Edvinas01/jelly-dude"
+        const val GIT_HUB_NEW_ISSUE_URL = "$GIT_HUB_URL/issues/new"
+
         /**
          * Folder where all game resources and assets are held.
          */

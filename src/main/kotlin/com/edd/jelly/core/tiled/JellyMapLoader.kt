@@ -1,7 +1,6 @@
 package com.edd.jelly.core.tiled
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap

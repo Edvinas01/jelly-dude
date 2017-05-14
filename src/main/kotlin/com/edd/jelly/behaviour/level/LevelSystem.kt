@@ -15,12 +15,18 @@ import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.util.GameException
 import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 class LevelSystem @Inject constructor(
         private val bodyEntityFactory: BodyEntityFactory,
         private val jellyMapLoader: JellyMapLoader,
         private val messaging: Messaging
 ) : EntitySystem() {
+
+    private companion object {
+        val LOG : Logger = LogManager.getLogger(LevelSystem::class.java)
+    }
 
     private lateinit var maps: ImmutableArray<Entity>
 
@@ -33,29 +39,36 @@ class LevelSystem @Inject constructor(
     /**
      * Get currently running map info.
      */
-    private fun getCurrentMap(): JellyMap {
+    private fun getCurrentMap(): JellyMap? {
         if (maps.size() > 1) {
             throw GameException("Only one map must be loaded")
         }
-        return maps.first()?.let {
+        return maps.firstOrNull()?.let {
             JellyMap.mapper[it]
-        } ?: throw GameException("Map must be loaded")
+        }
     }
 
     /**
      * Unload current level.
      */
     private fun unloadLevel() {
-        engine.removeAllEntities()
+        getCurrentMap()?.let {
+            LOG.debug("Unloading level: {} and clearing all entities", it.name)
+            engine.removeAllEntities()
+            it.tiledMap.dispose()
+        }
     }
 
     /**
-     * Load level by name.
+     * Load a new level by name and dispose of currently loaded map.
      */
     private fun loadLevel(name: String,
                           internal: Boolean = false) {
 
         val map = jellyMapLoader.loadMap(name, internal)
+
+        // Unload only after properly loading map details.
+        unloadLevel()
 
         // Create static collisions and entities.
         (bodyEntityFactory.create(map.collisionsLayer) + bodyEntityFactory.create(map.entitiesLayer)).forEach {
@@ -77,16 +90,14 @@ class LevelSystem @Inject constructor(
 
         // Listen for new level load requests.
         messaging.listen<LoadNewLevelEvent> {
-            unloadLevel()
             loadLevel(it.name, it.internal)
         }
 
         // Listen for level restarts.
         messaging.listen<RestartLevelEvent> {
-            val name = getCurrentMap().name
-
-            unloadLevel()
-            loadLevel(name)
+            getCurrentMap()?.let {
+                loadLevel(it.name)
+            }
         }
 
         // Listen for level removals.

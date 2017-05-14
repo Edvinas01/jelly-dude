@@ -4,18 +4,26 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Scaling
+import com.edd.jelly.behaviour.common.event.ErrorInfoEvent
 import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
 import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
+import com.edd.jelly.behaviour.common.event.LoadMainMenuScreenEvent
 import com.edd.jelly.behaviour.ui.screen.LanguageAware
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language
 import com.edd.jelly.core.tiled.JellyMapLoader
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 class LevelsWindow constructor(
         skin: Skin,
         jellyMapLoader: JellyMapLoader,
         messaging: Messaging
 ) : Window("Levels", skin, "jelly"), LanguageAware {
+
+    private companion object {
+        val LOG : Logger = LogManager.getLogger(LevelsWindow::class.java)
+    }
 
     init {
         isMovable = false
@@ -58,8 +66,17 @@ class LevelsWindow constructor(
 
                 addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
-                        messaging.send(LoadNewLevelEvent(meta.internalName))
-                        messaging.send(LoadGameScreenEvent)
+
+                        // Level loading might fail, messaging is not async, so gotta handle it here.
+                        try {
+                            messaging.send(LoadNewLevelEvent(meta.internalName))
+                            messaging.send(LoadGameScreenEvent)
+                        } catch (e : RuntimeException) {
+                            LOG.error("Could not load level", e)
+
+                            // Try to recover.
+                            messaging.send(ErrorInfoEvent(e.message ?: "Could not load level"))
+                        }
                     }
                 })
 

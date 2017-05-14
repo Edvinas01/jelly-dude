@@ -1,3 +1,5 @@
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
 buildscript {
     ext {
         kotlinVersion = '1.1.1'
@@ -7,6 +9,18 @@ buildscript {
         guiceVersion = '4.1.0'
         spockVersion = '1.1-groovy-2.4-rc-3'
         gdxVersion = '1.9.6'
+
+        // Raw asset directory.
+        rawAssets = 'raw_assets/'
+
+        // Raw tile-set directories with configs.
+        // @formatter:off
+        rawTiles = [[
+                name : 'main_tileset',
+                scale: 0.5
+            ]
+        ]
+        // @formatter:on
     }
 
     repositories {
@@ -19,6 +33,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     }
 }
 
@@ -60,6 +75,9 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
+/**
+ * Create distributable game .jar file.
+ */
 task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
@@ -70,6 +88,9 @@ task dist(type: Jar) {
     }
 }
 
+/**
+ * Run detect static code analysis.
+ */
 task detekt(type: JavaExec) {
     classpath = configurations.detekt
     main = 'io.gitlab.arturbosch.detekt.cli.Main'
@@ -81,6 +102,44 @@ task detekt(type: JavaExec) {
     ]
 
     args(params)
+}
+
+/**
+ * Pack game tile-sets so that they could be used in Tiled.
+ */
+task packTiles {
+    def output = 'assets/textures/'
+
+    // For each raw tile-set.
+    (project.ext.rawTiles as List<Map<String, Object>>).each {
+        def settings = new TexturePacker.Settings()
+        def name = it.name as String
+
+        // Default tile-set settings.
+        settings.with {
+            duplicatePadding = true
+            grid = true
+
+            maxWidth = 1024
+            maxHeight = 1024
+
+            paddingX = 2
+            paddingY = 2
+        }
+
+        // Adjust scale if required.
+        if (it.scale) {
+            settings.scale = [it.scale] as float[]
+        }
+
+        def inputDir = "$project.ext.rawAssets$name"
+        if (new File(inputDir).exists()) {
+            TexturePacker.process(settings, inputDir, output, name)
+
+            // Don't need the atlas file for tile-sets.
+            new File("$output${name}.atlas").delete()
+        }
+    }
 }
 
 dist.dependsOn classes

@@ -65,7 +65,6 @@ fun <T : MapObject> T.boolean(name: String, default: Boolean = false): Boolean {
     } ?: default
 }
 
-
 /**
  * Get string value from map layer properties.
  */
