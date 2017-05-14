@@ -21,7 +21,6 @@ class LevelsWindow constructor(
         messaging: Messaging
 ) : Window("Levels", skin, "jelly"), LanguageAware {
 
-
     private companion object {
         val LOG : Logger = LogManager.getLogger(LevelsWindow::class.java)
     }
