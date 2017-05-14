@@ -107,7 +107,7 @@ task detekt(type: JavaExec) {
 /**
  * Pack game tile-sets so that they could be used in Tiled.
  */
-task packTiles << {
+task packTiles {
     def output = 'assets/textures/'
 
     // For each raw tile-set.
