@@ -73,7 +73,7 @@ class LiquidRenderer @Inject constructor(
     fun render(camera: Camera) {
         val projection = camera.combined
 
-        val count = updateVertices()
+        val count = updateVertices(camera)
         renderPotential(count, projection)
         renderLiquid(count, projection)
     }
@@ -81,24 +81,49 @@ class LiquidRenderer @Inject constructor(
     /**
      * Update mesh vertices.
      */
-    private fun updateVertices(): Int {
+    private fun updateVertices(camera: Camera): Int {
         val positionBuffer = world.particlePositionBuffer
         val colorBuffer = world.particleColorBuffer
 
+        // Adittional bounding box offset.
+        val offset = world.particleRadius * 2
+
+        // Half width and half height of the view.
+        val hw = camera.viewportWidth / 2
+        val hh = camera.viewportHeight / 2
+
+        // Bottom left corner of the camera.
+        val x = camera.position.x - hw - offset
+        val y = camera.position.y - hh - offset
+
+        // Top right corner of the camera.
+        val xw = camera.position.x + hw + offset
+        val yh = camera.position.y + hh + offset
+
+        // How many iterations were made in the vertex loop.
+        var itr = 0
+
+        // Vertex position index.
         var idx = 0
 
         for (i in 0..world.particleCount - 1) {
             val pos = positionBuffer[i]
+
+            if (pos.x !in x..xw || pos.y !in y..yh) {
+                continue
+            }
+
             val color = colorBuffer[i]
 
             // In order: top center, bottom left, bottom right.
             idx = writeVertex(idx, pos.x + 0.0f * TRIANGLE_SCALE, pos.y + 0.622008459f * TRIANGLE_SCALE, pos, color)
             idx = writeVertex(idx, pos.x - 0.5f * TRIANGLE_SCALE, pos.y - 0.311004243f * TRIANGLE_SCALE, pos, color)
             idx = writeVertex(idx, pos.x + 0.5f * TRIANGLE_SCALE, pos.y - 0.311004243f * TRIANGLE_SCALE, pos, color)
+            itr++
         }
         particleMesh.updateVertices(0, vertexBuffer, 0, idx)
 
-        return world.particleCount * INDEX_PER_DROPLET
+        return itr * INDEX_PER_DROPLET
     }
 
     /**
