@@ -26,6 +26,8 @@ english:
     optionsScriptingLabel: Scripting
     optionsDebugLabel: Debug
 
+    optionsSoundLabel: Sound
+
     saveButton: Save
 
     # Pause window.
@@ -65,6 +67,8 @@ lithuanian:
     optionsFullscreenLabel: Per visą ekraną
     optionsScriptingLabel: Įskiepiai
     optionsDebugLabel: Testuoti
+
+    optionsSoundLabel: Garsas
 
     saveButton: Išsaugoti
 

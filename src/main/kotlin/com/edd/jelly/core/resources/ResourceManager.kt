@@ -13,11 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.util.NullSound
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.File
 
 @Singleton
@@ -29,11 +31,12 @@ class ResourceManager @Inject constructor(
 
     private companion object {
         const val MESSAGES_FILE = "messages.yml"
-        const val TEXTURE_DIRECTORY = "textures"
+        const val TEXTURE_DIRECTORY = "textures/"
         const val PNG_FILE_TYPE = "png"
         const val ATLAS_FILE_TYPE = "atlas"
+        const val SOUND_DIR = "sounds/"
 
-        val LOG = LogManager.getLogger(ResourceManager::class.java)
+        val LOG: Logger = LogManager.getLogger(ResourceManager::class.java)
     }
 
     private val languageMap = loadLanguages(objectMapper)
@@ -46,6 +49,7 @@ class ResourceManager @Inject constructor(
     private val textures = mutableMapOf<String, Texture>()
     private val atlases = mutableMapOf<String, TextureAtlas>()
     private val regions = mutableMapOf<String, TextureRegion>()
+    private val sounds = mutableMapOf<String, Sound>()
 
     /**
      * Blank texture which can be used as a placeholder.
@@ -86,7 +90,7 @@ class ResourceManager @Inject constructor(
             } else {
                 "$name.$ATLAS_FILE_TYPE"
             }
-            TextureAtlas(FileHandle(File("${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$fullPath")))
+            TextureAtlas(FileHandle(File("${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY$fullPath")))
         })
     }
 
@@ -108,8 +112,21 @@ class ResourceManager @Inject constructor(
         })
     }
 
+    /**
+     * Get and cache a sound by its name from sound directory.
+     */
     fun getSound(name: String): Sound {
-        return Gdx.audio.newSound(Gdx.files.external("sounds/$name"))
+        val fullName = "${Configurations.ASSETS_FOLDER}$SOUND_DIR$name.ogg"
+
+        return sounds.getOrPut(fullName, defaultValue = {
+            val file = File("${Configurations.ASSETS_FOLDER}$SOUND_DIR$name.ogg")
+            if (!file.exists()) {
+                LOG.warn("Sound: {}, does not exist", fullName)
+                NullSound
+            } else {
+                Gdx.audio.newSound(FileHandle(file))
+            }
+        })
     }
 
     fun getMusic(name: String): Music {
@@ -167,7 +184,7 @@ class ResourceManager @Inject constructor(
         } else {
             "$name.$PNG_FILE_TYPE"
         }
-        "${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY/$typedPath"
+        "${Configurations.ASSETS_FOLDER}$TEXTURE_DIRECTORY$typedPath"
     }
 
     private data class MessageBundle(val name: String, val messages: Map<String, String>)

@@ -16,6 +16,9 @@ game:
   particleRadius: 0.05
   maxParticles: 5000
 
+  # Other.
+  soundVolume: 0.5f
+
 # Video settings.
 video:
   screen:

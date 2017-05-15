@@ -174,10 +174,16 @@ class SoftBodyBuilder @Inject constructor(
         val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
         val vertices = textureCoords.copyOf()
 
+        val softBodyBodies = mutableListOf<Body>()
+        val softBody = SoftBody(softBodyBodies)
+
         bodies.forEachIndexed { i, b ->
             val pos = b.getLocalPoint(center)
             vertices[i * 2] = pos.x
             vertices[i * 2 + 1] = pos.y
+
+            b.userData = softBody
+            softBodyBodies.add(b)
         }
 
         return Entity().apply {
@@ -189,7 +195,7 @@ class SoftBodyBuilder @Inject constructor(
                             triangulator.computeTriangles(vertices, false).toArray()
                     )
             ))
-            add(SoftBody(bodies))
+            add(softBody)
             add(transform)
         }
     }
@@ -295,6 +301,9 @@ class SoftBodyBuilder @Inject constructor(
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()
 
+        val softBodyBodies = mutableListOf<Body>()
+        val softBody = SoftBody(softBodyBodies)
+
         bodies.forEachIndexed { i, b ->
             textureCoords[i * 2] =
                     (i % cols).toFloat() / (cols - 1) // u
@@ -305,6 +314,9 @@ class SoftBodyBuilder @Inject constructor(
             val pos = b.getLocalPoint(center)
             vertices[i * 2] = -pos.x
             vertices[i * 2 + 1] = -pos.y
+
+            b.userData = softBody
+            softBodyBodies.add(b)
         }
 
         return Entity().apply {
@@ -316,7 +328,7 @@ class SoftBodyBuilder @Inject constructor(
                             triangulator.computeTriangles(vertices, false).toArray()
                     )
             ))
-            add(SoftBody(bodies))
+            add(softBody)
             add(transform)
         }
     }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="64" tileheight="64" nextobjectid="86">
+ <properties>
+  <property name="ambiance" value="ambient_forest"/>
+ </properties>
  <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="3" tilecount="45" columns="15">
   <image source="../../../../../assets/textures/jelly_tiles.png" width="1024" height="256"/>
  </tileset>

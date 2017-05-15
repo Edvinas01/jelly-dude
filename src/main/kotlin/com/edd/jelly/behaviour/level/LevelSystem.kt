@@ -11,6 +11,7 @@ import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
 import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
 import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
+import com.edd.jelly.behaviour.common.event.PlaySoundEvent
 import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.util.GameException
 import com.edd.jelly.util.EntityListenerAdapter
@@ -79,6 +80,10 @@ class LevelSystem @Inject constructor(
         engine.addEntity(Entity().apply {
             add(map)
         })
+
+        map.ambientSoundNames.forEach {
+            messaging.send(PlaySoundEvent(name = it, loop = true))
+        }
 
         messaging.send(LevelLoadedEvent(map))
     }

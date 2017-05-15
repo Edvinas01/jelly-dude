@@ -117,6 +117,13 @@ class JellyMapLoader @Inject constructor(
             }
         }
 
+        val soundNames = mutableListOf<String>()
+        for (prop in map.properties.keys) {
+            if (prop.startsWith("ambiance")) {
+                soundNames.add(map.properties[prop].toString())
+            }
+        }
+
         return JellyMap(
                 width = (map.int("width") * map.int("tilewidth")).meters,
                 height = (map.int("height") * map.int("tileheight")).meters,
@@ -130,7 +137,8 @@ class JellyMapLoader @Inject constructor(
                 spawn = getSpawn(entities),
                 focusPoints = getFocusPoints(entities),
                 collisionsLayer = collisions,
-                entitiesLayer = entities
+                entitiesLayer = entities,
+                ambientSoundNames = soundNames
         )
     }
 

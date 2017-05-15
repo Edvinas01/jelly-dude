@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="111">
+ <properties>
+  <property name="ambiance" value="ambient_wind"/>
+ </properties>
  <tileset firstgid="1" name="test_tileset" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="../../textures/test_tileset.png" width="128" height="128"/>
  </tileset>

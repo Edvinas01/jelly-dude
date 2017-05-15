@@ -54,6 +54,11 @@ class OptionsWindow constructor(
         selected = language.handle
     }
 
+    private val soundSliderLabel = Label("Sound", skin)
+    private val soundSlider = Slider(0f, 1f, 0.1f, false, skin).apply {
+        value = configurations.config.game.soundVolume
+    }
+
     // Checkboxes.
     private val fullscreenCheckbox = CheckBox("Fullscreen", skin).apply {
         isChecked = configurations.config.video.screen.fullscreen
@@ -85,6 +90,7 @@ class OptionsWindow constructor(
                 input.shrink = shrinkInput.text
 
                 game.language = languageSelect.selected.internalName
+                game.soundVolume = soundSlider.value
                 game.scripting = scriptingCheckbox.isChecked
                 game.debug = debugCheckbox.isChecked
 
@@ -168,13 +174,21 @@ class OptionsWindow constructor(
         }).top().padRight(padRight)
                 .width(desiredWidth)
 
-        // Add language group to options.
+        // Add language and sound group to options.
         options.add(Table().apply {
             add(languageLabel)
                     .growX()
                     .row()
 
-            add(languageSelect).growX()
+            add(languageSelect)
+                    .growX()
+                    .row()
+
+            add(soundSliderLabel)
+                    .growX()
+                    .row()
+
+            add(soundSlider).growX()
         }).top().padRight(padRight)
                 .width(desiredWidth)
 
@@ -210,6 +224,7 @@ class OptionsWindow constructor(
         titleLabel.setText(lang["optionsWindowTitle"])
 
         languageLabel.setText(lang["optionsLanguageLabel"])
+        soundSliderLabel.setText(lang["optionsSoundLabel"])
 
         upInputLabel.setText(lang["optionsUpLabel"])
         downInputLabel.setText(lang["optionsDownLabel"])

@@ -26,12 +26,14 @@ import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 import org.jbox2d.dynamics.contacts.Contact
 import org.jbox2d.dynamics.joints.*
+import java.util.*
 
 class PlayerSystem @Inject constructor(
         private val earClippingTriangulator: EarClippingTriangulator,
         private val inputMultiplexer: InputMultiplexer,
         private val resourceManager: ResourceManager,
         private val messaging: Messaging,
+        private val random: Random,
         private val world: World,
         configurations: Configurations,
         scriptManager: ScriptManager
@@ -78,6 +80,11 @@ class PlayerSystem @Inject constructor(
         val DEFLATION_JOINT_LENGTH = 0.04f
         val DEFLATION_AMOUNT = 0.5f
         val DEFLATION_SPEED = 7
+
+        // Player sounds.
+        val SOUND_NAMES = (1..5).map { "slime_$it" }
+        val SOUND_VOLUME_MULTIPLIER = 0.2f
+        val SOUND_LOW_PITCH = 0.6f
     }
 
     private val beforeMoveHook = scriptManager.hook(BeforeMove::class.java)
@@ -129,8 +136,13 @@ class PlayerSystem @Inject constructor(
                 airTime += deltaTime
             }
 
+            // Count particle contacts with the player.
+            val particleContacts = (0 until world.particleBodyContactCount)
+                    .map { world.particleBodyContacts[it] }
+                    .count { it.body.userData == this }
+
             // Player can jump if hes been in air for not too long or has some sticky joints.
-            canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO)
+            canJump = airTime < MAX_AIR_TIME || testContactRatio(MIN_CONTACT_RATIO, particleContacts)
 
             // Calculated move force for this player.
             var moveForce = speedMultiplier * MOVE_FORCE * deltaTime
@@ -276,8 +288,7 @@ class PlayerSystem @Inject constructor(
 
                     // How much should we deflate this tick.
                     val dt = deflation.take(
-                            -sign
-                            * DEFLATION_SPEED
+                            -sign * DEFLATION_SPEED
 
                     ) * deltaTime * DEFLATION_SPEED
 
@@ -459,6 +470,17 @@ class PlayerSystem @Inject constructor(
 
             // Did a player trigger this contact?
             resolveContact(contact)?.let {
+
+                // Play sound if just touched the ground or something else.
+                val player = it.first
+                if (player.contacts.isEmpty()) {
+                    messaging.send(PlaySoundEvent(
+                            name = SOUND_NAMES[random.nextInt(SOUND_NAMES.size - 1)],
+                            volumeMultiplier = SOUND_VOLUME_MULTIPLIER,
+                            lowPitch = SOUND_LOW_PITCH
+                    ))
+                }
+
                 with(contact) {
 
                     // Always populate the list of all contacts.
