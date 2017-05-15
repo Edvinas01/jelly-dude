@@ -85,6 +85,10 @@ class PlayerSystem @Inject constructor(
         val SOUND_NAMES = (1..5).map { "slime_$it" }
         val SOUND_VOLUME_MULTIPLIER = 0.2f
         val SOUND_LOW_PITCH = 0.6f
+
+        val SOUND_POP_VOLUME_MULTIPLIER = 0.5f
+        val SOUND_POP_LOW_PITCH = 0.8f
+        val SOUND_POP = "pop"
     }
 
     private val beforeMoveHook = scriptManager.hook(BeforeMove::class.java)
@@ -507,6 +511,12 @@ class PlayerSystem @Inject constructor(
         // Listen for player inputs.
         messaging.listen<PlayerInputEvent> { (player, reset) ->
             if (reset) {
+                messaging.send(PlaySoundEvent(
+                        name = SOUND_POP,
+                        lowPitch = SOUND_POP_LOW_PITCH,
+                        volumeMultiplier = SOUND_POP_VOLUME_MULTIPLIER
+                ))
+
                 engine.removeEntity(player)
             }
         }
