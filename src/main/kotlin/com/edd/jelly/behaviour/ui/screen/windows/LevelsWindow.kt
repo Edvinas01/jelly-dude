@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Scaling
 import com.edd.jelly.behaviour.common.event.ErrorInfoEvent
 import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
 import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
-import com.edd.jelly.behaviour.common.event.LoadMainMenuScreenEvent
 import com.edd.jelly.behaviour.ui.screen.LanguageAware
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language

@@ -15,6 +15,7 @@ import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.tiled.boolean
 import com.edd.jelly.core.tiled.float
 import com.edd.jelly.core.tiled.int
+import com.edd.jelly.core.tiled.string
 import com.edd.jelly.util.GameException
 import com.edd.jelly.util.meters
 import com.edd.jelly.util.toVec2
@@ -296,7 +297,9 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         // Create mesh.
-        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
+        val texture = rect.string("texture")?.let {
+            resources.atlas[it] ?: resources.getRegion(it)
+        } ?: resources.atlas["dev_grid"]!!
 
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()
