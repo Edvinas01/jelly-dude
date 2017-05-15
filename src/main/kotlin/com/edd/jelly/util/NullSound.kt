@@ -2,6 +2,7 @@ package com.edd.jelly.util
 
 import com.badlogic.gdx.audio.Sound
 
+@Suppress("TooManyFunctions") // Null object pattern / can't do much about sound interface being huge.
 object NullSound : Sound {
 
     override fun pause() {

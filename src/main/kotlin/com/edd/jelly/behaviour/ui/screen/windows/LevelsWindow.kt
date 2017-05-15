@@ -67,6 +67,8 @@ class LevelsWindow constructor(
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
 
                         // Level loading might fail, messaging is not async, so gotta handle it here.
+                        // Don't want to catch 5+ errors from Gdx, so just using a runtime error.
+                        @Suppress("CatchRuntimeException")
                         try {
                             messaging.send(LoadNewLevelEvent(meta.internalName))
                             messaging.send(LoadGameScreenEvent)
