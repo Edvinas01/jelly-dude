@@ -2,12 +2,10 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="64" tileheight="64" nextobjectid="86">
  <properties>
   <property name="ambiance" value="ambient_forest"/>
+  <property name="music" value="piano_song"/>
  </properties>
- <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="3" tilecount="45" columns="15">
-  <image source="../../../../../assets/textures/jelly_tiles.png" width="1024" height="256"/>
- </tileset>
- <tileset firstgid="46" name="Objects" tilewidth="64" tileheight="64" tilecount="128" columns="32">
-  <image source="../../../../../assets/textures/jelly_stuff.png" width="2048" height="256"/>
+ <tileset firstgid="1" name="jelly_tiles" tilewidth="64" tileheight="64" spacing="2" margin="1" tilecount="225" columns="15">
+  <image source="../../../../../assets/textures/jelly_tiles.png" width="1024" height="1024"/>
  </tileset>
  <layer name="background" width="32" height="32">
   <properties>
@@ -75,24 +73,24 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="objects_01" width="32" height="32">
-  <data encoding="base64" compression="zlib">
-   eJzt1lkOgjAURuGuSXFgG4gDCWwCHHAbDiAvrNXzShNIE3uF6D3J99b0f2tqjKZpv9AMcwRYjLAfYYMYW4/3LrHCGuHAuRwFjjh53N9hjwOSgXMt7njg6XH/jAtKXD3e61qFGi80I+xrmjbtXN9oqVzfaKmm9Ea3H9zz7T+EvSf1h+jL3pP6Q/Rl791M9w+RIhPct/e0/+oNU0wgYw==
-  </data>
- </layer>
  <layer name="tiles_01" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1SEOACAQA8EDgiBB8P/Xch+grgjYSVZXNgIAACglq6Jm3p/ZEC3zPgDgXaePc32b+tMb9c/bqzAB/A==
+   eJxjYBgFo2AUDGWQBcTZQJwDxLkDYH8lEFcBcTUQ19DAfEL+6wDiTiDuAuJuGthPyH/TgXgGEM8EYj8g9gfieVS0nxj/CQCxIBQLUdFuEED23ywcauSBWAGKFalsPwjA/IfLb7S2Xw+I9YHYgIA8PjWjYBSMglFASxALxHEU6KekLUGNOoiStgQ16gBK2hLUsD+AAVHX+kDFYG0KWttvz4Aah8iYmPgkx35sdtETK4xwDAAsxCmf
+  </data>
+ </layer>
+ <layer name="objects_01" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
   </data>
  </layer>
  <layer name="objects_02" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1MkJgDAQRmGrcgG1DNc+XBpxuWirPg8BQW8a5/J/8CCQwwwEEgQiIvJGfjlvZlv401BLqfUiIiJy4/7oU2a5yIdCiiimxGB+QSVVVP84171lRz0NNHqetT/cTTTTQqun+WLnAFliC0E=
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
   </data>
  </layer>
  <layer name="tiles_02" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlTkKACAMwLxBcPD/r7WDjupUxJJApoqhU50DAICf8WKYxgf9JOZpUfh/7bfbTbvfxCr2y/z0BgDAKtZvEH361voD8icBHg==
+   eJzt1jkKAkEQQNE6gnoQ9QhewCXXE7gbuhu6G7p7Vr+MIIi0DHRTLvXhJVNBzUQ1IpZlfXNV1FBHQ2F/Fz30MVDYP8UMcywU9m9RRgUH5BTeIXQleXzjv5ZA0iEVeH8aGYds4P2W9S67RXq3qIAidthLdIs+vSZaaKMTY+arIUYYYxJj5qslVlhjc3+Wl+gf4tXMd7ddJ5xxeZodHTPrN7oC8IokUw==
   </data>
  </layer>
  <objectgroup name="collision">

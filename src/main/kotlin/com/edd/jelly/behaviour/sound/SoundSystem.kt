@@ -4,7 +4,9 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.utils.Timer
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.behaviour.common.event.PlayMusicEvent
 import com.edd.jelly.behaviour.common.event.PlaySoundEvent
@@ -19,6 +21,16 @@ class SoundSystem @Inject constructor(
         private val configurations: Configurations,
         private val messaging: Messaging
 ) : EntitySystem() {
+
+    private companion object {
+        const val FADE_IN_RATE_SECONDS = 0.1f
+        const val FADE_IN_AMOUNT = 0.01f
+    }
+
+    /**
+     * Song that is currently fading in.
+     */
+    private var fadeInTask : Timer.Task? = null
 
     override fun addedToEngine(engine: Engine) {
         val musicFamily = Family.all(PlayingMusic::class.java).get()
@@ -83,11 +95,14 @@ class SoundSystem @Inject constructor(
      */
     private fun initMusicListeners(musicFamily: Family) {
         messaging.listen<PlayMusicEvent> { (name, loop) ->
-            val music = resourceManager.getMusic(name)
-            music.isLooping = loop
-            music.volume = configurations.config.game.soundVolume
-            music.play()
+            val music = resourceManager.getMusic(name).apply {
+                fadeInTask?.cancel()
+                isLooping = loop
+                volume = 0f
+                play()
+            }
             engine.addEntity(Entity().add(PlayingMusic(music)))
+            fadeInMusic(music)
         }
 
         engine.addEntityListener(musicFamily, object : EntityListenerAdapter() {
@@ -95,5 +110,21 @@ class SoundSystem @Inject constructor(
                 PlayingMusic[entity].music.stop()
             }
         })
+    }
+
+    /**
+     * Fade in provided song.
+     */
+    private fun fadeInMusic(music: Music) {
+        fadeInTask?.cancel()
+
+        fadeInTask = Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                if (music.volume >= configurations.config.game.musicVolume) {
+                    cancel()
+                }
+                music.volume += FADE_IN_AMOUNT
+            }
+        }, 0f, FADE_IN_RATE_SECONDS)
     }
 }

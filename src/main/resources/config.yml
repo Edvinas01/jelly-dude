@@ -17,8 +17,8 @@ game:
   maxParticles: 5000
 
   # Other.
-  soundVolume: 0.5
-  musicVolume: 0.5
+  soundVolume: 0.6
+  musicVolume: 0.05
 
 # Video settings.
 video:

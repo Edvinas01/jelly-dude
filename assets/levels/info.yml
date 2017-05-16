@@ -13,3 +13,7 @@ sandbox:
   texture: levels/sandbox/sandbox.png
   author: Edd
   name: Sandbox
+wide:
+  description: Wide level for gaining some speed
+  author: Edd
+  name: Wide level

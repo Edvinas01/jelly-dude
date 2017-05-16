@@ -66,13 +66,13 @@ class OptionsWindow constructor(
     }
 
     private val soundSliderLabel = Label("Sound", skin)
-    private val soundSlider = Slider(0f, 1f, 0.1f, false, skin).apply {
+    private val soundSlider = Slider(0f, 1f, 0.05f, false, skin).apply {
         value = configurations.config.game.soundVolume
         addListener(sliderFixingListener)
     }
 
     private val musicSliderLabel = Label("Music", skin)
-    private val musicSlider = Slider(0f, 1f, 0.1f, false, skin).apply {
+    private val musicSlider = Slider(0f, 1f, 0.05f, false, skin).apply {
         value = configurations.config.game.musicVolume
         addListener(sliderFixingListener)
     }
@@ -109,6 +109,7 @@ class OptionsWindow constructor(
 
                 game.language = languageSelect.selected.internalName
                 game.soundVolume = soundSlider.value
+                game.musicVolume = musicSlider.value
                 game.scripting = scriptingCheckbox.isChecked
                 game.debug = debugCheckbox.isChecked
 
