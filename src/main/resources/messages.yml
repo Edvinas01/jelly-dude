@@ -27,6 +27,7 @@ english:
     optionsDebugLabel: Debug
 
     optionsSoundLabel: Sound
+    optionsMusicLabel: Music
 
     saveButton: Save
 
@@ -69,6 +70,7 @@ lithuanian:
     optionsDebugLabel: Testuoti
 
     optionsSoundLabel: Garsas
+    optionsMusicLabel: Muzika
 
     saveButton: Išsaugoti
 

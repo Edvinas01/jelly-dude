@@ -2,6 +2,7 @@ package com.edd.jelly.behaviour.ui.screen.windows
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -54,9 +55,26 @@ class OptionsWindow constructor(
         selected = language.handle
     }
 
+    /**
+     * Listener which fixes sliders which are placed within scroll pane.
+     */
+    private val sliderFixingListener = object : InputListener() {
+        override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+            event.stop()
+            return false
+        }
+    }
+
     private val soundSliderLabel = Label("Sound", skin)
     private val soundSlider = Slider(0f, 1f, 0.1f, false, skin).apply {
         value = configurations.config.game.soundVolume
+        addListener(sliderFixingListener)
+    }
+
+    private val musicSliderLabel = Label("Music", skin)
+    private val musicSlider = Slider(0f, 1f, 0.1f, false, skin).apply {
+        value = configurations.config.game.musicVolume
+        addListener(sliderFixingListener)
     }
 
     // Checkboxes.
@@ -184,11 +202,23 @@ class OptionsWindow constructor(
                     .growX()
                     .row()
 
+            // Sound volume.
             add(soundSliderLabel)
                     .growX()
                     .row()
 
-            add(soundSlider).growX()
+            add(soundSlider)
+                    .growX()
+                    .row()
+
+            // Music volume.
+            add(musicSliderLabel)
+                    .growX()
+                    .row()
+
+            add(musicSlider)
+                    .growX()
+
         }).top().padRight(padRight)
                 .width(desiredWidth)
 
@@ -225,6 +255,7 @@ class OptionsWindow constructor(
 
         languageLabel.setText(lang["optionsLanguageLabel"])
         soundSliderLabel.setText(lang["optionsSoundLabel"])
+        musicSliderLabel.setText(lang["optionsMusicLabel"])
 
         upInputLabel.setText(lang["optionsUpLabel"])
         downInputLabel.setText(lang["optionsDownLabel"])

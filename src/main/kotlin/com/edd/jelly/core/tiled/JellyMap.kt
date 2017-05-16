@@ -19,7 +19,8 @@ class JellyMap internal constructor(
         val focusPoints: List<Vector2>,
         val collisionsLayer: MapLayer,
         val entitiesLayer: MapLayer,
-        val ambientSoundNames: List<String>
+        val ambientSoundNames: List<String>,
+        val musicNames: List<String>
 ) : Component {
     companion object : ComponentResolver<JellyMap>(JellyMap::class.java)
 }

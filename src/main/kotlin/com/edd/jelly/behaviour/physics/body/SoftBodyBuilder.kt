@@ -1,6 +1,7 @@
 package com.edd.jelly.behaviour.physics.body
 
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
@@ -52,6 +53,16 @@ class SoftBodyBuilder @Inject constructor(
         friction = 1f
         shape = CircleShape().apply {
             radius = RADIUS
+        }
+    }
+
+    private val largeCircleFixture = FixtureDef().apply {
+        this.density = 0.1f
+
+        restitution = 0.05f
+        friction = 1f
+        shape = CircleShape().apply {
+            radius = RADIUS * 2
         }
     }
 
@@ -135,13 +146,17 @@ class SoftBodyBuilder @Inject constructor(
         val centerBody = world.createBody(circleDef.apply {
             position.set(center)
         }).apply {
-            createFixture(circleFixture)
+            createFixture(largeCircleFixture)
         }
 
+        bodies += centerBody // Don't forget to register the center!
         val glued = ellipseMapObject.glued
-        bodies += centerBody
 
-        // Join the circles.
+        // Create empty component.
+        val softBodyBodies = mutableListOf<Body>()
+        val softBody = SoftBody(softBodyBodies)
+
+        // Join the circles and add user data to each circle.
         val jointDef = getJointDef(ellipseMapObject)
         for (i in 0 until ci) {
 
@@ -160,32 +175,35 @@ class SoftBodyBuilder @Inject constructor(
                     neighborBody.worldCenter
             )
 
-            world.createJoint(jointDef)
+            world.createJoint(jointDef.apply {
+                collideConnected = false
+                frequencyHz *= 2 // Connect neighbours with stronger springs.
+            })
 
             // Connect the center circle with other circles.
             jointDef.initialize(currentBody, centerBody, currentBody.worldCenter, center)
-            world.createJoint(jointDef)
+            world.createJoint(jointDef.apply {
+                collideConnected = true
+                frequencyHz /= 2 // Center should be weaker.
+            })
+
+            // Add user data to the body and populate the component.
+            currentBody.userData = softBody
+            softBodyBodies.add(currentBody)
 
             if (glued) {
                 glue(currentBody)
             }
         }
 
+        centerBody.userData = softBody
+        softBodyBodies.add(centerBody)
+
         val transform = Transform(Vector2(center.x, center.y))
-        val texture = resources.atlas["dev_grid"]!! // TODO only test texture, remove
-        val vertices = textureCoords.copyOf()
+        val texture = ellipseMapObject.texture()
 
-        val softBodyBodies = mutableListOf<Body>()
-        val softBody = SoftBody(softBodyBodies)
-
-        bodies.forEachIndexed { i, b ->
-            val pos = b.getLocalPoint(center)
-            vertices[i * 2] = pos.x
-            vertices[i * 2 + 1] = pos.y
-
-            b.userData = softBody
-            softBodyBodies.add(b)
-        }
+        // Create initial mesh vertices and indices.
+        val (vertices, indices) = computeCircleVertices(textureCoords.size, center, bodies)
 
         return Entity().apply {
             add(SoftRenderable(
@@ -193,7 +211,7 @@ class SoftBodyBuilder @Inject constructor(
                             textureCoords,
                             texture,
                             vertices,
-                            triangulator.computeTriangles(vertices, false).toArray()
+                            indices
                     )
             ))
             add(softBody)
@@ -297,9 +315,7 @@ class SoftBodyBuilder @Inject constructor(
         }
 
         // Create mesh.
-        val texture = rect.string("texture")?.let {
-            resources.atlas[it] ?: resources.getRegion(it)
-        } ?: resources.atlas["dev_grid"]!!
+        val texture = rect.texture()
 
         val textureCoords = FloatArray(bodies.size * 2)
         val vertices = textureCoords.copyOf()
@@ -337,6 +353,15 @@ class SoftBodyBuilder @Inject constructor(
     }
 
     /**
+     * Get texture from map object.
+     */
+    private fun MapObject.texture(): TextureRegion {
+        return string("texture")?.let {
+            resources.atlas[it] ?: resources.getRegion(it)
+        } ?: resources.atlas["dev_grid"]!!
+    }
+
+    /**
      * Helper function to get joint definition with adjusted parameters based on map object.
      */
     private fun getJointDef(obj: MapObject) = DistanceJointDef().apply {
@@ -360,6 +385,39 @@ class SoftBodyBuilder @Inject constructor(
             }
             true
         }, AABB(body.position, body.position))
+    }
+
+    /**
+     * Compute circle vertices and indices.
+     *
+     * @return pair of arrays where the first array is vertex positions and the second array is indices.
+     */
+    private fun computeCircleVertices(size: Int, center: Vec2, bodies: List<Body>): Pair<FloatArray, ShortArray> {
+        val vertices = FloatArray(size)
+        val indices = mutableListOf<Short>()
+
+        bodies.forEachIndexed { i, b ->
+
+            // Create vertices.
+            val pos = b.getLocalPoint(center)
+            vertices[i * 2] = pos.x
+            vertices[i * 2 + 1] = pos.y
+
+            // Create indices.
+            if (i + 1 < bodies.size) {
+                indices.add((bodies.size - 1).toShort())
+                indices.add(i.toShort())
+                indices.add((i + 1).toShort())
+
+            } else {
+
+                // Last index, make the circle full.
+                indices.add(i.toShort())
+                indices.add(0)
+                indices.add((i - 1).toShort())
+            }
+        }
+        return vertices.to(indices.toShortArray())
     }
 
     /**

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
+import com.edd.jelly.util.NullMusic
 import com.edd.jelly.util.NullSound
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,6 +36,7 @@ class ResourceManager @Inject constructor(
         const val PNG_FILE_TYPE = "png"
         const val ATLAS_FILE_TYPE = "atlas"
         const val SOUND_DIR = "sounds/"
+        const val SOUND_FORMAT = ".ogg"
 
         val LOG: Logger = LogManager.getLogger(ResourceManager::class.java)
     }
@@ -50,6 +52,7 @@ class ResourceManager @Inject constructor(
     private val atlases = mutableMapOf<String, TextureAtlas>()
     private val regions = mutableMapOf<String, TextureRegion>()
     private val sounds = mutableMapOf<String, Sound>()
+    private val songs = mutableMapOf<String, Music>()
 
     /**
      * Blank texture which can be used as a placeholder.
@@ -113,13 +116,13 @@ class ResourceManager @Inject constructor(
     }
 
     /**
-     * Get and cache a sound by its name from sound directory.
+     * Get and cache a sound by its name, sound is loaded from sound directory.
      */
     fun getSound(name: String): Sound {
-        val fullName = "${Configurations.ASSETS_FOLDER}$SOUND_DIR$name.ogg"
+        val fullName = name.asSoundPath()
 
         return sounds.getOrPut(fullName, defaultValue = {
-            val file = File("${Configurations.ASSETS_FOLDER}$SOUND_DIR$name.ogg")
+            val file = File(fullName)
             if (!file.exists()) {
                 LOG.warn("Sound: {}, does not exist", fullName)
                 NullSound
@@ -129,8 +132,21 @@ class ResourceManager @Inject constructor(
         })
     }
 
+    /**
+     * Get and cache music by its name, music is loaded from sound directory.
+     */
     fun getMusic(name: String): Music {
-        return Gdx.audio.newMusic(Gdx.files.external("sounds/$name"))
+        val fullName = name.asSoundPath()
+
+        return songs.getOrPut(fullName, defaultValue = {
+            val file = File(fullName)
+            if (!file.exists()) {
+                LOG.warn("Music: {}, does not exist", fullName)
+                NullMusic
+            } else {
+                Gdx.audio.newMusic(FileHandle(file))
+            }
+        })
     }
 
     /**
@@ -188,6 +204,12 @@ class ResourceManager @Inject constructor(
     }
 
     private data class MessageBundle(val name: String, val messages: Map<String, String>)
+
+    /**
+     * Get string as sound path.
+     */
+    private fun String.asSoundPath() =
+            "${Configurations.ASSETS_FOLDER}$SOUND_DIR$this$SOUND_FORMAT"
 }
 
 operator fun TextureAtlas.get(name: String): TextureRegion? =
