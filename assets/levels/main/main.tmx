@@ -226,7 +226,6 @@
    <properties>
     <property name="color" value="#d442f4"/>
     <property name="colorAlpha" type="float" value="0.03"/>
-    <property name="texture" value="pink_jello_cube"/>
     <property name="type" value="liquid"/>
    </properties>
   </object>

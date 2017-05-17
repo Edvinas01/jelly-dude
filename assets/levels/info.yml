@@ -1,19 +1,20 @@
 main:
-  description: Main level to showcase game features
+  description: Not much space here
   texture: levels/main/main.png
   author: Edd
-  name: Main
+  name: Cramped forest
 liquid:
-  description: Testing liquid
+  description: Good for testing liquid, featuring weird music
   texture: levels/liquid/liquid.png
   author: Edd
-  name: Liquid tests
+  name: Liquid playground
 sandbox:
-  description: Testing various raw features
+  description: Level to run around and test various features
   texture: levels/sandbox/sandbox.png
   author: Edd
   name: Sandbox
 wide:
-  description: Wide level for gaining some speed
+  description: Wide and cool level for gaining some speed
   author: Edd
-  name: Wide level
+  texture: levels/wide/wide.png
+  name: Wide and cool
