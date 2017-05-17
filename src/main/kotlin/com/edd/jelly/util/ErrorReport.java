@@ -1,5 +1,7 @@
 package com.edd.jelly.util;
 
+import com.edd.jelly.core.configuration.Configurations;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,11 +19,17 @@ public final class ErrorReport extends JDialog {
     private JButton cancel;
     private JTextArea errorMessage;
 
+    public static void main(String...args) {
+        ErrorReport error = new ErrorReport(Configurations.GIT_HUB_NEW_ISSUE_URL, new NullPointerException("Test"));
+        error.setVisible(true);
+    }
+
     public ErrorReport(String issueUrl, Throwable throwable) {
         String trace = getStackTraceString(throwable);
 
         initComponents(trace);
         initListeners(issueUrl, throwable.getMessage(), trace);
+        pack();
     }
 
     /**
