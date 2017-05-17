@@ -18,3 +18,13 @@ wide:
   author: Edd
   texture: levels/wide/wide.png
   name: Wide and cool
+bridge:
+  description: Lots of bridges
+  author: Edd
+  texture: levels/bridge/bridge.png
+  name: Bridges
+soft_bodies:
+  description: Soft body playground
+  author: Edd
+  texture: levels/soft_bodies/soft_bodies.png
+  name: Soft Bodies
