@@ -13,6 +13,7 @@ import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
 import com.edd.jelly.behaviour.player.Player
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
+import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.util.clamp
@@ -32,12 +33,14 @@ class CameraPositionSystem @Inject constructor(
         /**
          * Speed of the camera which follows the player.
          */
-        val CAMERA_SPEED = 2f
+        const val CAMERA_SPEED = 2f
 
         /**
          * How often to change focus points.
          */
         val CHANGE_POINT_TIME = TimeUnit.SECONDS.toMillis(15)
+
+        const val VELOCITY_REDUCTION = 4
     }
 
     private lateinit var players: ImmutableArray<Entity>
@@ -67,7 +70,10 @@ class CameraPositionSystem @Inject constructor(
     }
 
     override fun addedToEngine(engine: Engine) {
-        players = engine.getEntitiesFor(Family.all(Player::class.java).get())
+        players = engine.getEntitiesFor(Family.all(
+                Transform::class.java,
+                Player::class.java
+        ).get())
     }
 
     override fun update(deltaTime: Float) {
@@ -77,7 +83,13 @@ class CameraPositionSystem @Inject constructor(
             // If we have a player and debug is off, follow the camera to it.
             if (followPlayer) {
                 val transform = player.transform
-                moveCamera(deltaTime, transform.x, transform.y)
+                val velocity = Player[player].velocity
+
+                moveCamera(
+                        deltaTime,
+                        transform.x + velocity.x / VELOCITY_REDUCTION,
+                        transform.y + velocity.y / VELOCITY_REDUCTION
+                )
             }
 
         } else {
