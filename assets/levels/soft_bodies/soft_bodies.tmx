@@ -182,7 +182,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="146" x="192" y="1216" width="128" height="128">
+  <object id="146" x="208" y="1216" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
@@ -191,7 +191,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="147" x="64" y="1216" width="128" height="128">
+  <object id="147" x="48" y="1216" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
