@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="64" tileheight="64" nextobjectid="173">
  <properties>
   <property name="ambiance" value="ambient_wind"/>
-  <property name="music" value="space_piano_song"/>
+  <property name="music" value="funky_song"/>
  </properties>
  <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="2" margin="1" tilecount="225" columns="15">
   <image source="../../textures/jelly_tiles.png" width="1024" height="1024"/>
@@ -88,7 +88,7 @@
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
     <property name="stiffness" type="float" value="50"/>
-    <property name="texture" value="yellow_jello_cube"/>
+    <property name="texture" value="pink_jello_cube"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
@@ -214,7 +214,7 @@
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
     <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="red_jello_cube"/>
+    <property name="texture" value="green_jello_cube"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
