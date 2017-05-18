@@ -37,15 +37,15 @@
  </objectgroup>
  <layer name="tiles" width="64" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1DEOgCAQRNGptBUKWvGmHtWjuITY0ZAQEfkvmYSCgiELEgAAAAAAAAD80yFdpXhL77O9IVrPUtwk/XfrWco2Sf8vsLuWzZt8472jsHlL7zD9RU33joL+9I8at/8qnUtOWlcbuX/qHixR+VxB9XfQs7+bNI8bZWUgbA==
+   eJzt1DEOgCAQRNGptBUKW/GmHtWjuISWhoSIK/8lk1BQMGRBAgAAAAAAAIB/OqW7lmgZfbY3JOtZS5ik/2E9a9km6f8FdteyeVPsvNcLm7f8DvNf1HWvF/Snf5Lf/qt0LSV53cxz/9x9tySVc+1qv4OR/cPkeQBmMSCO
   </data>
  </layer>
  <objectgroup name="collision">
   <object id="4" x="-128" y="0" width="128" height="2048"/>
-  <object id="32" x="3968" y="0" width="128" height="2048"/>
-  <object id="33" x="-128" y="-128" width="4224" height="128"/>
-  <object id="34" x="-128" y="2048" width="4224" height="128"/>
-  <object id="93" x="0" y="1984" width="3968" height="64"/>
+  <object id="32" x="4096" y="0" width="128" height="2048"/>
+  <object id="33" x="-128" y="-128" width="4352" height="128"/>
+  <object id="34" x="-128" y="2048" width="4352" height="128"/>
+  <object id="93" x="0" y="1984" width="4096" height="64"/>
   <object id="124" x="0" y="384" width="192" height="192"/>
   <object id="125" x="0" y="832" width="256" height="192"/>
   <object id="126" x="0" y="1344" width="448" height="192"/>
