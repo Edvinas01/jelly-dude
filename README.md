@@ -24,6 +24,9 @@ gradlew.bat run
 
 This will download all required dependencies, build the game and launch it.
 
+## Video
+[![Game feature video](https://img.youtube.com/vi/0q4RSth3HUs/0.jpg)](https://youtu.be/0q4RSth3HUs "Game feature video")
+
 ## Tools
 Suggested tools:
 * [LibGDX inspections](https://plugins.jetbrains.com/plugin/8509-libgdx-inspections)
