@@ -75,9 +75,9 @@ data class Player(
     /**
      * Check if player has enough ground contacts and sticky joints based on provided contact ratio.
      */
-    fun testContactRatio(ratio: Int): Boolean {
+    fun testContactRatio(ratio: Int, additionalContacts: Int = 0): Boolean {
         val limit = joint.bodies.size / ratio
-        return groundContacts.size >= limit
+        return (additionalContacts + groundContacts.size) >= limit
                 || stickyJoints.size >= limit
     }
 }

@@ -5,13 +5,11 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
+import com.edd.jelly.behaviour.common.event.*
 import com.edd.jelly.behaviour.physics.body.BodyEntityFactory
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
-import com.edd.jelly.behaviour.common.event.LevelLoadedEvent
-import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
-import com.edd.jelly.behaviour.common.event.RestartLevelEvent
 import com.edd.jelly.util.GameException
 import com.edd.jelly.util.EntityListenerAdapter
 import com.google.inject.Inject
@@ -79,6 +77,16 @@ class LevelSystem @Inject constructor(
         engine.addEntity(Entity().apply {
             add(map)
         })
+
+        // Play level ambiance.
+        map.ambientSoundNames.forEach {
+            messaging.send(PlaySoundEvent(name = it, loop = true))
+        }
+
+        // Play level music.
+        map.musicNames.forEach {
+            messaging.send(PlayMusicEvent(name = it, loop = true))
+        }
 
         messaging.send(LevelLoadedEvent(map))
     }

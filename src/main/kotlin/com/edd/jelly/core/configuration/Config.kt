@@ -15,7 +15,9 @@ data class Config(
                     val gravity: Float,
                     val particleRadius: Float,
                     val maxParticles: Int,
-                    var debug: Boolean
+                    var debug: Boolean,
+                    var soundVolume: Float,
+                    var musicVolume: Float
     )
 
     /**

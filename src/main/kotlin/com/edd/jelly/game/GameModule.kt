@@ -40,6 +40,7 @@ import org.jbox2d.dynamics.World
 import java.util.*
 import javax.script.ScriptEngineManager
 
+@Suppress("TooManyFunctions") // Config class.
 class GameModule(private val game: JellyGame) : Module {
 
     override fun configure(binder: Binder) {

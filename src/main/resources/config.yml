@@ -16,12 +16,16 @@ game:
   particleRadius: 0.05
   maxParticles: 5000
 
+  # Other.
+  soundVolume: 0.6
+  musicVolume: 0.05
+
 # Video settings.
 video:
   screen:
     fullscreen: false
-    width: 800
-    height: 600
+    width: 1280
+    height: 720
   fpsLimit: 60
   vsync: true
 

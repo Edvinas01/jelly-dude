@@ -17,7 +17,6 @@ import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
-import org.jbox2d.common.MathUtils
 import org.jbox2d.dynamics.World
 
 class DebugRenderingSystem @Inject constructor(
@@ -63,8 +62,8 @@ class DebugRenderingSystem @Inject constructor(
                     transformTexture,
                     transform.x,
                     transform.y,
-                    MathUtils.max(transformTexture.regionWidth.meters, transform.width),
-                    MathUtils.max(transformTexture.regionHeight.meters, transform.height)
+                    transformTexture.regionWidth.meters,
+                    transformTexture.regionHeight.meters
             )
         }
         spriteBatch.end()

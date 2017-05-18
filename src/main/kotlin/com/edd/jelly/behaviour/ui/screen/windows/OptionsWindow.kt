@@ -2,6 +2,7 @@ package com.edd.jelly.behaviour.ui.screen.windows
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Value.percentWidth
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -54,6 +55,28 @@ class OptionsWindow constructor(
         selected = language.handle
     }
 
+    /**
+     * Listener which fixes sliders which are placed within scroll pane.
+     */
+    private val sliderFixingListener = object : InputListener() {
+        override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+            event.stop()
+            return false
+        }
+    }
+
+    private val soundSliderLabel = Label("Sound", skin)
+    private val soundSlider = Slider(0f, 1f, 0.05f, false, skin).apply {
+        value = configurations.config.game.soundVolume
+        addListener(sliderFixingListener)
+    }
+
+    private val musicSliderLabel = Label("Music", skin)
+    private val musicSlider = Slider(0f, 1f, 0.05f, false, skin).apply {
+        value = configurations.config.game.musicVolume
+        addListener(sliderFixingListener)
+    }
+
     // Checkboxes.
     private val fullscreenCheckbox = CheckBox("Fullscreen", skin).apply {
         isChecked = configurations.config.video.screen.fullscreen
@@ -85,6 +108,8 @@ class OptionsWindow constructor(
                 input.shrink = shrinkInput.text
 
                 game.language = languageSelect.selected.internalName
+                game.soundVolume = soundSlider.value
+                game.musicVolume = musicSlider.value
                 game.scripting = scriptingCheckbox.isChecked
                 game.debug = debugCheckbox.isChecked
 
@@ -168,13 +193,33 @@ class OptionsWindow constructor(
         }).top().padRight(padRight)
                 .width(desiredWidth)
 
-        // Add language group to options.
+        // Add language and sound group to options.
         options.add(Table().apply {
             add(languageLabel)
                     .growX()
                     .row()
 
-            add(languageSelect).growX()
+            add(languageSelect)
+                    .growX()
+                    .row()
+
+            // Sound volume.
+            add(soundSliderLabel)
+                    .growX()
+                    .row()
+
+            add(soundSlider)
+                    .growX()
+                    .row()
+
+            // Music volume.
+            add(musicSliderLabel)
+                    .growX()
+                    .row()
+
+            add(musicSlider)
+                    .growX()
+
         }).top().padRight(padRight)
                 .width(desiredWidth)
 
@@ -210,6 +255,8 @@ class OptionsWindow constructor(
         titleLabel.setText(lang["optionsWindowTitle"])
 
         languageLabel.setText(lang["optionsLanguageLabel"])
+        soundSliderLabel.setText(lang["optionsSoundLabel"])
+        musicSliderLabel.setText(lang["optionsMusicLabel"])
 
         upInputLabel.setText(lang["optionsUpLabel"])
         downInputLabel.setText(lang["optionsDownLabel"])

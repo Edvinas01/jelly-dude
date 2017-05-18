@@ -10,17 +10,14 @@ buildscript {
         spockVersion = '1.1-groovy-2.4-rc-3'
         gdxVersion = '1.9.6'
 
+        // Texture directory.
+        textureDir = 'assets/textures/'
+
         // Raw asset directory.
         rawAssets = 'raw_assets/'
 
-        // Raw tile-set directories with configs.
-        // @formatter:off
-        rawTiles = [[
-                name : 'main_tileset',
-                scale: 0.5
-            ]
-        ]
-        // @formatter:on
+        // Main atlas name.
+        mainAtlasName = 'jelly_stuff'
     }
 
     repositories {
@@ -51,7 +48,7 @@ apply plugin: 'kotlin'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 
-version = '0.3.2-alpha'
+version = '0.3.4-alpha'
 
 sourceCompatibility = 1.8
 
@@ -105,42 +102,22 @@ task detekt(type: JavaExec) {
 }
 
 /**
- * Pack game tile-sets so that they could be used in Tiled.
+ * Pack main game atlas textures.
  */
-task packTiles {
+task packMainAtlas {
     doLast {
-        def output = 'assets/textures/'
+        def output = project.ext.textureDir as String
+        def name = project.ext.mainAtlasName as String
+        def input = "$project.ext.rawAssets${name}"
 
-        // For each raw tile-set.
-        (project.ext.rawTiles as List<Map<String, Object>>).each {
-            def settings = new TexturePacker.Settings()
-            def name = it.name as String
-
-            // Default tile-set settings.
-            settings.with {
-                duplicatePadding = true
-                grid = true
-
-                maxWidth = 1024
-                maxHeight = 1024
-
-                paddingX = 2
-                paddingY = 2
-            }
-
-            // Adjust scale if required.
-            if (it.scale) {
-                settings.scale = [it.scale] as float[]
-            }
-
-            def inputDir = "$project.ext.rawAssets$name"
-            if (new File(inputDir).exists()) {
-                TexturePacker.process(settings, inputDir, output, name)
-
-                // Don't need the atlas file for tile-sets.
-                new File("$output${name}.atlas").delete()
-            }
+        def settings = new TexturePacker.Settings()
+        settings.with {
+            maxWidth = 2048
+            maxHeight = 2048
+            paddingX = 0
+            paddingY = 0
         }
+        TexturePacker.process(settings, input, output, name)
     }
 }
 

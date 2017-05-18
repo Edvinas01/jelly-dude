@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="64" tileheight="64" nextobjectid="73">
- <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="3" tilecount="45" columns="15">
-  <image source="../../textures/jelly_tiles.png" width="1024" height="256"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="64" tileheight="64" nextobjectid="91">
+ <properties>
+  <property name="ambiance" value="ambient_wind"/>
+  <property name="music" value="weird_mouse_song"/>
+ </properties>
+ <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="2" margin="1" tilecount="225" columns="15">
+  <image source="../../textures/jelly_tiles.png" width="1024" height="1024"/>
  </tileset>
  <layer name="background" width="32" height="16">
   <properties>
@@ -28,7 +32,7 @@
  </objectgroup>
  <layer name="tiles" width="32" height="16">
   <data encoding="base64" compression="zlib">
-   eJztkNsKgEAIRN3udP//r22CXZLQBKs3DxwQZscFiYIgCIIEa2HmLHBV3Jw7CzPchfkNf+z8kiqr3SUZuafD8zbbKW8bI/d0eF7+H+FE1z1Oezg85JJW554f314B8g==
+   eJztk0kKgDAMReuEWyfcWi8gHrFHN8FGgrQOieLGDw9Svj8JpRrzrcpvZ7tesQPmNVmY7SzUkh0or8nCbJfDmSi8n108S7LFOnPj5uq/fr2mCmgCNVfo7e//gbs9SRMwB2qN3uj5pGpP7F6qE1+SIR+xnjHy7XDiSzLkc1ogYXshKdAd+DF4Zu/xnsgCtKgOrA==
   </data>
  </layer>
  <objectgroup name="collision">
@@ -45,6 +49,42 @@
   <object id="61" x="1536" y="640" width="128" height="128"/>
   <object id="62" x="192" y="640" width="128" height="128"/>
   <object id="63" x="384" y="640" width="128" height="128"/>
-  <object id="64" x="768" y="640" width="512" height="48"/>
+  <object id="64" x="832" y="640" width="384" height="48"/>
+  <object id="73" x="768" y="640">
+   <polygon points="0,0 64,0 64,48 0,32"/>
+  </object>
+  <object id="74" x="1216" y="640">
+   <polygon points="0,0 64,0 64,32 0,48"/>
+  </object>
+  <object id="75" x="2048" y="64">
+   <polygon points="0,0 -192,192 0,192"/>
+  </object>
+  <object id="79" x="0" y="64">
+   <polygon points="0,0 0,192 192,192"/>
+  </object>
+  <object id="83" x="336" y="256">
+   <polygon points="-16,0 176,0 176,16 128,48 32,48 -16,16"/>
+  </object>
+  <object id="84" x="592" y="256">
+   <polygon points="-16,0 176,0 176,16 128,48 32,48 -16,16"/>
+  </object>
+  <object id="85" x="1296" y="256">
+   <polygon points="-16,0 176,0 176,16 128,48 32,48 -16,16"/>
+  </object>
+  <object id="86" x="1552" y="256">
+   <polygon points="-16,0 176,0 176,16 128,48 32,48 -16,16"/>
+  </object>
+  <object id="87" x="832" y="256">
+   <polygon points="0,0 384,0 384,16 336,48 48,48 0,16"/>
+  </object>
+  <object id="88" x="1792" y="256">
+   <polygon points="0,0 0,16 48,48 256,48 256,0"/>
+  </object>
+  <object id="89" x="896" y="256">
+   <polygon points="0,0 128,-128 256,0"/>
+  </object>
+  <object id="90" x="0" y="256">
+   <polygon points="0,0 256,0 256,16 208,48 0,48"/>
+  </object>
  </objectgroup>
 </map>

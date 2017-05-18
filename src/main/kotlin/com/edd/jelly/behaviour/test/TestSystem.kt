@@ -17,6 +17,8 @@ import com.edd.jelly.behaviour.physics.Particles
 import com.edd.jelly.behaviour.physics.Physics
 import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
+import com.edd.jelly.behaviour.common.event.PlaySoundEvent
+import com.edd.jelly.behaviour.physics.body.SoftBody
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.ResourceManager
@@ -50,6 +52,10 @@ class TestSystem @Inject constructor(
 ) : EntitySystem() {
 
     private companion object {
+        const val BOING_SOUND_NAME = "boing"
+        const val BOING_LOW_PITCH = 0.8f
+        const val BOING_VELOCITY = 3f
+
         val LOG: Logger = LogManager.getLogger(TestSystem::class.java)
     }
 
@@ -84,12 +90,12 @@ class TestSystem @Inject constructor(
     private var tmpBox = Vec2()
 
     private val queryCallback = QueryCallback {
-            jointDef.bodyA = it.body
-            jointDef.bodyB = it.body
-            jointDef.target.set(tmpGdx.x, tmpGdx.y)
-            joint = world.createJoint(jointDef) as MouseJoint
+        jointDef.bodyA = it.body
+        jointDef.bodyB = it.body
+        jointDef.target.set(tmpGdx.x, tmpGdx.y)
+        joint = world.createJoint(jointDef) as MouseJoint
 
-            false
+        false
     }
 
     init {
@@ -159,7 +165,7 @@ class TestSystem @Inject constructor(
 
             when (keycode) {
 
-                // Handle mode changing.
+            // Handle mode changing.
                 Input.Keys.NUM_1 -> mode = Mode.BOX
                 Input.Keys.NUM_2 -> mode = Mode.CIRCLE
                 Input.Keys.NUM_3 -> mode = Mode.PARTICLE_BOX
@@ -201,6 +207,22 @@ class TestSystem @Inject constructor(
 
         override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
             if (Input.Buttons.RIGHT == button && joint != null) {
+
+                // Play a sound on joint release.
+                val data = joint?.bodyB?.userData
+                if (data is SoftBody) {
+
+                    var vel = 0f
+                    data.bodies.forEach {
+                        vel += it.linearVelocity.length()
+                    }
+                    vel /= data.bodies.size
+
+                    if (vel > BOING_VELOCITY) {
+                        messaging.send(PlaySoundEvent(name = BOING_SOUND_NAME, lowPitch = BOING_LOW_PITCH))
+                    }
+                }
+
                 world.destroyJoint(joint)
                 joint = null
                 return true
@@ -296,7 +318,7 @@ class TestSystem @Inject constructor(
             val h = 0.1f + MathUtils.random(1f)
 
             engine.addEntity(Entity().apply {
-//                add(Transform(
+                //                add(Transform(
 //                        Vector2(pos.x, pos.y),
 //                        Vector2(0.1f + MathUtils.random(1f), 0.1f + MathUtils.random(1f))
 //                ))

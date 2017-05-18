@@ -11,11 +11,15 @@ import org.jbox2d.dynamics.contacts.Contact
 class MessagingContactListener(private val messaging: Messaging) : ContactListener {
 
     override fun endContact(contact: Contact) {
-        messaging.send(EndContactEvent(contact))
+        if (isInteresting(contact)) {
+            messaging.send(EndContactEvent(contact))
+        }
     }
 
     override fun beginContact(contact: Contact) {
-        messaging.send(BeginContactEvent(contact))
+        if (isInteresting(contact)) {
+            messaging.send(BeginContactEvent(contact))
+        }
     }
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
@@ -23,4 +27,7 @@ class MessagingContactListener(private val messaging: Messaging) : ContactListen
 
     override fun postSolve(contact: Contact, impulse: ContactImpulse) {
     }
+
+    private fun isInteresting(contact: Contact) =
+            contact.fixtureA.body.userData != null || contact.fixtureB.body.userData != null
 }

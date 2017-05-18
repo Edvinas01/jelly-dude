@@ -1,58 +1,51 @@
 
 jelly_stuff.png
-size: 2048,256
+size: 512,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-arrow_sign
+blue_jello_cube
   rotate: false
-  xy: 896, 0
+  xy: 256, 64
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
-bush
-  rotate: false
-  xy: 768, 128
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-bush
-  rotate: false
-  xy: 768, 0
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-bush
-  rotate: false
-  xy: 960, 0
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 3
-bush
-  rotate: false
-  xy: 1024, 192
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 4
+  index: -1
 crate
   rotate: false
-  xy: 1024, 128
+  xy: 256, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 dev_grid
   rotate: false
-  xy: 1152, 160
+  xy: 448, 32
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
+green_jello_cube
+  rotate: false
+  xy: 384, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hanging_thing
+  rotate: false
+  xy: 448, 64
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+just_pink_jello
+  rotate: false
+  xy: 448, 192
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 level_icon
   rotate: false
   xy: 0, 0
@@ -60,72 +53,58 @@ level_icon
   orig: 256, 256
   offset: 0, 0
   index: -1
-rocks
+orange_bead
   rotate: false
-  xy: 1088, 192
+  xy: 320, 64
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
+  index: -1
+pink_jello_cube
+  rotate: false
+  xy: 320, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+red_bead
+  rotate: false
+  xy: 384, 128
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+rope
+  rotate: false
+  xy: 480, 64
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
 round_crate
   rotate: false
-  xy: 1024, 64
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 1
-shroom
-  rotate: false
-  xy: 1024, 0
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 1
-shroom
-  rotate: false
-  xy: 1088, 128
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 2
-sign
-  rotate: false
-  xy: 1152, 192
+  xy: 448, 128
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 slime
   rotate: false
-  xy: 896, 128
+  xy: 256, 128
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
-stump
-  rotate: false
-  xy: 896, 64
-  size: 128, 64
-  orig: 128, 64
-  offset: 0, 0
-  index: 1
-tree
-  rotate: false
-  xy: 256, 0
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 1
-tree
-  rotate: false
-  xy: 512, 0
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
 xy_axis
   rotate: false
-  xy: 1088, 64
+  xy: 384, 64
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+yellow_bead
+  rotate: false
+  xy: 384, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

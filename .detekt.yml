@@ -19,11 +19,11 @@ empty:
 complexity:
   active: true
   LongMethod:
-    threshold: 20
+    threshold: 50
   LongParameterList:
     threshold: 5
   LargeClass:
-    threshold: 150
+    threshold: 300
   ComplexMethod:
     threshold: 10
   TooManyFunctions:

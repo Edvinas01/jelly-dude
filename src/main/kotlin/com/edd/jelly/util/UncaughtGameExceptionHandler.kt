@@ -19,10 +19,7 @@ class UncaughtGameExceptionHandler : Thread.UncaughtExceptionHandler {
 
     private fun showErrorDialog(e: Throwable) {
         SwingUtilities.invokeLater {
-            ErrorReport(Configurations.GIT_HUB_NEW_ISSUE_URL, e).apply {
-                pack()
-                isVisible = true
-            }
+            CrashReport.showReport(Configurations.GIT_HUB_NEW_ISSUE_URL, e)
         }
     }
 }

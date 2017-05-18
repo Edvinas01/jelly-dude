@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Scaling
 import com.edd.jelly.behaviour.common.event.ErrorInfoEvent
 import com.edd.jelly.behaviour.common.event.LoadNewLevelEvent
 import com.edd.jelly.behaviour.common.event.LoadGameScreenEvent
-import com.edd.jelly.behaviour.common.event.LoadMainMenuScreenEvent
 import com.edd.jelly.behaviour.ui.screen.LanguageAware
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.resources.Language
@@ -68,6 +67,8 @@ class LevelsWindow constructor(
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
 
                         // Level loading might fail, messaging is not async, so gotta handle it here.
+                        // Don't want to catch 5+ errors from Gdx, so just using a runtime error.
+                        @Suppress("CatchRuntimeException")
                         try {
                             messaging.send(LoadNewLevelEvent(meta.internalName))
                             messaging.send(LoadGameScreenEvent)
