@@ -34,10 +34,11 @@ public final class ScriptGameContext {
         stored.remove(name);
     }
 
+    public float getDeltaTime() {
+        return Gdx.graphics.getDeltaTime();
+    }
+
     public int getFps() {
-        if (Gdx.graphics != null) {
-            return Gdx.graphics.getFramesPerSecond();
-        }
-        return -1;
+        return Gdx.graphics.getFramesPerSecond();
     }
 }

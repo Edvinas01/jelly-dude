@@ -56,7 +56,7 @@ public final class Hook<T> {
 
         try {
             functions.forEach(consumer);
-        } catch (NashornException e) {
+        } catch (RuntimeException e) {
             LOG.error("Could not execute hook function for hook of type: {}",
                     hookType.getSimpleName(), e);
 
