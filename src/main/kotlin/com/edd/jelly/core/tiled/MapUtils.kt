@@ -14,12 +14,21 @@ fun <T : TiledMap> T.mustLayer(name: String): MapLayer {
 }
 
 /**
- * Get tiled map int property or throw an exception.
+ * Get tiled map int property.
  */
 fun <T : TiledMap> T.int(name: String): Int {
     return this.properties.get(name)?.let {
         it as? Int ?: 0
     } ?: 0
+}
+
+/**
+ * Get tiled map string property.
+ */
+fun <T : TiledMap> T.string(name: String): String? {
+    return this.properties.get(name)?.let {
+        it as? String
+    }
 }
 
 /**

@@ -3,6 +3,7 @@ package com.edd.jelly.behaviour.player
 import com.badlogic.ashley.core.*
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.PolygonRegion
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.EarClippingTriangulator
 import com.badlogic.gdx.math.Vector2
 import com.edd.jelly.behaviour.common.event.*
@@ -308,8 +309,8 @@ class PlayerSystem @Inject constructor(
     /**
      * Create polygon region from provided transform position, size and body vertices.
      */
-    private fun createPlayerTexture(transform: Transform, bodies: Array<Body>): PolygonRegion {
-        val playerTexture = resourceManager.atlas[PLAYER_TEXTURE_NAME]!!
+    private fun createPlayerTexture(region: TextureRegion?, transform: Transform, bodies: Array<Body>): PolygonRegion {
+        val playerTexture = region ?: resourceManager.atlas[PLAYER_TEXTURE_NAME]!!
 
         val xRatio = playerTexture.regionWidth / transform.width.pixels
         val yRatio = playerTexture.regionHeight / transform.height.pixels
@@ -341,6 +342,7 @@ class PlayerSystem @Inject constructor(
      */
     private fun spawnPlayer(x: Float,
                             y: Float,
+                            playerTexture: TextureRegion? = null,
                             width: Float = PLAYER_WIDTH,
                             height: Float = PLAYER_HEIGHT): Entity {
 
@@ -402,7 +404,7 @@ class PlayerSystem @Inject constructor(
             }
 
             // Register player entity components.
-            add(PolygonRenderable(createPlayerTexture(transform, joint.bodies)))
+            add(PolygonRenderable(createPlayerTexture(playerTexture, transform, joint.bodies)))
             add(player)
             add(transform)
 
@@ -442,13 +444,17 @@ class PlayerSystem @Inject constructor(
     private fun initListeners() {
 
         // Listen for player destruction.
-        engine.addEntityListener(Family.one(Player::class.java).get(), object : EntityListener {
+        engine.addEntityListener(Family
+                .one(Player::class.java)
+                .one(PolygonRenderable::class.java).get(), object : EntityListener {
+
             override fun entityRemoved(entity: Entity) {
                 val player = destroyPlayer(entity)
+                val poly = PolygonRenderable.mapper[entity]
 
                 if (player.reset) {
                     with(player.lastSpawn) {
-                        spawnPlayer(x, y)
+                        spawnPlayer(x, y, poly?.polygonRegion?.region)
                     }
                 }
             }
@@ -524,7 +530,7 @@ class PlayerSystem @Inject constructor(
         // Listen for level loads.
         messaging.listen<LevelLoadedEvent> { (map) ->
             map.spawn?.let {
-                spawnPlayer(it.x, it.y)
+                spawnPlayer(it.x, it.y, map.playerTexture)
             }
         }
 
