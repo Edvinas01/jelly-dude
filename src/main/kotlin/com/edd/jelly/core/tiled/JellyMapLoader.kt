@@ -131,6 +131,11 @@ class JellyMapLoader @Inject constructor(
             }
         }
 
+        // Map player texture.
+        val playerTexture = map.string("playerTexture")?.let {
+            resourceManager.atlas[it] ?: resourceManager.getRegion(it)
+        }
+
         return JellyMap(
                 width = (map.int("width") * map.int("tilewidth")).meters,
                 height = (map.int("height") * map.int("tileheight")).meters,
@@ -146,7 +151,8 @@ class JellyMapLoader @Inject constructor(
                 collisionsLayer = collisions,
                 entitiesLayer = entities,
                 ambientSoundNames = soundNames,
-                musicNames = musicNames
+                musicNames = musicNames,
+                playerTexture = playerTexture
         )
     }
 
