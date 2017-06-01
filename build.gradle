@@ -8,7 +8,7 @@ buildscript {
         detektVersion = '1.0.0.M9'
         guiceVersion = '4.1.0'
         spockVersion = '1.1-groovy-2.4-rc-3'
-        gdxVersion = '1.9.6'
+        gdxVersion = '1.9.7-SNAPSHOT'
 
         // Texture directory.
         textureDir = 'assets/textures/'
