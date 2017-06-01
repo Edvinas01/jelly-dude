@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.Particles
-import com.edd.jelly.behaviour.physics.Physics
+import com.edd.jelly.behaviour.physics.body.RigidBody
 import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.behaviour.common.event.PlaySoundEvent
@@ -275,7 +275,7 @@ class TestSystem @Inject constructor(
                     Vec2(v.x, v.y)
                 }, 0f)
 
-                add(Physics(body))
+                add(RigidBody(body))
             })
         }
 
@@ -305,7 +305,7 @@ class TestSystem @Inject constructor(
                     Vec2(v.x, v.y)
                 }, 0f)
 
-                add(Physics(body))
+                add(RigidBody(body))
             })
         }
 

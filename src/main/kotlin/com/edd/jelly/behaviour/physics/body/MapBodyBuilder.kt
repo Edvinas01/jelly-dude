@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.edd.jelly.behaviour.physics.Physics
+import com.edd.jelly.behaviour.physics.body.RigidBody
 import com.edd.jelly.util.Units
 import com.edd.jelly.util.meters
 import com.google.inject.Inject
@@ -24,18 +24,18 @@ import org.jbox2d.dynamics.World
  * Builds bodies for tiled map.
  */
 @Singleton
-class MapBodyBuilder @Inject constructor(private val world: World) {
+class MapBodyBuilder @Inject constructor(private val world: World) : BodyBuilder {
 
     private companion object {
         const val DENSITY = 1f
         val BODY_TYPE = BodyType.STATIC
     }
 
-    fun create(obj: MapObject): Entity? {
-        val pair = createPair(obj) ?: return null
+    override fun create(mapObject: MapObject): Entity? {
+        val pair = createPair(mapObject) ?: return null
 
         return Entity().apply {
-            add(Physics(world.createBody(BodyDef().apply {
+            add(RigidBody(world.createBody(BodyDef().apply {
                 type = BODY_TYPE
             }).apply {
                 setTransform(pair.first, 0f)

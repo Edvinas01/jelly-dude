@@ -5,9 +5,11 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
+import com.edd.jelly.behaviour.physics.body.RigidBody
 import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.body.SoftBody
+import com.edd.jelly.behaviour.physics.body.rigidBody
 import com.edd.jelly.behaviour.rendering.SoftRenderable
 import com.edd.jelly.util.degrees
 import com.edd.jelly.util.toVec2
@@ -34,12 +36,12 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
 
         physicsEntities = engine.getEntitiesFor(Family.all(
                 Transform::class.java,
-                Physics::class.java
+                RigidBody::class.java
         ).get())
 
         particleEntities = engine.getEntitiesFor(Family.all(
                 Particles::class.java,
-                Physics::class.java
+                RigidBody::class.java
         ).get())
     }
 
@@ -50,7 +52,7 @@ class PhysicsSynchronizationSystem @Inject constructor() : EntitySystem() {
         // Sync physics entities.
         physicsEntities.forEach {
             val transform = it.transform
-            val body = it.physics.body
+            val body = it.rigidBody.body
 
             transform.position.set(body.position.x, body.position.y)
             transform.rotation = body.angle.degrees

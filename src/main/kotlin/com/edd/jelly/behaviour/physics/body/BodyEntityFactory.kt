@@ -9,6 +9,7 @@ import com.google.inject.Singleton
 
 @Singleton
 class BodyEntityFactory @Inject constructor(
+        private val rigidBodyGroupBuilder: RigidBodyGroupBuilder,
         private val softBodyBuilder: SoftBodyBuilder,
         private val mapBodyBuilder: MapBodyBuilder,
         private val liquidBuilder: LiquidBuilder
@@ -17,6 +18,7 @@ class BodyEntityFactory @Inject constructor(
     private companion object {
         const val TYPE = "type"
 
+        const val TYPE_RIGID_GROUP = "rigid_group"
         const val TYPE_CHECKPOINT = "checkpoint"
         const val TYPE_LIQUID = "liquid"
         const val TYPE_SOFT = "soft"
@@ -35,6 +37,7 @@ class BodyEntityFactory @Inject constructor(
     fun create(mapObjects: MapObjects): List<Entity> {
         return mapObjects.map { o ->
             when (o.string(TYPE)) {
+                TYPE_RIGID_GROUP -> rigidBodyGroupBuilder.create(o)
                 TYPE_CHECKPOINT -> null
                 TYPE_LIQUID -> liquidBuilder.create(o)
                 TYPE_SOFT -> softBodyBuilder.create(o)

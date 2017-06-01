@@ -35,7 +35,7 @@ class SoftBodyBuilder @Inject constructor(
         private val triangulator: DelaunayTriangulator,
         private val resources: ResourceManager,
         private val world: World
-) {
+) : BodyBuilder {
 
     private companion object {
         const val RADIUS = 0.1f
@@ -77,11 +77,11 @@ class SoftBodyBuilder @Inject constructor(
      *
      * @return created soft map object entity.
      */
-    fun create(obj: MapObject): Entity? {
-        if (obj is RectangleMapObject) {
-            return rectangle(obj)
-        } else if (obj is EllipseMapObject) {
-            return ellipse(obj)
+    override fun create(mapObject: MapObject): Entity? {
+        if (mapObject is RectangleMapObject) {
+            return rectangle(mapObject)
+        } else if (mapObject is EllipseMapObject) {
+            return ellipse(mapObject)
         }
         return null
     }

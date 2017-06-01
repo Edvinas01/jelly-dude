@@ -23,7 +23,7 @@ import org.jbox2d.particle.ParticleType
 @Singleton
 class LiquidBuilder @Inject constructor(
         private val world: World
-) {
+) : BodyBuilder {
 
     private companion object {
         val COLOR_ALPHA = 0.1f
@@ -35,9 +35,9 @@ class LiquidBuilder @Inject constructor(
      *
      * @return created liquid object entity.
      */
-    fun create(obj: MapObject): Entity? {
-        if (obj is RectangleMapObject) {
-            return rectangle(obj)
+    override fun create(mapObject: MapObject): Entity? {
+        if (mapObject is RectangleMapObject) {
+            return rectangle(mapObject)
         }
         return null
     }
