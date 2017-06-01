@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="128" tileheight="128" nextobjectid="131">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="128" tileheight="128" nextobjectid="135">
  <properties>
   <property name="ambiance" value="ambient_wind"/>
-  <property name="music" value="weird_mouse_song"/>
+  <property name="music" value="piano_song"/>
   <property name="playerTexture" value="paper_slime"/>
  </properties>
  <tileset firstgid="1" name="paper_tiles" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="128" columns="16">
@@ -142,6 +142,42 @@
     <property name="texture" value="paper_rope_up"/>
     <property name="type" value="soft"/>
    </properties>
+  </object>
+  <object id="131" x="3616" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="132" x="3808" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="133" x="3712" y="3616" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="134" x="1024" y="2752" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
   </object>
  </objectgroup>
  <layer name="front_tiles_1" width="64" height="32">
