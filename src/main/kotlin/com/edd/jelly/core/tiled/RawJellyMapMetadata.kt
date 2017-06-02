@@ -4,5 +4,5 @@ data class RawJellyMapMetadata(
         val description: String?,
         val texture: String?,
         val author: String?,
-        val name: String?
+        val names: Map<String, String>?
 )

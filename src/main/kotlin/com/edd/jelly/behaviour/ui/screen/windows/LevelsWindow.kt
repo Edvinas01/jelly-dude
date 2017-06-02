@@ -17,7 +17,8 @@ import org.apache.logging.log4j.Logger
 class LevelsWindow constructor(
         skin: Skin,
         jellyMapLoader: JellyMapLoader,
-        messaging: Messaging
+        messaging: Messaging,
+        language: String
 ) : Window("Levels", skin, "jelly"), LanguageAware {
 
     private companion object {
@@ -59,7 +60,7 @@ class LevelsWindow constructor(
                     .row()
 
             // Launch level button.
-            levelDetails.add(TextButton(meta.name, skin).apply {
+            levelDetails.add(TextButton(meta.names[language] ?: meta.internalName.capitalize(), skin).apply {
                 label.setWrap(true)
                 label.setEllipsis(true)
 

@@ -10,7 +10,7 @@ import com.edd.jelly.core.resources.Language
 class MenuWindow constructor(
         skin: Skin,
         setActive: (selected: Window) -> Unit,
-        levelsWindow: LevelsWindow,
+        private val levelsWindow: LevelsWindow,
         optionsWindow: OptionsWindow
 ) : Window("Menu", skin, "jelly"), LanguageAware {
 
@@ -76,6 +76,7 @@ class MenuWindow constructor(
     }
 
     override fun updateLanguage(lang: Language) {
+        titleLabel.setText(lang["menuWindowTitle"])
         menuPlayButton.setText(lang["menuPlayButton"])
         menuOptionsButton.setText(lang["menuOptionsButton"])
         menuExitButton.setText(lang["exitButton"])

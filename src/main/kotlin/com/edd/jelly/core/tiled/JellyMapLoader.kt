@@ -209,7 +209,7 @@ class JellyMapLoader @Inject constructor(
                     k,
                     v.description ?: "",
                     v.author ?: "",
-                    v.name ?: k.capitalize(),
+                    v.names ?: emptyMap(),
                     v.texture?.let {
                         resourceManager.getRegion(it, true)
                     } ?: resourceManager.atlas[LEVEL_ICON_NAME]!!

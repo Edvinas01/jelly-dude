@@ -34,7 +34,8 @@ class MainMenuScreen @Inject constructor(
     private val levelsWindow = LevelsWindow(
             skin,
             jellyMapLoader,
-            messaging
+            messaging,
+            resources.language.handle.internalName
     )
 
     private val optionsWindow = OptionsWindow(
