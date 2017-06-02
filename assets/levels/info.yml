@@ -14,10 +14,10 @@ sandbox:
   author: Edd
   name: Sandbox
 wide:
-  description: Wide and cool level for gaining some speed
+  description: Wide level with lots of ramps
   author: Edd
   texture: levels/wide/wide.png
-  name: Wide and cool
+  name: Ramps
 bridge:
   description: Lots of bridges
   author: Edd
@@ -28,3 +28,8 @@ soft_bodies:
   author: Edd
   texture: levels/soft_bodies/soft_bodies.png
   name: Soft Bodies
+drawn:
+  description: Hand draw map
+  author: Edd
+  texture: levels/drawn/drawn.png
+  name: Drawn

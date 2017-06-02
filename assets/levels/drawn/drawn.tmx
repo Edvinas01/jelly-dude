@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="128" tileheight="128" nextobjectid="135">
+ <properties>
+  <property name="ambiance" value="ambient_wind"/>
+  <property name="music" value="piano_song"/>
+  <property name="playerTexture" value="paper_slime"/>
+ </properties>
+ <tileset firstgid="1" name="paper_tiles" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="128" columns="16">
+  <image source="../../textures/paper_tiles.png" width="2080" height="1040"/>
+ </tileset>
+ <layer name="background_1" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="fitY" type="bool" value="true"/>
+   <property name="scaleX" type="float" value="2"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedX" type="float" value="0.4"/>
+   <property name="speedY" type="float" value="0.8"/>
+   <property name="texture" value="paper_background_3"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="background_2" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="scaleX" type="float" value="0.8"/>
+   <property name="scaleY" type="float" value="0.8"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.6"/>
+   <property name="texture" value="paper_background_1"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="background_3" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="scaleX" type="float" value="0.8"/>
+   <property name="scaleY" type="float" value="0.8"/>
+   <property name="speedX" type="float" value="0.1"/>
+   <property name="speedY" type="float" value="0.4"/>
+   <property name="texture" value="paper_background_2"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="back_offset_objects" width="64" height="32" offsetx="0" offsety="32">
+  <data encoding="base64" compression="zlib">
+   eJztmEkKwjAUhmOPYA+hN9ClFUW3ztPGOg9r502P4lE8mn9piqFgsQYaqf8HH3mPJuU9SgKpEIQQQuLIQSvQQ+wZLid10HPFCnwgfpiuh2QLV4ipms+EuJupJH3Qu+cqud/7HLpvV2QL9+Xdz/3eZ8GoRRt2NN9BCCGEEEIIyS5jOJFxEfeyQsb/9UTvmDu4l3EZvZf+oH9fR+ZXeJNxE703Iv0P4BCO0irwx1jDDdyaLsQQJ3iGlw/mqmdJErqwB/tfrE0bG/vDlmM+slfUsyQJC7iEK/3ytPjkG8cRniU1WIdV5ZkTGUPCOQd4hC3NGgiJ4wnwgCI8
+  </data>
+ </layer>
+ <objectgroup name="entities">
+  <object id="65" name="start" x="7808" y="1280">
+   <properties>
+    <property name="type" value="checkpoint"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="123" x="5056" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="124" x="6336" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="125" x="3776" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="100"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="126" x="6304" y="3424" width="704" height="32">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="127" x="7200" y="3424" width="544" height="32">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="128" x="1710" y="2912" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="129" x="2356.67" y="2912" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="130" x="1075.33" y="2914.67" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="131" x="3616" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="132" x="3808" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="133" x="3712" y="3616" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="134" x="1024" y="2752" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="front_tiles_1" width="64" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt0rkNgDAQRNHFVEAJmABSIugAyqAUSqFUlgwsjmSROf6TRpYc2B55RQAAAAAAAAAAAJ6j1FSxHxFRo2mNz8w1PojuTcbXmOg0vfGZ2neodV3HP7T/HY76O133koiMkZ5qbpn9Qrbdw2RB3IdmY+/vr/qnJ7PxhoR9/pYZcoERZQ==
+  </data>
+ </layer>
+ <layer name="front_tiles_2" width="64" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztmEEKgzAQRaOeoEeIm3bbVbvsqnqMHMWjeBSP1h9KSxgyRLGYaP+DTyCMYX4mLmaMIYQQQgghhGxJBdURYX8M4yzURmRFnHZeTCWAPNwJq1QtfMGru2KVaoM4772JnKWpBJCzg9dJCvtTGIc6O3h9SNkgTrvLkv3/Eu0uNeXOlxBCCCHbcDFmOEO588jFHd5vB/CPGvpaLqaH9+4A/lFDX8tVaL1m6Tyh7r0Oa87Res1/IeU/NUuodv4fzfD/7SebSG+993fz8QFvY2pWFJurzPmuZC2ZlRxRL/p8LAQ=
+  </data>
+ </layer>
+ <layer name="front_offset_tiles" width="64" height="32" offsetx="0" offsety="32">
+  <data encoding="base64" compression="zlib">
+   eJzt2P0JgzAQh+FbRZ3AdoTazlHaCfoxgKM4ai80gSMYIVa0ad8Hfgh+cecF/4gIAAAA8BsOPs4putZpjuuWswrts9+6BgAAAJRpp9m/j33uOeAbVZra5N9oz+dWZAjZup657ByrkT5S/6S5/T80z+jcTXPPqvoztudG0/rUGX2UPH9fu8TRbzFMrYWRdyzef9hnumiumc84qf2ocI+bvZ15KlNrwbyjyPljeS+M7SIK
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="32" x="8192" y="-128" width="128" height="4224"/>
+  <object id="33" x="0" y="-128" width="8192" height="128"/>
+  <object id="34" x="-128" y="4096" width="8448" height="128"/>
+  <object id="91" x="-128" y="-128" width="128" height="4224"/>
+  <object id="92" x="0" y="3872" width="8192" height="224"/>
+  <object id="93" x="0" y="3360" width="352" height="512"/>
+  <object id="94" x="416" y="3744" width="128" height="128"/>
+  <object id="95" x="1248" y="3616" width="896" height="256"/>
+  <object id="96" x="544" y="3360" width="704" height="512"/>
+  <object id="97" x="2144" y="3648" width="352" height="32"/>
+  <object id="100" x="1952" y="3616">
+   <polygon points="0,0 -32,-32 -8,-83.3333 204,-80.6667 221.333,-29.3333 200.667,-2"/>
+  </object>
+  <object id="101" x="2560" y="3744" width="256" height="128"/>
+  <object id="102" x="5408" y="3776" width="1344" height="96"/>
+  <object id="103" x="5536" y="3648" width="1216" height="128"/>
+  <object id="104" x="5536" y="3520" width="832" height="128"/>
+  <object id="105" x="5920" y="3392" width="416" height="128"/>
+  <object id="106" x="7712" y="3136" width="480" height="736"/>
+  <object id="107" x="7584" y="3776" width="128" height="96"/>
+  <object id="109" x="6976" y="3456">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="110" x="2240" y="2944">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="111" x="1600" y="2944">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="112" x="960" y="2944">
+   <polygon points="0,0 256,0 256,-32 127.333,-53.3333 0,-32"/>
+  </object>
+  <object id="113" x="1312" y="704" width="448" height="192"/>
+  <object id="114" x="4256" y="1440" width="832" height="320"/>
+  <object id="120" x="5536" y="1440" width="832" height="320"/>
+  <object id="121" x="6688" y="1568" width="1504" height="320"/>
+  <object id="122" x="6816" y="1440" width="1376" height="128"/>
+ </objectgroup>
+ <layer name="clouds_1" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4900"/>
+   <property name="scaleX" type="float" value="0.5"/>
+   <property name="scaleY" type="float" value="0.5"/>
+   <property name="speedX" type="float" value="0.15"/>
+   <property name="speedY" type="float" value="0.4"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="clouds_2" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4300"/>
+   <property name="scaleX" type="float" value="0.7"/>
+   <property name="scaleY" type="float" value="0.7"/>
+   <property name="speedX" type="float" value="0.1"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="clouds_3" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4300"/>
+   <property name="scaleX" type="float" value="0.4"/>
+   <property name="scaleY" type="float" value="0.4"/>
+   <property name="speedX" type="float" value="0.2"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+</map>
