@@ -7,6 +7,8 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.ParticleEffect
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -36,6 +38,7 @@ class ResourceManager @Inject constructor(
         const val PNG_FILE_TYPE = "png"
         const val ATLAS_FILE_TYPE = "atlas"
         const val SOUND_DIR = "sounds/"
+        const val PARTICLE_DIR = "particles/"
         const val SOUND_FORMAT = ".ogg"
 
         val LOG: Logger = LogManager.getLogger(ResourceManager::class.java)
@@ -147,6 +150,20 @@ class ResourceManager @Inject constructor(
                 Gdx.audio.newMusic(FileHandle(file))
             }
         })
+    }
+
+    /**
+     * Get particle pool by particle effect name. Note that pools are not cached.
+     */
+    fun getParticlePool(name: String) = with(ParticleEffect()) {
+        val fullName = "${Configurations.ASSETS_FOLDER}$PARTICLE_DIR$name.p"
+        val file = File(fullName)
+        if (!file.exists()) {
+            LOG.warn("Particle: {}, does not exist", fullName)
+        } else {
+            load(FileHandle(file), atlas)
+        }
+        ParticleEffectPool(this, 0, 100)
     }
 
     /**
