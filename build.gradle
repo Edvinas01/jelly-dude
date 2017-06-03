@@ -48,7 +48,7 @@ apply plugin: 'kotlin'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 
-version = '0.3.4-alpha'
+version = '0.3.5-alpha'
 
 sourceCompatibility = 1.8
 
