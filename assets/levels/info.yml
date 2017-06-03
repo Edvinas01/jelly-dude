@@ -2,29 +2,48 @@ main:
   description: Not much space here
   texture: levels/main/main.png
   author: Edd
-  name: Cramped forest
+  names:
+    lithuanian: Miškas
+    english: Forest
 liquid:
   description: Good for testing liquid, featuring weird music
   texture: levels/liquid/liquid.png
   author: Edd
-  name: Liquid playground
+  names:
+    lithuanian: Skysčių testavimas
+    english: Liquid playground
 sandbox:
   description: Level to run around and test various features
   texture: levels/sandbox/sandbox.png
   author: Edd
-  name: Sandbox
+  names:
+    lithuanian: Smėlio dėžė
+    english: Sandbox
 wide:
-  description: Wide and cool level for gaining some speed
+  description: Wide level with lots of ramps
   author: Edd
   texture: levels/wide/wide.png
-  name: Wide and cool
+  names:
+    lithuanian: Rampos
+    english: Ramps
 bridge:
   description: Lots of bridges
   author: Edd
   texture: levels/bridge/bridge.png
-  name: Bridges
+  names:
+    lithuanian: Tiltai
+    english: Bridges
 soft_bodies:
   description: Soft body playground
   author: Edd
   texture: levels/soft_bodies/soft_bodies.png
-  name: Soft Bodies
+  names:
+    lithuanian: Minkšti kūnai
+    english: Soft Bodies
+drawn:
+  description: Hand draw map
+  author: Edd
+  texture: levels/drawn/drawn.png
+  names:
+    lithuanian: Nupieštas
+    english: Drawn

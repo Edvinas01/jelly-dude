@@ -2,6 +2,7 @@ package com.edd.jelly.core.tiled
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
@@ -15,6 +16,7 @@ class JellyMap internal constructor(
         val backgroundLayers: Collection<MapLayer>,
         val foregroundLayers: Collection<MapLayer>,
         val background: Texture?,
+        val playerTexture: TextureRegion?,
         val spawn: Vector2?,
         val focusPoints: List<Vector2>,
         val collisionsLayer: MapLayer,

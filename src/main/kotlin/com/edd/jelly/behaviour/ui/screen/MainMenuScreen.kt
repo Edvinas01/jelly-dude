@@ -32,9 +32,10 @@ class MainMenuScreen @Inject constructor(
 
     private val gameTitle = Label("Jelly Dude", skin, "title")
     private val levelsWindow = LevelsWindow(
-            skin,
             jellyMapLoader,
-            messaging
+            skin,
+            messaging,
+            resources.language.handle.internalName
     )
 
     private val optionsWindow = OptionsWindow(

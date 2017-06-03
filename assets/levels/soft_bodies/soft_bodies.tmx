@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="64" tileheight="64" nextobjectid="173">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="96" height="32" tilewidth="64" tileheight="64" nextobjectid="277">
  <properties>
   <property name="ambiance" value="ambient_wind"/>
   <property name="music" value="funky_song"/>
@@ -7,7 +7,7 @@
  <tileset firstgid="1" name="Tiles" tilewidth="64" tileheight="64" spacing="2" margin="1" tilecount="225" columns="15">
   <image source="../../textures/jelly_tiles.png" width="1024" height="1024"/>
  </tileset>
- <layer name="background" width="64" height="32">
+ <layer name="background" width="96" height="32">
   <properties>
    <property name="clampBottom" type="bool" value="true"/>
    <property name="clampTop" type="bool" value="true"/>
@@ -19,98 +19,31 @@
    <property name="type" value="parallax"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAIB3AzAAAAE=
   </data>
  </layer>
- <layer name="bg_objects" width="64" height="32">
+ <layer name="bg_objects" width="96" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1bEJwDAMBEBN6EwQ7z9G3FoQJS5CCt+BCvEI1H0EAAAAAADwhXNM//sJALbz1D85f9tXbcxxs+ds9adKdatrZxf20Qb1
+   eJzt2MnOAVEUReF6wcJc8wB6Q72h3lDvWe0EiZRbhYh7Bnd9yYq/ITmp0Y4oAgAAAAAAAABkqaqaqquG8S0h6qqe6quB8S0hmqqZmquF8S0h2qqd2quD8S2ATzmVT/ytcH+NU/6PzzVVS7VVx/iWEA3VSI3VxPaUIC3VSq3VxviWEB3VSZ3VxfiWfyirivURQIBcu4a9449r17B3/HHtGvaOP65d8+3eif9wF26KqnT/OfmcXc/9seXSXqPode+923/fvv8h+b3H8+/vvhP5ZZNmfdb31mVbZ7sCeeMt+g==
   </data>
  </layer>
  <objectgroup name="entities">
-  <object id="65" name="start" x="1280" y="1408">
+  <object id="65" name="start" x="256" y="1856">
    <properties>
     <property name="type" value="checkpoint"/>
    </properties>
    <ellipse/>
   </object>
- </objectgroup>
- <layer name="tiles" width="64" height="32">
-  <data encoding="base64" compression="zlib">
-   eJzt1DEOgCAQRNGptBUKW/GmHtWjuISWhoSIK/8lk1BQMGRBAgAAAAAAAIB/OqW7lmgZfbY3JOtZS5ik/2E9a9km6f8FdteyeVPsvNcLm7f8DvNf1HWvF/Snf5Lf/qt0LSV53cxz/9x9tySVc+1qv4OR/cPkeQBmMSCO
-  </data>
- </layer>
- <objectgroup name="collision">
-  <object id="4" x="-128" y="0" width="128" height="2048"/>
-  <object id="32" x="4096" y="0" width="128" height="2048"/>
-  <object id="33" x="-128" y="-128" width="4352" height="128"/>
-  <object id="34" x="-128" y="2048" width="4352" height="128"/>
-  <object id="93" x="0" y="1984" width="4096" height="64"/>
-  <object id="124" x="0" y="384" width="192" height="192"/>
-  <object id="125" x="0" y="832" width="256" height="192"/>
-  <object id="126" x="0" y="1344" width="448" height="192"/>
-  <object id="127" x="1536" y="0" width="192" height="448"/>
-  <object id="128" x="2688" y="0" width="192" height="448"/>
-  <object id="129" x="2816" y="1536" width="192" height="448"/>
-  <object id="130" x="2112" y="1536" width="192" height="448"/>
-  <object id="131" x="1024" y="1984">
-   <polygon points="0,0 128,-128 256,-128 384,0"/>
-  </object>
-  <object id="132" x="432" y="1408" width="288" height="64">
+  <object id="173" x="752" y="1728" width="208" height="48">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
     <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="green_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="133" x="240" y="896" width="288" height="64">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="green_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="134" x="160" y="448" width="288" height="64">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="green_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="135" x="2288" y="1536" width="544" height="64">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="50"/>
-    <property name="texture" value="pink_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="136" x="400" y="1520" width="32" height="272">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="100"/>
     <property name="texture" value="blue_jello_cube"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="137" x="112" y="1520" width="32" height="272">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="100"/>
-    <property name="texture" value="blue_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="138" x="1424" y="1664" width="64" height="336">
+  <object id="221" x="2992" y="1664" width="64" height="336">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -119,16 +52,7 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="139" x="944" y="1664" width="64" height="336">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="30"/>
-    <property name="texture" value="blue_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="140" x="1616" y="432" width="32" height="400">
+  <object id="222" x="4816" y="432" width="32" height="432">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -137,16 +61,25 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="141" x="2768" y="432" width="32" height="432">
+  <object id="223" x="3856" y="1488" width="96" height="96">
    <properties>
     <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="20"/>
-    <property name="texture" value="rope"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="142" x="1552" y="784" width="160" height="112">
+  <object id="224" x="4032" y="1872" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="225" x="4496" y="832" width="672" height="64">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -155,7 +88,25 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="143" x="1296" y="816" width="288" height="32">
+  <object id="226" x="3664" y="432" width="32" height="400">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="20"/>
+    <property name="texture" value="rope"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="227" x="5488" y="1520" width="32" height="176">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="just_pink_jello"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="228" x="2288" y="896" width="288" height="64">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -164,7 +115,16 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="144" x="1680" y="816" width="288" height="32">
+  <object id="229" x="3920" y="1872" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="230" x="3728" y="816" width="288" height="32">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -173,7 +133,7 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="145" x="128" y="1088" width="128" height="128">
+  <object id="231" x="2080" y="256" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
@@ -182,7 +142,25 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="146" x="208" y="1216" width="128" height="128">
+  <object id="232" x="4928" y="1280" width="64" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="233" x="2448" y="1520" width="32" height="272">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="100"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="234" x="2096" y="704" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
@@ -191,7 +169,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="147" x="48" y="1216" width="128" height="128">
+  <object id="235" x="4880" y="688" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
@@ -200,16 +178,16 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="148" x="2448" y="832" width="672" height="64">
+  <object id="236" x="3920" y="1616" width="96" height="96">
    <properties>
     <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="blue_jello_cube"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="149" x="944" y="1648" width="544" height="48">
+  <object id="237" x="2480" y="1408" width="288" height="64">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
@@ -218,52 +196,43 @@
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="150" x="3328" y="1664" width="256" height="64">
+  <object id="238" x="3792" y="1872" width="96" height="96">
    <properties>
     <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="20"/>
-    <property name="texture" value="just_pink_jello"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="151" x="3328" y="1696" width="32" height="80">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="just_pink_jello"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="152" x="3552" y="1696" width="32" height="80">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="just_pink_jello"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="153" x="3440" y="1520" width="32" height="176">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="70"/>
-    <property name="texture" value="just_pink_jello"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="154" x="3392" y="1408" width="128" height="128">
+  <object id="239" x="2256" y="1216" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="just_pink_jello"/>
+    <property name="texture" value="yellow_bead"/>
     <property name="type" value="soft"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="155" x="2432" y="1280" width="192" height="192">
+  <object id="240" x="3856" y="1744" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="241" x="5600" y="1696" width="32" height="80">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="just_pink_jello"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="242" x="4480" y="1280" width="192" height="192">
    <properties>
     <property name="density" type="int" value="4"/>
     <property name="stiffness" type="float" value="15"/>
@@ -272,142 +241,16 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="156" x="32" y="256" width="128" height="128">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="orange_bead"/>
-    <property name="type" value="soft"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="157" x="48" y="704" width="128" height="128">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="yellow_bead"/>
-    <property name="type" value="soft"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="158" x="1616" y="1872" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="160" x="1744" y="1872" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="161" x="1872" y="1872" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="162" x="1808" y="1744" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="163" x="1936" y="1744" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="164" x="1984" y="1872" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="165" x="1680" y="1744" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="166" x="1744" y="1616" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="167" x="1872" y="1616" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="168" x="1808" y="1488" width="96" height="96">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="false"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="level_icon"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="169" x="2880" y="1280" width="64" height="288">
+  <object id="243" x="3344" y="816" width="288" height="32">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="50"/>
-    <property name="texture" value="blue_jello_cube"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="green_jello_cube"/>
     <property name="type" value="soft"/>
    </properties>
   </object>
-  <object id="170" x="2176" y="1280" width="64" height="288">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="glued" type="bool" value="true"/>
-    <property name="stiffness" type="float" value="50"/>
-    <property name="texture" value="blue_jello_cube"/>
-    <property name="type" value="soft"/>
-   </properties>
-  </object>
-  <object id="171" x="2608" y="688" width="128" height="128">
-   <properties>
-    <property name="density" type="int" value="3"/>
-    <property name="stiffness" type="float" value="15"/>
-    <property name="texture" value="orange_bead"/>
-    <property name="type" value="soft"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="172" x="2832" y="688" width="128" height="128">
+  <object id="244" x="2096" y="1216" width="128" height="128">
    <properties>
     <property name="density" type="int" value="3"/>
     <property name="stiffness" type="float" value="15"/>
@@ -416,15 +259,235 @@
    </properties>
    <ellipse/>
   </object>
+  <object id="245" x="3792" y="1616" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="246" x="3664" y="1872" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="247" x="3472" y="1664" width="64" height="336">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="30"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="248" x="4224" y="1280" width="64" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="249" x="4336" y="1536" width="544" height="64">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="pink_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="250" x="4656" y="688" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="orange_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="251" x="2160" y="1520" width="32" height="272">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="100"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="252" x="3728" y="1744" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="253" x="3600" y="784" width="160" height="112">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="blue_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="254" x="5376" y="1664" width="256" height="64">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="20"/>
+    <property name="texture" value="just_pink_jello"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="255" x="5376" y="1696" width="32" height="80">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="just_pink_jello"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="256" x="2992" y="1648" width="544" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="green_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="257" x="2176" y="1088" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="orange_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="258" x="3984" y="1744" width="96" height="96">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="false"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="level_icon"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="259" x="2208" y="448" width="288" height="64">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="70"/>
+    <property name="texture" value="green_jello_cube"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="260" x="5440" y="1408" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="15"/>
+    <property name="texture" value="just_pink_jello"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="267" x="1424" y="1152" width="352" height="96">
+   <properties>
+    <property name="color" value="#d442f4"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
+    <property name="type" value="liquid"/>
+   </properties>
+  </object>
+  <object id="271" x="1728" y="1984" width="128" height="128" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.1"/>
+    <property name="texture" value="crate"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="272" x="1536" y="1984" width="96.1155" height="96.3487" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.1"/>
+    <property name="texture" value="crate"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="275" x="1487.71" y="1872.06" width="80.0576" height="80.6392" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.1"/>
+    <property name="texture" value="crate"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="276" x="1440" y="1968" width="80.0576" height="80.6392" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.1"/>
+    <property name="texture" value="crate"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
  </objectgroup>
- <layer name="fg_tiles" width="64" height="32">
+ <layer name="tiles" width="96" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt2MsNgCAQhOEtQW3AtXNKoRRKcRC9GI/yiP5fMtcNkxhXNKtrVVzZBpnTGv3p70Z/+o8x52FuyJmUl0cfFrM4K5ofR5hz5+qdM1fqPzo9TyFn+Wl/AP917b+1vANT7/O05uf+87IDU9/TtHftv618A6Xe5wEAAADwbbp3mO5e+R8nADSzA110GcA=
+   eJzt1kEKgCAUhOFZ1TZduK1u1BE6SkftKD1xFy6KQhH/DwYkXMg8rCQAAAAAAAAAAAAAANCSTdrvz1bpzMVbyp+wP4v1nIuj/yJm6zmXif67YbOW3Tf5n/fiGbtv8T0Yv0W/7sUz9F8X/ddF/9+M0jGkxPVrLfdf+38gdh8si1IvQe9n0HL/X7nOcwHtiSFx
   </data>
  </layer>
- <layer name="fg_objects" width="64" height="32">
+ <layer name="fg_offset_tiles" width="96" height="32" offsetx="32" offsety="48">
   <data encoding="base64" compression="zlib">
-   eJzt1VEKgCAMAFAPmHWAuv85so9gWIhEYMF7MHBOcDDBlAAAAAAAgC9YS2yjm4AXzSWW0U3wmPn9Uw7ruxnGvVzV6rz3nlbtXLfe03FmCnn8D+u/Mebe6NUO3KMI8g==
+   eJzt0FENwCAMRdFKYApAwWYFiUgFVDRLz0le+nvTCAAAAAAAAID/adkBhc2I1c99skMKu/8f2RGFvWdfdgQAAAAlbWqSAc0=
   </data>
  </layer>
+ <layer name="fg_tiles" width="96" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztmesNgzAMhD0CZQGg/d8ySbsCo2UURmGUmoIlQA0PKYlDuE86CUGUmCMxJhCFpWC9iJqQ45WsKpJ+tIH/usB/XeC/LvBfF/ivS38fd6L2wbfDx0aUsXyMl/NYNxb338bQjzYyj0YZ0c2T/2DOOP8bnv8Nr2UjyuF/EELnfzAH/usC/3WB/7rY6s9ieAd32vGljq3+LIcatNOK6yrY6s9q+AbrtONLHeR/XeC/Pzh/EOfwfq/ECvz3x549QvjvHpn3a5I1Af/ds6gp/6qatJX6v8JzcMJR/yfnTZAAT86b9Vm5/qRfTllVvWgr9b+nkJNiT10D/JHKv8+zAv91Sd3/2PNr6v7HjtQs9VZDcBjbusss54FbtvYNfOvqfAGA0z1a
+  </data>
+ </layer>
+ <layer name="fg_objects" width="96" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1lsKgCAQAMBuVgfocYC6/zmyj2CJCopAyRkQXB+4iAs2DQAAAAAAAKXrcicAAMCn5tSW3EkAvzGmNuVOAl6q/f22uROozFf3PYT+2RuOY9va7mLvk3Pu5vb+XT1ta/oQx//o8W8a49prtEQrlaIJ8A==
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="4" x="-128" y="0" width="128" height="2048"/>
+  <object id="32" x="6144" y="0" width="128" height="2048"/>
+  <object id="33" x="-128" y="-128" width="6400" height="128"/>
+  <object id="34" x="-128" y="2048" width="6400" height="128"/>
+  <object id="93" x="0" y="1984" width="6144" height="64"/>
+  <object id="124" x="1920" y="384" width="320" height="192"/>
+  <object id="125" x="1920" y="832" width="384" height="192"/>
+  <object id="126" x="1920" y="1344" width="576" height="192"/>
+  <object id="127" x="3584" y="0" width="192" height="448"/>
+  <object id="128" x="4736" y="0" width="192" height="448"/>
+  <object id="129" x="4864" y="1536" width="192" height="448"/>
+  <object id="130" x="4160" y="1536" width="192" height="448"/>
+  <object id="131" x="3072" y="1984">
+   <polygon points="0,0 128,-128 256,-128 384,0"/>
+  </object>
+  <object id="174" x="576" y="1536" width="192" height="384"/>
+  <object id="176" x="384" y="1920" width="128" height="64"/>
+  <object id="177" x="0" y="1920" width="128" height="64"/>
+  <object id="180" x="1024" y="1920" width="192" height="64"/>
+  <object id="261" x="1792" y="0" width="128" height="1536"/>
+  <object id="263" x="1088" y="1280" width="640" height="256"/>
+  <object id="264" x="1216" y="1152" width="192" height="128"/>
+  <object id="265" x="1760" y="1264" width="32" height="256"/>
+  <object id="268" x="1728" y="1344">
+   <polygon points="0,0 0,29.5 15,14.75"/>
+  </object>
+  <object id="270" x="1760" y="1360">
+   <polygon points="0,0 -11.5,16.75 0,32"/>
+  </object>
+ </objectgroup>
 </map>

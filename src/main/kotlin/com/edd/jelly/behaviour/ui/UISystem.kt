@@ -34,6 +34,10 @@ class UISystem @Inject constructor(
         setRootScreen(injector.getInstance(MainMenuScreen::class.java))
     }
 
+    override fun update(deltaTime: Float) {
+        game.renderScreen()
+    }
+
     /**
      * Replace current root screen with a new one.
      */

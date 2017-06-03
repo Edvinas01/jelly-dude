@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.utils.ImmutableArray
 import com.edd.jelly.behaviour.common.event.*
 import com.edd.jelly.behaviour.physics.body.BodyEntityFactory
+import com.edd.jelly.behaviour.physics.body.MapBodyBuilder
 import com.edd.jelly.core.events.Messaging
 import com.edd.jelly.core.tiled.JellyMap
 import com.edd.jelly.core.tiled.JellyMapLoader
@@ -69,7 +70,9 @@ class LevelSystem @Inject constructor(
         unloadLevel()
 
         // Create static collisions and entities.
-        (bodyEntityFactory.create(map.collisionsLayer) + bodyEntityFactory.create(map.entitiesLayer)).forEach {
+        (bodyEntityFactory.createWith(MapBodyBuilder::class, map.collisionsLayer)
+                + bodyEntityFactory.create(map.entitiesLayer)).forEach {
+
             engine.addEntity(it)
         }
 

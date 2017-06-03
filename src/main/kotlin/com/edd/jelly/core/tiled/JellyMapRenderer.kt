@@ -79,7 +79,7 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
             val hh = camera.viewportHeight / 2
 
             // Camera y position with offset.
-            val offsetY = offset.y + camera.position.y
+            val offsetY = (offset.y + layer.offsetY) + camera.position.y
 
             // Camera bottom.
             val y = offsetY - hh
@@ -105,7 +105,7 @@ class JellyMapRenderer(private val camera: OrthographicCamera,
             }
 
             // Camera left.
-            val x = offset.x + camera.position.x - size.x / 2
+            val x = (offset.x + layer.offsetX) + camera.position.x - size.x / 2
 
             for (padding in -1..1) {
                 batch.draw(

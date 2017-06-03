@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="128" tileheight="128" nextobjectid="197">
+ <properties>
+  <property name="ambiance" value="ambient_wind"/>
+  <property name="music" value="piano_song"/>
+  <property name="playerTexture" value="paper_slime"/>
+ </properties>
+ <tileset firstgid="1" name="paper_tiles" tilewidth="128" tileheight="128" spacing="2" margin="1" tilecount="128" columns="16">
+  <image source="../../textures/paper_tiles.png" width="2080" height="1040"/>
+ </tileset>
+ <layer name="background_1" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="true"/>
+   <property name="fitX" type="bool" value="true"/>
+   <property name="fitY" type="bool" value="true"/>
+   <property name="scaleX" type="float" value="2"/>
+   <property name="scaleY" type="float" value="2"/>
+   <property name="speedX" type="float" value="0.4"/>
+   <property name="speedY" type="float" value="0.8"/>
+   <property name="texture" value="paper_background_3"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="background_2" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="scaleX" type="float" value="0.8"/>
+   <property name="scaleY" type="float" value="0.8"/>
+   <property name="speedX" type="float" value="0.3"/>
+   <property name="speedY" type="float" value="0.6"/>
+   <property name="texture" value="paper_background_1"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="background_3" width="64" height="32">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="scaleX" type="float" value="0.8"/>
+   <property name="scaleY" type="float" value="0.8"/>
+   <property name="speedX" type="float" value="0.1"/>
+   <property name="speedY" type="float" value="0.4"/>
+   <property name="texture" value="paper_background_2"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="back_offset_objects" width="64" height="32" offsetx="0" offsety="32">
+  <data encoding="base64" compression="zlib">
+   eJzt2EkKwjAYhuHYI9hD6A10aUXRrfO0dXbprJscrUfzgyYQugithaTQ74GXBrTwh9osFIKIiGxqKEiSWEvP4ziHPXeCpBjr2Pc8REQ2YzTxPQQREREREZXWGm3UuimEbFTsv54zuqh1G3tvVWT/kbp+0Bfd0BB7H6T2v0BLtHI6XXkc0BGdfA/i2FUkv4kneqF3hnvMsySPKZqh+R/3uhbi/QjVtZ56V8yzJI8t2qF98fEKyfKMbfRZ0kN91DU+i1JXTX/njh5oVHAGIpsf2CwZfg==
+  </data>
+ </layer>
+ <layer name="clouds_1" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4900"/>
+   <property name="scaleX" type="float" value="0.5"/>
+   <property name="scaleY" type="float" value="0.5"/>
+   <property name="speedX" type="float" value="0.15"/>
+   <property name="speedY" type="float" value="0.4"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="clouds_2" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4300"/>
+   <property name="scaleX" type="float" value="0.7"/>
+   <property name="scaleY" type="float" value="0.7"/>
+   <property name="speedX" type="float" value="0.1"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <layer name="clouds_3" width="64" height="32" offsetx="128" offsety="-128">
+  <properties>
+   <property name="clampBottom" type="bool" value="true"/>
+   <property name="clampTop" type="bool" value="false"/>
+   <property name="fitX" type="bool" value="false"/>
+   <property name="fitY" type="bool" value="false"/>
+   <property name="offsetY" type="float" value="4300"/>
+   <property name="scaleX" type="float" value="0.4"/>
+   <property name="scaleY" type="float" value="0.4"/>
+   <property name="speedX" type="float" value="0.2"/>
+   <property name="speedY" type="float" value="0.5"/>
+   <property name="texture" value="paper_clouds"/>
+   <property name="type" value="parallax"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAAAAAAAgHcDIAAAAQ==
+  </data>
+ </layer>
+ <objectgroup name="entities">
+  <object id="65" name="start" x="7808" y="1152">
+   <properties>
+    <property name="type" value="checkpoint"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="123" x="5056" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="124" x="6336" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="125" x="3776" y="1440" width="512" height="48">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="100"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="126" x="6304" y="3424" width="704" height="32">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="127" x="7200" y="3424" width="544" height="32">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="50"/>
+    <property name="texture" value="paper_rope_down"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="128" x="1710" y="2912" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="129" x="2356.67" y="2912" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="130" x="1075.33" y="2914.67" width="32" height="288">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="glued" type="bool" value="true"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_rope_up"/>
+    <property name="type" value="soft"/>
+   </properties>
+  </object>
+  <object id="131" x="3616" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="132" x="3808" y="3744" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_ship_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="133" x="3712" y="3616" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="134" x="1024" y="2752" width="128" height="128">
+   <properties>
+    <property name="density" type="int" value="3"/>
+    <property name="stiffness" type="float" value="10"/>
+    <property name="texture" value="paper_fish_bead"/>
+    <property name="type" value="soft"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="135" x="4224" y="1312" width="128" height="128">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="142" x="4287.77" y="1183.77" width="128" height="128" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="143" x="4352" y="1312" width="128" height="128" rotation="-180">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="144" x="4480" y="1312" width="128" height="128" rotation="-180">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="145" x="4352" y="1312" width="128" height="128">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="146" x="4480" y="1312" width="128" height="128">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="148" x="4864" y="1312" width="256" height="128">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box_wide"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="150" x="5120" y="1184" width="128" height="128" rotation="-270">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="152" x="4864" y="1312" width="256" height="128" rotation="-450">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box_wide"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="153" x="0" y="3360" width="128" height="128" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="154" x="128" y="3232" width="128" height="128" rotation="-719.792">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="155" x="32" y="3232" width="128" height="128" rotation="-449.792">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="156" x="2560" y="3744" width="256" height="128">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box_wide"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="165" x="-768" y="1440" width="576" height="416">
+   <properties>
+    <property name="color" value="#CA00C4"/>
+    <property name="colorAlpha" type="float" value="0.03"/>
+    <property name="type" value="liquid"/>
+   </properties>
+  </object>
+  <object id="166" x="4736" y="1440" width="192" height="128" rotation="-450">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box_wide"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="189" x="1504" y="3584" width="128" height="128" rotation="-180">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="190" x="7840" y="3136" width="128" height="128" rotation="-180">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="191" x="8160" y="3136" width="160" height="160" rotation="-180">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="192" x="7936" y="3008" width="128" height="128" rotation="-161.753">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="193" x="8096" y="2944" width="128" height="128" rotation="-161.753">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="194" x="8160" y="2752" width="128" height="128" rotation="-186.819">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="195" x="7968" y="2848" width="97.941" height="91.1727" rotation="-161.753">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+  <object id="196" x="7968" y="3136" width="97.941" height="91.1727" rotation="-169.557">
+   <properties>
+    <property name="density" type="float" value="0.05"/>
+    <property name="texture" value="paper_box"/>
+    <property name="type" value="rigid"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="front_tiles_1" width="64" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt18ERgjAUhOEHVGAJwEGvykE7gDJSiqVQCqW5jhfJoHJAH5L/m9nJLfN2kkNiBgAAAABIRfZI7z2Hl9ws5An319kHZfCeA7/XmF1PivccAADMtVcO3kM4OiuXhfcslSpKudK3cat0C++pvuGo9TnVSvt/w6v++h/ZVLINvR3vd7+2cfc4uyhb+jdOnf2n/sWbu/EPifuklhujJxWS
+  </data>
+ </layer>
+ <layer name="front_tiles_2" width="64" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztmEEKgzAQRaOeoEeIm3bbVbvsqnqMHMWjeBSP1h9KSxgyRLGYaP+DTyCMYX4mLmaMIYQQQgghhGxJBdURYX8M4yzURmRFnHZeTCWAPNwJq1QtfMGru2KVaoM4772JnKWpBJCzg9dJCvtTGIc6O3h9SNkgTrvLkv3/Eu0uNeXOlxBCCCHbcDFmOEO588jFHd5vB/CPGvpaLqaH9+4A/lFDX8tVaL1m6Tyh7r0Oa87Res1/IeU/NUuodv4fzfD/7SebSG+993fz8QFvY2pWFJurzPmuZC2ZlRxRL/p8LAQ=
+  </data>
+ </layer>
+ <layer name="front_offset_tiles" width="64" height="32" offsetx="0" offsety="32">
+  <data encoding="base64" compression="zlib">
+   eJzt2P0JgzAQh+FbRTuB7QjazuEKdgJHcVRPGuEQk5I2qNH3gR+CH+HOC/6hCAAAAHAOtcvktbjWaJ7blrMJ7bPfuwYAAADk6a55fI597DngiApNaXI12nNbiQxz9q7nV3aOxUofvm9Syv47zfufBSLZnm+ayqWM6CPn+bvaZRl9F0NoL6yskbz/+vstwWd8/6Pme6bZ25n7EtoLZo0s54/0Rh+XIF4=
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="32" x="8192" y="-128" width="128" height="4224"/>
+  <object id="33" x="0" y="-128" width="8192" height="128"/>
+  <object id="34" x="-128" y="4096" width="8448" height="128"/>
+  <object id="91" x="-128" y="-128" width="128" height="2048"/>
+  <object id="92" x="0" y="3872" width="8192" height="224"/>
+  <object id="93" x="0" y="3360" width="352" height="512"/>
+  <object id="94" x="416" y="3744" width="128" height="128"/>
+  <object id="95" x="1248" y="3616" width="896" height="256"/>
+  <object id="96" x="544" y="3360" width="704" height="512"/>
+  <object id="97" x="2144" y="3648" width="352" height="32"/>
+  <object id="100" x="1952" y="3616">
+   <polygon points="0,0 -32,-32 -8,-83.3333 204,-80.6667 221.333,-29.3333 200.667,-2"/>
+  </object>
+  <object id="102" x="5408" y="3776" width="1344" height="96"/>
+  <object id="103" x="5536" y="3648" width="1216" height="128"/>
+  <object id="104" x="5536" y="3520" width="832" height="128"/>
+  <object id="105" x="5920" y="3392" width="416" height="128"/>
+  <object id="106" x="7712" y="3136" width="480" height="736"/>
+  <object id="107" x="7584" y="3776" width="128" height="96"/>
+  <object id="109" x="6976" y="3456">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="110" x="2240" y="2944">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="111" x="1600" y="2944">
+   <polygon points="0,0 256,0 256,-32 128,-64 0,-32"/>
+  </object>
+  <object id="112" x="960" y="2944">
+   <polygon points="0,0 256,0 256,-32 127.333,-53.3333 0,-32"/>
+  </object>
+  <object id="113" x="1312" y="704" width="448" height="192"/>
+  <object id="114" x="4256" y="1440" width="832" height="320"/>
+  <object id="120" x="5536" y="1440" width="832" height="320"/>
+  <object id="121" x="6688" y="1568" width="1504" height="320"/>
+  <object id="122" x="6816" y="1440" width="1376" height="128"/>
+  <object id="168" x="160" y="1824" width="192" height="320"/>
+  <object id="176" x="-128" y="1952" width="128" height="2144"/>
+  <object id="182" x="-128" y="1952">
+   <polygon points="0,0 -832,-64 -832,256 0,256"/>
+  </object>
+  <object id="183" x="-960" y="1376" width="128" height="544"/>
+  <object id="184" x="-960" y="1248" width="832" height="128"/>
+  <object id="185" x="-128" y="1920">
+   <polyline points="0,0 128,14.5 128,0"/>
+  </object>
+  <object id="188" x="0" y="2336">
+   <polygon points="0,13.3333 163.333,13.3333 192,64 0,64"/>
+  </object>
+ </objectgroup>
+</map>

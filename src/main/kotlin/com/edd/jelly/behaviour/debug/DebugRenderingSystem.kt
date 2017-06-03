@@ -62,8 +62,13 @@ class DebugRenderingSystem @Inject constructor(
                     transformTexture,
                     transform.x,
                     transform.y,
+                    0f,
+                    0f,
                     transformTexture.regionWidth.meters,
-                    transformTexture.regionHeight.meters
+                    transformTexture.regionHeight.meters,
+                    1f,
+                    1f,
+                    transform.rotation
             )
         }
         spriteBatch.end()

@@ -15,14 +15,17 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
 class LevelsWindow constructor(
+        private val jellyMapLoader: JellyMapLoader,
         skin: Skin,
-        jellyMapLoader: JellyMapLoader,
-        messaging: Messaging
+        messaging: Messaging,
+        language: String
 ) : Window("Levels", skin, "jelly"), LanguageAware {
 
     private companion object {
-        val LOG : Logger = LogManager.getLogger(LevelsWindow::class.java)
+        val LOG: Logger = LogManager.getLogger(LevelsWindow::class.java)
     }
+
+    private val playButtons = mutableMapOf<String, TextButton>()
 
     init {
         isMovable = false
@@ -58,8 +61,7 @@ class LevelsWindow constructor(
                     .grow()
                     .row()
 
-            // Launch level button.
-            levelDetails.add(TextButton(meta.name, skin).apply {
+            val button = TextButton(meta.names[language] ?: meta.internalName.capitalize(), skin).apply {
                 label.setWrap(true)
                 label.setEllipsis(true)
 
@@ -72,7 +74,7 @@ class LevelsWindow constructor(
                         try {
                             messaging.send(LoadNewLevelEvent(meta.internalName))
                             messaging.send(LoadGameScreenEvent)
-                        } catch (e : RuntimeException) {
+                        } catch (e: RuntimeException) {
                             LOG.error("Could not load level", e)
 
                             // Try to recover.
@@ -82,7 +84,14 @@ class LevelsWindow constructor(
                 })
 
                 addListener(tooltip)
-            }).growX()
+            }
+
+            // Launch level button.
+            levelDetails
+                    .add(button)
+                    .growX()
+
+            playButtons.put(meta.internalName, button)
 
             levelContainer
                     .add(levelDetails)
@@ -90,6 +99,7 @@ class LevelsWindow constructor(
                     .padLeft(elementPad)
                     .padRight(elementPad)
                     .width(elementWidth)
+                    .height(elementWidth)
         }
 
         // Scroll for levels.
@@ -98,5 +108,13 @@ class LevelsWindow constructor(
 
     override fun updateLanguage(lang: Language) {
         titleLabel.setText(lang["levelsWindowTitle"])
+
+        playButtons.forEach { internalName, button ->
+            button.setText(jellyMapLoader.metadata[internalName]
+                    ?.names
+                    ?.get(lang.handle.internalName)
+                    ?: internalName.capitalize()
+            )
+        }
     }
 }

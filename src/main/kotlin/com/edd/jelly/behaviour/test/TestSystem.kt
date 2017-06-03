@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3
 import com.edd.jelly.behaviour.position.Transform
 import com.edd.jelly.behaviour.position.transform
 import com.edd.jelly.behaviour.physics.Particles
-import com.edd.jelly.behaviour.physics.Physics
+import com.edd.jelly.behaviour.physics.body.RigidBody
 import com.edd.jelly.behaviour.rendering.Renderable
 import com.edd.jelly.behaviour.common.event.ConfigChangedEvent
 import com.edd.jelly.behaviour.common.event.PlaySoundEvent
@@ -90,12 +90,16 @@ class TestSystem @Inject constructor(
     private var tmpBox = Vec2()
 
     private val queryCallback = QueryCallback {
-        jointDef.bodyA = it.body
-        jointDef.bodyB = it.body
-        jointDef.target.set(tmpGdx.x, tmpGdx.y)
-        joint = world.createJoint(jointDef) as MouseJoint
+        if (BodyType.KINEMATIC == it.body.type) {
+            true
+        } else {
+            jointDef.bodyA = it.body
+            jointDef.bodyB = it.body
+            jointDef.target.set(tmpGdx.x, tmpGdx.y)
+            joint = world.createJoint(jointDef) as MouseJoint
 
-        false
+            false
+        }
     }
 
     init {
@@ -275,7 +279,7 @@ class TestSystem @Inject constructor(
                     Vec2(v.x, v.y)
                 }, 0f)
 
-                add(Physics(body))
+                add(RigidBody(body))
             })
         }
 
@@ -305,7 +309,7 @@ class TestSystem @Inject constructor(
                     Vec2(v.x, v.y)
                 }, 0f)
 
-                add(Physics(body))
+                add(RigidBody(body))
             })
         }
 

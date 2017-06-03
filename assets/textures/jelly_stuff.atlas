@@ -1,47 +1,47 @@
 
 jelly_stuff.png
-size: 512,256
+size: 2048,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 blue_jello_cube
   rotate: false
-  xy: 256, 64
+  xy: 1280, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 crate
   rotate: false
-  xy: 256, 0
+  xy: 1344, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
+  index: -1
 dev_grid
   rotate: false
-  xy: 448, 32
+  xy: 1728, 160
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
-  index: 1
+  index: -1
 green_jello_cube
   rotate: false
-  xy: 384, 192
+  xy: 1408, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 hanging_thing
   rotate: false
-  xy: 448, 64
+  xy: 1728, 192
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
   index: -1
 just_pink_jello
   rotate: false
-  xy: 448, 192
+  xy: 1472, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -55,56 +55,112 @@ level_icon
   index: -1
 orange_bead
   rotate: false
-  xy: 320, 64
+  xy: 1600, 192
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+paper_box
+  rotate: false
+  xy: 1280, 64
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+paper_box_wide
+  rotate: false
+  xy: 1024, 128
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+paper_fish_bead
+  rotate: false
+  xy: 256, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+paper_log
+  rotate: false
+  xy: 1024, 0
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+paper_rope_down
+  rotate: false
+  xy: 1280, 192
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+paper_rope_up
+  rotate: false
+  xy: 1536, 0
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+paper_ship_bead
+  rotate: false
+  xy: 512, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+paper_slime
+  rotate: false
+  xy: 768, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
 pink_jello_cube
   rotate: false
-  xy: 320, 0
+  xy: 1600, 128
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_bead
   rotate: false
-  xy: 384, 128
+  xy: 1664, 192
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 rope
   rotate: false
-  xy: 480, 64
+  xy: 1664, 64
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
   index: -1
 round_crate
   rotate: false
-  xy: 448, 128
+  xy: 1600, 64
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
+  index: -1
 slime
   rotate: false
-  xy: 256, 128
+  xy: 1408, 64
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
+  index: -1
 xy_axis
   rotate: false
-  xy: 384, 64
+  xy: 1600, 0
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 yellow_bead
   rotate: false
-  xy: 384, 0
+  xy: 1664, 128
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

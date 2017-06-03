@@ -24,6 +24,7 @@ import com.edd.jelly.behaviour.player.PlayerSystem
 import com.edd.jelly.behaviour.rendering.RenderingSystem
 import com.edd.jelly.behaviour.sound.SoundSystem
 import com.edd.jelly.behaviour.test.CameraControllerSystem
+import com.edd.jelly.behaviour.test.PixelDrawingSystem
 import com.edd.jelly.behaviour.test.TestSystem
 import com.edd.jelly.behaviour.ui.UISystem
 import com.edd.jelly.core.configuration.Configurations
@@ -81,7 +82,10 @@ class GameModule(private val game: JellyGame) : Module {
                 // Rendering.
                 RenderingSystem::class.java,
                 DebugRenderingSystem::class.java,
-                UISystem::class.java
+                UISystem::class.java,
+
+                // Draw pixels on top of everything!
+                PixelDrawingSystem::class.java
         ))
     }
 

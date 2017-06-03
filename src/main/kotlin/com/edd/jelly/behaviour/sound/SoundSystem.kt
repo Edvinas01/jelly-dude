@@ -116,6 +116,11 @@ class SoundSystem @Inject constructor(
      * Fade in provided song.
      */
     private fun fadeInMusic(music: Music) {
+        if (configurations.config.game.musicVolume <= 0) {
+            music.volume = 0f
+            return
+        }
+
         fadeInTask?.cancel()
 
         fadeInTask = Timer.schedule(object : Timer.Task() {
