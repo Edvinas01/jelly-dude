@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="111">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="64" tilewidth="32" tileheight="32" nextobjectid="120">
  <properties>
   <property name="ambiance" value="ambient_wind"/>
  </properties>
@@ -55,7 +55,7 @@
   </data>
  </layer>
  <objectgroup name="entities">
-  <object id="58" name="start" x="704" y="1600">
+  <object id="58" name="start" x="2240" y="1856">
    <properties>
     <property name="type" value="checkpoint"/>
    </properties>

@@ -112,6 +112,7 @@ task packMainAtlas {
 
         def settings = new TexturePacker.Settings()
         settings.with {
+            useIndexes = false
             maxWidth = 2048
             maxHeight = 2048
             paddingX = 0

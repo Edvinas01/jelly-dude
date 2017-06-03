@@ -90,12 +90,16 @@ class TestSystem @Inject constructor(
     private var tmpBox = Vec2()
 
     private val queryCallback = QueryCallback {
-        jointDef.bodyA = it.body
-        jointDef.bodyB = it.body
-        jointDef.target.set(tmpGdx.x, tmpGdx.y)
-        joint = world.createJoint(jointDef) as MouseJoint
+        if (BodyType.KINEMATIC == it.body.type) {
+            true
+        } else {
+            jointDef.bodyA = it.body
+            jointDef.bodyB = it.body
+            jointDef.target.set(tmpGdx.x, tmpGdx.y)
+            joint = world.createJoint(jointDef) as MouseJoint
 
-        false
+            false
+        }
     }
 
     init {

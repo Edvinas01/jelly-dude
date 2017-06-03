@@ -17,14 +17,14 @@ crate
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
+  index: -1
 dev_grid
   rotate: false
   xy: 1728, 160
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
-  index: 1
+  index: -1
 green_jello_cube
   rotate: false
   xy: 1408, 0
@@ -62,18 +62,18 @@ orange_bead
   index: -1
 paper_box
   rotate: false
-  xy: 1024, 128
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: 2
-paper_box
-  rotate: false
   xy: 1280, 64
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
+  index: -1
+paper_box_wide
+  rotate: false
+  xy: 1024, 128
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
 paper_fish_bead
   rotate: false
   xy: 256, 0
@@ -143,14 +143,14 @@ round_crate
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
+  index: -1
 slime
   rotate: false
   xy: 1408, 64
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
+  index: -1
 xy_axis
   rotate: false
   xy: 1600, 0
