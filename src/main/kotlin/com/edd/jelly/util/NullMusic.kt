@@ -2,7 +2,6 @@ package com.edd.jelly.util
 
 import com.badlogic.gdx.audio.Music
 
-@Suppress("TooManyFunctions") // Null object pattern / can't do much about music interface being huge.
 object NullMusic : Music {
 
     override fun isPlaying() = false

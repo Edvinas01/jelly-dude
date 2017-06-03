@@ -22,7 +22,6 @@ import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
 
-
 /**
  * Builds simple rigid bodies.
  */
