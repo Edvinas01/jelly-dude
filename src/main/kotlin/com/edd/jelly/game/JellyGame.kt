@@ -75,7 +75,9 @@ class JellyGame(val configurations: Configurations) : Game() {
             return
         }
         engine.update(Gdx.graphics.deltaTime)
+    }
 
+    fun renderScreen() {
         super.render()
     }
 
