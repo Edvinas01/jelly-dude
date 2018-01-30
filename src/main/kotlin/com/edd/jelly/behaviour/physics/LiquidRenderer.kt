@@ -57,7 +57,7 @@ class LiquidRenderer @Inject constructor(
     private val potentialAttributes = potentialShader.attributeArray()
     private val liquidAttributes = liquidShader.attributeArray()
 
-    private val frameBuffer = FrameBuffer(
+    private val frameBuffer = FrameBuffer.createFrameBuffer(
             Pixmap.Format.RGBA8888,
             POTENTIAL_MAP_SIZE,
             POTENTIAL_MAP_SIZE,
@@ -85,7 +85,7 @@ class LiquidRenderer @Inject constructor(
         val positionBuffer = world.particlePositionBuffer
         val colorBuffer = world.particleColorBuffer
 
-        // Adittional bounding box offset.
+        // Additional bounding box offset.
         val offset = world.particleRadius * 2
 
         // Half width and half height of the view.
@@ -106,7 +106,7 @@ class LiquidRenderer @Inject constructor(
         // Vertex position index.
         var idx = 0
 
-        for (i in 0..world.particleCount - 1) {
+        for (i in 0 until world.particleCount) {
             val pos = positionBuffer[i]
 
             if (pos.x !in x..xw || pos.y !in y..yh) {
