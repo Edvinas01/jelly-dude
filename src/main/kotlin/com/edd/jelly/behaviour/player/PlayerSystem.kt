@@ -299,7 +299,7 @@ class PlayerSystem @Inject constructor(
 
                     ) * deltaTime * DEFLATION_SPEED
 
-                    joint.targetVolume -= dt
+                    joint.targetArea -= dt
                     deflation += dt
                 } else {
                     deflationState = Player.Deflation.IDLE

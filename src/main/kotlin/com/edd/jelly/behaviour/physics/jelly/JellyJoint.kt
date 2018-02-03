@@ -14,7 +14,7 @@ class JellyJoint(private val world: World, def: JellyJointDef) : Joint(world.poo
 
     val bodies: Array<Body>
 
-    var targetVolume = 0f
+    var targetArea = 0f
 
     private val distanceJoints: Array<DistanceJoint>
     private val normals: Array<Vec2>
@@ -31,7 +31,7 @@ class JellyJoint(private val world: World, def: JellyJointDef) : Joint(world.poo
         bodies = def.bodies.toTypedArray()
         normals = Array(bodies.size, { Vec2() })
 
-        targetVolume = calculateArea { current, next ->
+        targetArea = calculateArea { current, next ->
             bodies[current].worldCenter.to(bodies[next].worldCenter)
         }
 
@@ -78,7 +78,7 @@ class JellyJoint(private val world: World, def: JellyJointDef) : Joint(world.poo
     }
 
     fun inflate(factor: Float) {
-        targetVolume *= factor
+        targetArea *= factor
     }
 
     override fun destructor() {
@@ -158,7 +158,7 @@ class JellyJoint(private val world: World, def: JellyJointDef) : Joint(world.poo
             perimeter += distance
         }
 
-        val deltaArea = targetVolume - calculateArea { current, next ->
+        val deltaArea = targetArea - calculateArea { current, next ->
             positions[bodies[current].m_islandIndex].c.to(positions[bodies[next].m_islandIndex].c)
         }
 
