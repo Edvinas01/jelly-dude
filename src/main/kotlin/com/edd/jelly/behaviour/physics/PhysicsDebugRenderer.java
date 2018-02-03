@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
+import com.edd.jelly.behaviour.physics.jelly.JellyJoint;
 import org.jbox2d.collision.WorldManifold;
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
@@ -273,7 +274,8 @@ public class PhysicsDebugRenderer implements Disposable {
 
         if (JointType.DISTANCE == joint.getType()
                 || JointType.CONSTANT_VOLUME == joint.getType()
-                || JointType.WELD == joint.getType()) {
+                || JointType.WELD == joint.getType()
+                || joint instanceof JellyJoint) {
 
             drawSegment(p1, p2, JOINT_COLOR);
         } else if (joint.getType() == JointType.PULLEY) {

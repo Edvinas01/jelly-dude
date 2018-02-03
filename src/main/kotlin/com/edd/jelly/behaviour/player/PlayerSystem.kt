@@ -17,6 +17,8 @@ import com.edd.jelly.core.resources.ResourceManager
 import com.edd.jelly.core.resources.get
 import com.edd.jelly.core.scripts.ScriptManager
 import com.edd.jelly.behaviour.common.hook.*
+import com.edd.jelly.behaviour.physics.jelly.JellyJoint
+import com.edd.jelly.behaviour.physics.jelly.JellyJointDef
 import com.edd.jelly.core.configuration.Configurations
 import com.edd.jelly.util.take
 import com.google.inject.Inject
@@ -356,7 +358,7 @@ class PlayerSystem @Inject constructor(
         }
 
         val entity = Entity().apply {
-            val joint = world.createJoint(ConstantVolumeJointDef().apply {
+            val joint = world.createJoint(JellyJointDef().apply {
                 collideConnected = false
                 dampingRatio = DAMPING
                 frequencyHz = HZ
@@ -365,7 +367,7 @@ class PlayerSystem @Inject constructor(
                 val halfWidth = width / 2
                 val halfHeight = height / 2
 
-                for (vertex in 0..PLAYER_VERTEX_COUNT - 1) {
+                for (vertex in 0 until PLAYER_VERTEX_COUNT) {
 
                     // Should add bodies as entities to the engine?
                     addBody(world.createBody(BodyDef().apply {
@@ -392,7 +394,7 @@ class PlayerSystem @Inject constructor(
                         })
                     })
                 }
-            }) as ConstantVolumeJoint
+            }) as JellyJoint
 
             val transform = Transform(
                     Vector2(x, y),

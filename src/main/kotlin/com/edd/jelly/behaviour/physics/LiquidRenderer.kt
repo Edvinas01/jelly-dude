@@ -57,7 +57,7 @@ class LiquidRenderer @Inject constructor(
     private val potentialAttributes = potentialShader.attributeArray()
     private val liquidAttributes = liquidShader.attributeArray()
 
-    private val frameBuffer = FrameBuffer.createFrameBuffer(
+    private val frameBuffer = FrameBuffer(
             Pixmap.Format.RGBA8888,
             POTENTIAL_MAP_SIZE,
             POTENTIAL_MAP_SIZE,

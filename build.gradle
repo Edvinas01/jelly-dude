@@ -2,13 +2,21 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker
 
 buildscript {
     ext {
-        kotlinVersion = '1.1.1'
+        // Dependencies.
+        kotlinVersion = '1.2.21'
         ashleyVersion = '1.7.3'
-        groovyVersion = '2.4.7'
-        detektVersion = '1.0.0.M10.3'
         guiceVersion = '4.1.0'
+        gdxVersion = '1.9.8'
+        log4jVersion = '2.10.0'
+        jacksonVersion = '2.9.4'
+        kotlinArgParserVersion = '2.0.4'
+        commonsIoVersion = '2.6'
+        jbox2dVersion = '2.3.1'
+
+        // Testing dependencies.
+        groovyVersion = '2.4.13'
         spockVersion = '1.1-groovy-2.4-rc-3'
-        gdxVersion = '1.9.7-SNAPSHOT'
+        detektVersion = '1.0.0.M10.3'
 
         // Texture directory.
         textureDir = 'assets/textures/'
@@ -147,19 +155,19 @@ dependencies {
     compile "com.google.inject:guice:$guiceVersion"
 
     // Logging.
-    compile 'org.apache.logging.log4j:log4j-core:2.8.1'
-    compile 'org.apache.logging.log4j:log4j-api:2.8.1'
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
 
     // Other useful libraries.
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0.pr1'
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0.pr1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1'
-    compile 'com.xenomachina:kotlin-argparser:2.0.0'
-    compile 'commons-io:commons-io:2.5'
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile "com.xenomachina:kotlin-argparser:$kotlinArgParserVersion"
+    compile "commons-io:commons-io:$commonsIoVersion"
 
     // JBox2d + Liquid fun dependencies.
-    compile files('libs/jbox2d/jbox2d-library-2.3.1-SNAPSHOT.jar')
-    compile files('libs/jbox2d/jbox2d-library-2.3.1-SNAPSHOT-sources.jar')
+    compile files("libs/jbox2d/jbox2d-library-$jbox2dVersion-SNAPSHOT.jar")
+    compile files("libs/jbox2d/jbox2d-library-$jbox2dVersion-SNAPSHOT-sources.jar")
 
     // Testing.
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
@@ -171,5 +179,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '4.5'
 }
